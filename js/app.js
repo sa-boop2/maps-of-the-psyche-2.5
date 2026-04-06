@@ -433,6 +433,7 @@
       if (appMain) appMain.classList.remove('home-active');
       App.View2D?.hide();
       secView.scrollTop = 0;
+      window.PsycheApp?.ViewsTrainings?.showHall?.();
       renderSecondaryView(secView, viewId);
     } else if (viewId === 'map') {
       mapView.classList.add('active');

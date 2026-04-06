@@ -136,6 +136,11 @@ window.PsycheApp.ViewsTrainings = (function() {
     reRender();
   }
 
+  function showHall() {
+    hallMode = true;
+    if (currentContainer) reRender();
+  }
+
   function goHome() {
     if (window.PsycheApp?.goToView) {
       window.PsycheApp.goToView('home');
@@ -603,6 +608,7 @@ window.PsycheApp.ViewsTrainings = (function() {
     toggleHabit,
     completeReflection,
     goToHall,
+    showHall,
     goHome
   };
 })();

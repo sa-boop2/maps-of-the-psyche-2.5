@@ -140,11 +140,13 @@ window.PsycheApp.Sphere3D = (function() {
       biologicalMirrorEnabled = !biologicalMirrorEnabled;
       this.classList.toggle('active', biologicalMirrorEnabled);
       if (biologicalMirrorEnabled) {
+        document.getElementById('map-view')?.classList.add('bio-open');
         biologicalMirrorPanel?.classList.remove('hidden');
         const hasSelection = !!selectedNode?.userData?.layer;
         biologicalMirrorNeedsSelection = !hasSelection;
         updateBiologicalMirror(hasSelection ? selectedNode.userData.layer : null, { waitingForAnalyze: true });
       } else {
+        document.getElementById('map-view')?.classList.remove('bio-open');
         biologicalMirrorPanel?.classList.add('hidden');
       }
     });
@@ -152,6 +154,17 @@ window.PsycheApp.Sphere3D = (function() {
     document.getElementById('btn-close-biological-mirror')?.addEventListener('click', () => {
       biologicalMirrorEnabled = false;
       biologicalMirrorNeedsSelection = true;
+      document.getElementById('map-view')?.classList.remove('bio-open');
+      biologicalMirrorPanel?.classList.add('hidden');
+      const btn = document.getElementById('btn-toggle-biological-mirror');
+      btn?.classList.remove('active');
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key !== 'Escape') return;
+      if (!biologicalMirrorEnabled) return;
+      biologicalMirrorEnabled = false;
+      biologicalMirrorNeedsSelection = true;
+      document.getElementById('map-view')?.classList.remove('bio-open');
       biologicalMirrorPanel?.classList.add('hidden');
       const btn = document.getElementById('btn-toggle-biological-mirror');
       btn?.classList.remove('active');
@@ -376,18 +389,20 @@ window.PsycheApp.Sphere3D = (function() {
     const legend = document.getElementById('map-legend');
     if (!legend || !fw) return;
     const relatedTrainings = window.PsycheApp?.getTrainingsForFramework?.(fw.id) || [];
+    const layerListHtml = fw.layers.map((l, i) =>
+      `<div class="legend-item" data-idx="${i}"><span class="legend-num">${i+1}</span><span class="legend-dot" style="background:${l.color};color:${l.color}"></span><span class="legend-name">${l.name}</span></div>`
+    ).join('');
+    const trainingHtml = relatedTrainings.length ? `
+      <div class="legend-training-links-fixed">
+        <div class="legend-training-title">Related Trainings</div>
+        ${relatedTrainings.map(t => `<button class="legend-training-btn" data-training-id="${t.id}">${t.icon} ${t.title}</button>`).join('')}
+      </div>
+    ` : '';
     legend.innerHTML =
       `<div style="font-family:var(--font-display);color:var(--gold-light);font-size:0.85rem;margin-bottom:4px;letter-spacing:0.05em">${fw.name}</div>` +
       `<div style="font-size:0.68rem;color:var(--text-dim);margin-bottom:8px;letter-spacing:0.04em">OUTER → CORE</div>` +
-      fw.layers.map((l, i) =>
-        `<div class="legend-item" data-idx="${i}"><span class="legend-num">${i+1}</span><span class="legend-dot" style="background:${l.color};color:${l.color}"></span><span class="legend-name">${l.name}</span></div>`
-      ).join('') +
-      (relatedTrainings.length ? `
-        <div class="legend-training-links legend-training-links-fixed">
-          <div class="legend-training-title">Related Trainings</div>
-          ${relatedTrainings.map(t => `<button class="legend-training-btn" data-training-id="${t.id}">${t.icon} ${t.title}</button>`).join('')}
-        </div>
-      ` : '');
+      `<div class="legend-layers-scroll">${layerListHtml}</div>` +
+      trainingHtml;
     legend.querySelectorAll('.legend-item').forEach(el => {
       el.addEventListener('click', () => {
         const idx = parseInt(el.dataset.idx);
@@ -496,8 +511,9 @@ window.PsycheApp.Sphere3D = (function() {
     data.frameworkId = node.userData.framework.id;
     data.crossRefs = findCrossRefs(node.userData.framework, node.userData.layerIndex);
     window.PsycheApp.Sidebar.show(data);
-    if (biologicalMirrorEnabled && !biologicalMirrorNeedsSelection) {
-      updateBiologicalMirror(data, { waitingForAnalyze: false });
+    if (biologicalMirrorEnabled) {
+      biologicalMirrorNeedsSelection = true;
+      updateBiologicalMirror(null, { waitingForAnalyze: true });
     }
 
     // ── SPOTLIGHT EFFECT — dim everything except selected node ──

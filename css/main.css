@@ -173,6 +173,28 @@ a:hover { color: var(--gold-light); }
   flex-wrap: nowrap;
 }
 
+.view-pager {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+}
+
+.view-page-btn {
+  width: 26px;
+  height: 26px;
+  font-size: 0.72rem;
+  color: var(--gold-light);
+  border-color: var(--border);
+  flex-shrink: 0;
+}
+
+.view-page-btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
 /* Group separator */
 .view-sep {
   width: 1px;
@@ -376,7 +398,8 @@ a:hover { color: var(--gold-light); }
   backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
   border: 1px solid var(--border);
   border-radius: var(--r);
-  max-height: 58vh; overflow-y: auto;
+  max-height: 58vh;
+  overflow: hidden;
   font-size: 0.78rem;
   width: min(380px, 34vw);
 }
@@ -404,15 +427,18 @@ a:hover { color: var(--gold-light); }
   flex-shrink: 0;
 }
 
-.legend-training-links {
-  margin-top: 8px;
-}
-
 .legend-training-links-fixed {
-  position: sticky;
-  bottom: 0;
+  position: static;
   background: linear-gradient(180deg, rgba(8,10,18,0.05), rgba(8,10,18,0.75) 28%, rgba(8,10,18,0.92));
   padding-top: 8px;
+  margin-top: 8px;
+  border-top: 1px solid var(--border);
+}
+
+.legend-layers-scroll {
+  overflow-y: auto;
+  max-height: 34vh;
+  padding-right: 4px;
 }
 
 .legend-training-title {
@@ -446,6 +472,7 @@ a:hover { color: var(--gold-light); }
 #map-controls {
   position: absolute; bottom: 20px; right: 20px;
   display: flex; flex-direction: column; gap: 6px;
+  z-index: 90;
 }
 
 .map-ctrl-btn {
@@ -464,9 +491,9 @@ a:hover { color: var(--gold-light); }
 
 #biological-mirror-panel {
   position: absolute;
-  right: 20px;
+  right: 74px;
   bottom: 20px;
-  width: 390px;
+  width: min(390px, calc(100vw - 96px));
   max-height: 48vh;
   overflow-y: auto;
   background: var(--bg-glass);
@@ -474,11 +501,16 @@ a:hover { color: var(--gold-light); }
   border-radius: var(--r);
   padding: 13px 15px;
   backdrop-filter: blur(12px);
-  z-index: 55;
+  z-index: 120;
 }
 
 #biological-mirror-panel.hidden {
   display: none;
+}
+
+#map-view.bio-open #biological-mirror-panel {
+  right: calc(var(--sidebar-w) + 24px);
+  width: min(390px, calc(100vw - var(--sidebar-w) - 48px));
 }
 
 .bio-header h4 {

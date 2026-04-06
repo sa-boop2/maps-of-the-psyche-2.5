@@ -1518,9 +1518,44 @@ a:hover { color: var(--gold-light); }
 [data-theme="light"] .map-ctrl-btn { background: rgba(252,251,248,0.92); border-color: rgba(0,0,0,0.08); }
 [data-theme="light"] .map-ctrl-btn:hover { border-color: rgba(0,0,0,0.18); color: #7a6830; }
 [data-theme="light"] #map-legend { background: rgba(252,251,248,0.94); border-color: rgba(0,0,0,0.08); }
+[data-theme="light"] .legend-name { color: #3a3428; }
+[data-theme="light"] .legend-item:hover { background: rgba(122,104,48,0.06); }
 [data-theme="light"] #cmd-palette { background: rgba(250,250,247,0.7); }
 [data-theme="light"] #keyboard-hints { background: rgba(250,250,247,0.7); }
 [data-theme="light"] .legend-num { background: rgba(122,104,48,0.08); }
+[data-theme="light"] .legend-training-links-fixed {
+  background: linear-gradient(180deg, rgba(122,104,48,0.03), rgba(122,104,48,0.06));
+  border-top-color: rgba(0,0,0,0.08);
+}
+[data-theme="light"] .legend-training-title { color: #7a6830; }
+[data-theme="light"] .legend-training-btn {
+  background: rgba(122,104,48,0.06);
+  border-color: rgba(0,0,0,0.12);
+  color: #3a3428;
+}
+[data-theme="light"] .legend-training-btn:hover {
+  background: rgba(122,104,48,0.12);
+  border-color: #7a6830;
+  color: #2a241a;
+}
+[data-theme="light"] #biological-mirror-panel {
+  background: rgba(252,251,248,0.96);
+  border-color: rgba(0,0,0,0.1);
+}
+[data-theme="light"] .bio-analysis-lead,
+[data-theme="light"] .bio-card {
+  background: rgba(122,104,48,0.05);
+  border-color: rgba(0,0,0,0.1);
+}
+[data-theme="light"] .bio-card--integration {
+  background: linear-gradient(180deg, rgba(122,104,48,0.13), rgba(122,104,48,0.05));
+  border-color: rgba(122,104,48,0.3);
+}
+[data-theme="light"] .bio-close-btn {
+  background: rgba(0,0,0,0.03);
+  border-color: rgba(0,0,0,0.12);
+  color: #3a3428;
+}
 [data-theme="light"] .card { background: rgba(252,251,248,0.95); border-color: rgba(0,0,0,0.06); }
 [data-theme="light"] .card:hover { border-color: rgba(0,0,0,0.14); }
 [data-theme="light"] .view-tab { background: rgba(0,0,0,0.02); border-color: rgba(0,0,0,0.08); }

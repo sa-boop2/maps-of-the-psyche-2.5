@@ -827,15 +827,30 @@ a:hover { color: var(--gold-light); }
 
 /* === LOADING SCREEN === */
 #loading-screen {
-  position: fixed; inset: 0;
+  position: fixed; 
+  inset: 0;
   background: var(--bg-primary);
-  display: flex; align-items: center; justify-content: center;
+  display: flex; 
+  align-items: center; 
+  justify-content: center;
   z-index: 999;
-  transition: opacity 0.8s var(--ease);
+  transition: opacity 0.6s var(--ease);
+  /* Performance */
+  will-change: opacity;
+  transform: translateZ(0);
 }
-#loading-screen.done { opacity: 0; pointer-events: none; }
 
-.loading-content { text-align: center; }
+#loading-screen.done { 
+  opacity: 0; 
+  pointer-events: none; 
+}
+
+.loading-content { 
+  text-align: center; 
+  /* Prevent repaint during animation */
+  contain: layout style paint;
+}
+
 .loading-symbol {
   font-family: var(--font-display);
   font-size: 4rem;
@@ -843,7 +858,10 @@ a:hover { color: var(--gold-light); }
   text-shadow: 0 0 40px var(--gold-glow-strong);
   margin-bottom: 16px;
   animation: pulse-glow 2s ease-in-out infinite;
+  /* Performance */
+  will-change: text-shadow;
 }
+
 .loading-text {
   font-size: 0.9rem;
   color: var(--text-dim);
@@ -851,18 +869,24 @@ a:hover { color: var(--gold-light); }
   text-transform: uppercase;
   margin-bottom: 20px;
 }
+
 .loading-bar {
-  width: 200px; height: 2px;
+  width: 200px; 
+  height: 2px;
   background: var(--bg-tertiary);
   border-radius: 1px;
   overflow: hidden;
   margin: 0 auto;
+  /* Performance */
+  contain: strict;
 }
+
 .loading-fill {
   height: 100%;
   background: var(--gold);
   border-radius: 1px;
   animation: load-fill 2s var(--ease) forwards;
+  will-change: transform;
 }
 
 /* === TOOLTIP === */

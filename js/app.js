@@ -337,22 +337,39 @@
     }
   }
   function setView(viewId) {
-    if (currentView === viewId && viewId !== 'home') return; // Prevent redundant view switching
+    if (currentView === viewId && viewId !== 'home') return;
     currentView = viewId;
     document.querySelectorAll('#view-tabs .view-btn').forEach(b => b.classList.toggle('active', b.dataset.view === viewId));
     const mapView = document.getElementById('map-view');
     const secView = document.getElementById('secondary-view');
+    const mainNav = document.getElementById('main-nav');
     const subNav = document.getElementById('sub-nav');
-    if (viewId === 'map') {
+    const appMain = document.getElementById('app-main');
+
+    if (viewId === 'home') {
+      // Full immersive — hide all nav chrome
+      mapView.classList.remove('active');
+      secView.classList.add('active');
+      if (mainNav) mainNav.classList.add('nav-hidden');
+      if (subNav) subNav.style.display = 'none';
+      if (appMain) appMain.classList.add('home-active');
+      App.View2D?.hide();
+      secView.scrollTop = 0;
+      renderSecondaryView(secView, viewId);
+    } else if (viewId === 'map') {
       mapView.classList.add('active');
       secView.classList.remove('active');
+      if (mainNav) mainNav.classList.remove('nav-hidden');
       if (subNav) subNav.style.display = '';
+      if (appMain) appMain.classList.remove('home-active');
       if (mapMode === '3d') App.Sphere3D.setFramework(App.currentFramework);
       else { App.View2D?.show(); App.View2D?.setFramework(App.currentFramework); }
     } else {
       mapView.classList.remove('active');
       secView.classList.add('active');
+      if (mainNav) mainNav.classList.remove('nav-hidden');
       if (subNav) subNav.style.display = 'none';
+      if (appMain) appMain.classList.remove('home-active');
       App.View2D?.hide();
       secView.scrollTop = 0;
       renderSecondaryView(secView, viewId);

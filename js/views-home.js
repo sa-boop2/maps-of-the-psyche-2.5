@@ -98,22 +98,31 @@ window.PsycheApp.ViewsHome = (function() {
 
     container.innerHTML = `
       <div class="home-page">
-        <div class="home-hero fade-in">
-          <div class="home-hero-sigil">Ψ</div>
-          <h1 class="home-hero-title">PSYCHE</h1>
-          <div class="home-hero-rule"></div>
-          <p class="home-hero-sub">An Interactive Map of the Human Psyche</p>
-          <p class="home-hero-desc">28 frameworks · 6 traditions · 65,000 years of human wisdom</p>
+        <!-- Ambient background elements -->
+        <div class="home-ambient">
+          <div class="home-orb home-orb--1"></div>
+          <div class="home-orb home-orb--2"></div>
+          <div class="home-orb home-orb--3"></div>
         </div>
 
-        ${renderFeaturedCard(featured)}
+        <div class="home-content">
+          <div class="home-hero fade-in">
+            <div class="home-hero-sigil">Ψ</div>
+            <h1 class="home-hero-title">PSYCHE</h1>
+            <div class="home-hero-rule"></div>
+            <p class="home-hero-sub">An Interactive Map of the Human Psyche</p>
+            <p class="home-hero-desc">28 frameworks · 6 traditions · 65,000 years of human wisdom</p>
+          </div>
 
-        <div class="home-grid">
-          ${rest.map((card, i) => renderCard(card, i)).join('')}
-        </div>
+          ${renderFeaturedCard(featured)}
 
-        <div class="home-footer fade-in" style="animation-delay: 1.2s">
-          <p>Built with reverence for the cartographers of consciousness — from the Buddha to Jung, from the Yoruba to Freud.</p>
+          <div class="home-grid">
+            ${rest.map((card, i) => renderCard(card, i)).join('')}
+          </div>
+
+          <div class="home-footer fade-in" style="animation-delay: 1.2s">
+            <p>Built with reverence for the cartographers of consciousness — from the Buddha to Jung, from the Yoruba to Freud.</p>
+          </div>
         </div>
       </div>
     `;

@@ -6736,6 +6736,130 @@ button, a, input, select, textarea { transition: all var(--t) var(--ease); }
   font-style: italic;
 }
 
+/* ========================================================================
+   FINAL ENFORCED OVERRIDES (requested UX behavior)
+   ======================================================================== */
+
+/* Home: premium rounded main cards + above-the-fold compactness */
+.home-content {
+  max-width: 1140px !important;
+  padding: 0 16px 44px !important;
+}
+.home-hero {
+  padding: 1.8vh 16px 0.8vh !important;
+}
+.home-hero-sigil {
+  font-size: 2.7rem !important;
+  margin-bottom: 4px !important;
+}
+.home-hero-title {
+  font-size: 2.15rem !important;
+  margin-bottom: 6px !important;
+  letter-spacing: 0.12em !important;
+}
+.home-hero-rule {
+  margin-bottom: 6px !important;
+}
+.home-hero-sub {
+  font-size: 0.86rem !important;
+  margin-bottom: 4px !important;
+}
+.home-hero-desc {
+  font-size: 0.68rem !important;
+}
+.home-section-subtitle {
+  margin-bottom: 6px !important;
+}
+.home-primary-row {
+  gap: 7px !important;
+}
+.home-primary-card {
+  border-radius: 18px !important;
+  min-height: 130px !important;
+  padding: 9px 9px 8px !important;
+  background: linear-gradient(165deg, rgba(24, 22, 40, 0.94), rgba(10, 10, 28, 0.86)) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.06),
+    0 10px 28px rgba(0,0,0,0.32) !important;
+}
+.home-primary-card:hover {
+  border-color: rgba(201, 168, 76, 0.36) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.08),
+    0 12px 32px rgba(0,0,0,0.36),
+    0 0 24px rgba(201,168,76,0.1) !important;
+}
+.home-primary-title { font-size: 0.8rem !important; }
+.home-primary-subtitle { font-size: 0.57rem !important; margin-bottom: 4px !important; }
+.home-primary-desc { font-size: 0.61rem !important; line-height: 1.22 !important; }
+
+/* Map: requested layout exactly (longer bio, thinner legend, timeline below) */
+#map-view #biological-mirror-panel {
+  height: min(82vh, 840px) !important;
+  max-height: min(82vh, 840px) !important;
+}
+#map-view #map-legend {
+  width: min(240px, 22vw) !important;
+  max-height: min(36vh, 300px) !important;
+  padding: 7px 9px !important;
+  font-size: 0.64rem !important;
+  border-radius: 9px !important;
+  bottom: 66px !important;
+}
+#map-view .legend-layers-scroll {
+  max-height: min(22vh, 180px) !important;
+}
+#map-view .legend-dot { width: 7px !important; height: 7px !important; }
+#map-view .legend-num { width: 14px !important; height: 14px !important; font-size: 0.52rem !important; }
+#map-view .legend-training-btn { font-size: 0.62rem !important; padding: 2px 6px !important; }
+
+#map-view #timeline-container {
+  top: auto !important;
+  bottom: 8px !important;
+  width: min(54vw, 500px) !important;
+  border-radius: 16px !important;
+  padding: 7px 10px !important;
+}
+
+/* Light mode: ensure related trainings + legend surfaces are corrected */
+[data-theme="light"] #map-view .legend-training-links-fixed {
+  background: linear-gradient(180deg, rgba(122,104,48,0.03), rgba(122,104,48,0.08)) !important;
+  border-top-color: rgba(0,0,0,0.08) !important;
+}
+[data-theme="light"] #map-view .legend-training-title {
+  color: #6f5e2d !important;
+}
+[data-theme="light"] #map-view .legend-training-btn {
+  background: rgba(122,104,48,0.07) !important;
+  border-color: rgba(0,0,0,0.14) !important;
+  color: #2f2a1f !important;
+}
+[data-theme="light"] #map-view .legend-training-btn:hover {
+  background: rgba(122,104,48,0.14) !important;
+  border-color: #7a6830 !important;
+}
+
+@media (max-width: 900px) {
+  #map-view #timeline-container {
+    bottom: 6px !important;
+    width: min(68vw, 450px) !important;
+  }
+  #map-view #biological-mirror-panel {
+    height: min(78vh, 760px) !important;
+    max-height: min(78vh, 760px) !important;
+  }
+}
+
+@media (max-width: 740px) {
+  #map-view #timeline-container {
+    width: calc(100vw - 100px) !important;
+  }
+  #map-view #map-legend {
+    width: min(230px, calc(100vw - 104px)) !important;
+    max-height: min(34vh, 260px) !important;
+  }
+}
+
 /* ── HABITS (Practice Tab) ── */
 .habits-list {
   display: flex;

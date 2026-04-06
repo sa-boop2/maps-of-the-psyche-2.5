@@ -6384,6 +6384,146 @@ button, a, input, select, textarea { transition: all var(--t) var(--ease); }
   background: linear-gradient(90deg, #b22222, #d97070);
 }
 
+/* Buddhist: Mindful Observation - Warm oranges, earthen tones */
+.training-theme-buddhist {
+  --training-bg: radial-gradient(ellipse at 50% 0%, rgba(232, 160, 76, 0.15), transparent 60%);
+}
+
+.training-theme-buddhist .tab-btn.active {
+  color: #e8a04c;
+  border-bottom-color: #e8a04c;
+}
+
+.training-theme-buddhist .habits-bar-fill {
+  background: linear-gradient(90deg, #e8a04c, #f4b86e);
+}
+
+/* Chakra: Rainbow Spectrum - Cycling through all chakra colors */
+.training-theme-chakra {
+  --training-bg: radial-gradient(ellipse at 50% 0%, rgba(218, 59, 137, 0.15), transparent 60%);
+}
+
+.training-theme-chakra .tab-btn.active {
+  color: #da3b89;
+  border-bottom-color: #da3b89;
+}
+
+.training-theme-chakra .habits-bar-fill {
+  background: linear-gradient(90deg, #c23163, #da3b89, #e756a4);
+}
+
+/* Egyptian: Ancient Mystery - Deep purples, golds, lapis lazuli blues */
+.training-theme-egyptian {
+  --training-bg: radial-gradient(ellipse at 50% 0%, rgba(142, 68, 173, 0.15), transparent 60%);
+}
+
+.training-theme-egyptian .tab-btn.active {
+  color: #8e44ad;
+  border-bottom-color: #8e44ad;
+}
+
+.training-theme-egyptian .habits-bar-fill {
+  background: linear-gradient(90deg, #8e44ad, #a569bd);
+}
+
+/* Gnostic: Electric Revelation - Deep purples, electric violets, shocking awareness */
+.training-theme-gnostic {
+  --training-bg: radial-gradient(ellipse at 50% 0%, rgba(156, 39, 176, 0.15), transparent 60%);
+}
+
+.training-theme-gnostic .tab-btn.active {
+  color: #9c27b0;
+  border-bottom-color: #9c27b0;
+}
+
+.training-theme-gnostic .habits-bar-fill {
+  background: linear-gradient(90deg, #7b1fa2, #9c27b0, #ab47bc);
+}
+
+/* Kabbalah: Sacred Geometry - Deep blues, divine proportions */
+.training-theme-kabbalah {
+  --training-bg: radial-gradient(ellipse at 50% 0%, rgba(63, 81, 181, 0.15), transparent 60%);
+}
+
+.training-theme-kabbalah .tab-btn.active {
+  color: #5c6bc0;
+  border-bottom-color: #5c6bc0;
+}
+
+.training-theme-kabbalah .habits-bar-fill {
+  background: linear-gradient(90deg, #3f51b5, #5c6bc0);
+}
+
+/* Alchemy: Transmutation - Golds, alchemical reds, philosopher's stone hues */
+.training-theme-alchemy {
+  --training-bg: radial-gradient(ellipse at 50% 0%, rgba(218, 165, 32, 0.15), transparent 60%);
+}
+
+.training-theme-alchemy .tab-btn.active {
+  color: #daa520;
+  border-bottom-color: #daa520;
+}
+
+.training-theme-alchemy .habits-bar-fill {
+  background: linear-gradient(90deg, #b8860b, #daa520, #f0c14f);
+}
+
+/* IFS: Internal Family - Soft blues, therapeutic calm, multiplicity */
+.training-theme-ifs {
+  --training-bg: radial-gradient(ellipse at 50% 0%, rgba(79, 195, 247, 0.15), transparent 60%);
+}
+
+.training-theme-ifs .tab-btn.active {
+  color: #4fc3f7;
+  border-bottom-color: #4fc3f7;
+}
+
+.training-theme-ifs .habits-bar-fill {
+  background: linear-gradient(90deg, #29b6f6, #4fc3f7);
+}
+
+/* Sufi: Heart-Centered Love - Deep rose, passionate reds, devotional warmth */
+.training-theme-sufi {
+  --training-bg: radial-gradient(ellipse at 50% 0%, rgba(233, 30, 99, 0.15), transparent 60%);
+}
+
+.training-theme-sufi .tab-btn.active {
+  color: #e91e63;
+  border-bottom-color: #e91e63;
+}
+
+.training-theme-sufi .habits-bar-fill {
+  background: linear-gradient(90deg, #c2185b, #e91e63, #f06292);
+}
+
+/* Frankl: Existential Meaning - Deep blues, serious purpose, dignified darkness */
+.training-theme-frankl {
+  --training-bg: radial-gradient(ellipse at 50% 0%, rgba(66, 134, 244, 0.15), transparent 60%);
+}
+
+.training-theme-frankl .tab-btn.active {
+  color: #4286f4;
+  border-bottom-color: #4286f4;
+}
+
+.training-theme-frankl .habits-bar-fill {
+  background: linear-gradient(90deg, #1e88e5, #4286f4);
+}
+
+/* Spiral: Developmental Stages - Teal integral consciousness, evolutionary flow */
+.training-theme-spiral {
+  --training-bg: radial-gradient(ellipse at 50% 0%, rgba(0, 188, 212, 0.15), transparent 60%);
+}
+
+.training-theme-spiral .tab-btn.active {
+  color: #00bcd4;
+  border-bottom-color: #00bcd4;
+}
+
+.training-theme-spiral .habits-bar-fill {
+  background: linear-gradient(90deg, #0097a7, #00bcd4, #26c6da);
+}
+
 /* ── RESPONSIVE ── */
 @media (max-width: 768px) {
   .dashboard-tabs {

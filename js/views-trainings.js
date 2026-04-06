@@ -217,15 +217,15 @@ window.PsycheApp.ViewsTrainings = (function() {
     return `
       <div class="trainings-page training-active ${themeClass}" style="--hue: ${t.hue};">
         <div class="dashboard-topbar">
-          <button class="dashboard-back-btn" onclick="PsycheApp.ViewsTrainings.pauseTraining()">
-            ← Hall
+          <button class="dashboard-home-btn" onclick="PsycheApp.ViewsTrainings.goHome()">
+            ← Home
           </button>
           <div class="dashboard-topbar-title">
             <span class="dashboard-topbar-icon">${t.icon}</span>
             <span>${t.title}</span>
           </div>
-          <button class="dashboard-home-btn" onclick="PsycheApp.ViewsTrainings.goHome()">
-            Home
+          <button class="dashboard-back-btn" onclick="PsycheApp.ViewsTrainings.pauseTraining()">
+            Hall →
           </button>
         </div>
 

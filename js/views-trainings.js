@@ -22,7 +22,7 @@ window.PsycheApp.ViewsTrainings = (function() {
         trainingState = data.state || null;
       }
     } catch (e) {
-      console.warn('TRAININGS: Could not load state', e);
+      // Silent fail - localStorage not critical
     }
   }
 
@@ -33,7 +33,7 @@ window.PsycheApp.ViewsTrainings = (function() {
         state: trainingState
       }));
     } catch (e) {
-      console.warn('TRAININGS: Could not save state', e);
+      // Silent fail - localStorage not critical
     }
   }
 
@@ -407,46 +407,65 @@ window.PsycheApp.ViewsTrainings = (function() {
     `;
   }
 
-  // ── BIND EVENTS ──
+  // ── BIND EVENTS (Optimized with Event Delegation) ──
   function bindEvents() {
-    // Tab switching
-    document.querySelectorAll('.tab-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const targetTab = btn.dataset.tab;
+    if (!currentContainer) return;
+    
+    // Single event listener for all interactions using delegation
+    currentContainer.addEventListener('click', (e) => {
+      const target = e.target;
+      
+      // Tab switching
+      if (target.classList.contains('tab-btn')) {
+        const targetTab = target.dataset.tab;
         
         // Update buttons
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
+        currentContainer.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        target.classList.add('active');
         
         // Update panels
-        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-        document.querySelector(`[data-panel="${targetTab}"]`)?.classList.add('active');
-      });
-    });
-  
-    // Training card clicks
-    document.querySelectorAll('.training-card').forEach(card => {
-      card.addEventListener('click', (e) => {
-        if (e.target.classList.contains('training-card-btn')) {
+        currentContainer.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        currentContainer.querySelector(`[data-panel="${targetTab}"]`)?.classList.add('active');
+        return;
+      }
+      
+      // Training card clicks
+      const card = target.closest('.training-card');
+      if (card) {
+        if (target.classList.contains('training-card-btn')) {
           const id = card.dataset.training;
           beginTraining(id);
-        }
-      });
-      // Also allow clicking the whole card
-      card.addEventListener('click', (e) => {
-        if (!e.target.classList.contains('training-card-btn')) {
+        } else {
           const id = card.dataset.training;
           showPreview(id);
         }
-      });
-    });
-
-    // Habit toggles
-    document.querySelectorAll('.habit-row').forEach(row => {
-      row.addEventListener('click', () => {
-        const id = row.dataset.habit;
+        return;
+      }
+      
+      // Habit toggles
+      const habitRow = target.closest('.habit-row');
+      if (habitRow) {
+        const id = habitRow.dataset.habit;
         toggleHabit(id);
-      });
+        return;
+      }
+      
+      // Modal close
+      if (target.classList.contains('modal-close') || target.classList.contains('modal-backdrop')) {
+        document.querySelector('.training-modal')?.remove();
+        return;
+      }
+      
+      // Modal begin button
+      if (target.classList.contains('modal-begin')) {
+        const modal = target.closest('.training-modal');
+        const trainingId = modal?.dataset.trainingId;
+        if (trainingId) {
+          document.querySelector('.training-modal')?.remove();
+          beginTraining(trainingId);
+        }
+        return;
+      }
     });
   }
 
@@ -459,6 +478,7 @@ window.PsycheApp.ViewsTrainings = (function() {
 
     const modal = document.createElement('div');
     modal.className = 'training-modal';
+    modal.dataset.trainingId = trainingId; // Store ID for event delegation
     modal.innerHTML = `
       <div class="modal-backdrop"></div>
       <div class="modal-content" style="--hue: ${t.hue};">
@@ -478,22 +498,13 @@ window.PsycheApp.ViewsTrainings = (function() {
         </div>
         <div class="modal-actions">
           <button class="modal-begin">Begin This Path</button>
-          <button class="modal-cancel">Not Yet</button>
+          <button class="modal-close modal-cancel">Not Yet</button>
         </div>
       </div>
     `;
 
     document.body.appendChild(modal);
     requestAnimationFrame(() => modal.classList.add('active'));
-
-    // Events
-    modal.querySelector('.modal-backdrop').onclick = () => modal.remove();
-    modal.querySelector('.modal-close').onclick = () => modal.remove();
-    modal.querySelector('.modal-cancel').onclick = () => modal.remove();
-    modal.querySelector('.modal-begin').onclick = () => {
-      modal.remove();
-      beginTraining(trainingId);
-    };
   }
 
   // ── MAIN RENDER ──

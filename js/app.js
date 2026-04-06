@@ -46,10 +46,10 @@
 
   // ── INIT ──
   function init() {
-    console.log("PSYCHE: Initializing Master Edition...");
+    // Production: console.log removed for performance
     
     if (!App.allFrameworks || App.allFrameworks.length === 0) {
-      console.error("PSYCHE: No frameworks loaded. Check your 'data/' folder and script paths.");
+      console.error("PSYCHE: No frameworks loaded");
       const errorMsg = document.createElement('div');
       errorMsg.style = "position:fixed; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(20,0,0,0.95); color:#ff4d4d; z-index:9999; font-family:monospace; padding:40px; text-align:center;";
       errorMsg.innerHTML = "<h1>Data Load Error</h1><p>No frameworks found. Please ensure the 'data/' folder is correctly uploaded to your server.</p>";

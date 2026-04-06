@@ -6,6 +6,10 @@
 /* === RESET & VARIABLES === */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+html {
+  scroll-behavior: smooth;
+}
+
 :root {
   --bg-primary: #0a0a1a;
   --bg-secondary: #0e0e22;
@@ -4806,6 +4810,9 @@ button, a, input, select, textarea { transition: all var(--t) var(--ease); }
   inset: 0;
   overflow-y: auto;
   background: var(--bg-primary);
+  /* Performance optimizations */
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 .trainings-home-btn {
@@ -4826,6 +4833,8 @@ button, a, input, select, textarea { transition: all var(--t) var(--ease); }
   font-size: 0.85rem;
   cursor: pointer;
   transition: all var(--t);
+  /* Performance */
+  will-change: border-color, color;
 }
 
 .trainings-home-btn:hover {
@@ -4904,6 +4913,7 @@ button, a, input, select, textarea { transition: all var(--t) var(--ease); }
   background: linear-gradient(90deg, transparent, hsl(var(--hue), 50%, 50%), transparent);
   opacity: 0;
   transition: opacity 0.4s;
+  will-change: opacity;
 }
 
 .training-card:hover {
@@ -4928,6 +4938,7 @@ button, a, input, select, textarea { transition: all var(--t) var(--ease); }
   opacity: 0;
   transition: opacity 0.4s;
   pointer-events: none;
+  will-change: opacity;
 }
 
 .training-card:hover .training-card-glow {
@@ -4940,6 +4951,7 @@ button, a, input, select, textarea { transition: all var(--t) var(--ease); }
   color: hsl(var(--hue), 45%, 55%);
   text-shadow: 0 0 30px hsla(var(--hue), 50%, 50%, 0.4);
   transition: transform 0.4s, text-shadow 0.4s;
+  will-change: transform;
 }
 
 .training-card:hover .training-card-icon {
@@ -5042,6 +5054,7 @@ button, a, input, select, textarea { transition: all var(--t) var(--ease); }
   justify-content: center;
   opacity: 0;
   transition: opacity 0.3s;
+  will-change: opacity;
 }
 
 .training-modal.active {
@@ -5067,6 +5080,9 @@ button, a, input, select, textarea { transition: all var(--t) var(--ease); }
   padding: 40px;
   transform: translateY(20px);
   transition: transform 0.4s var(--ease);
+  will-change: transform;
+  /* Performance */
+  backface-visibility: hidden;
 }
 
 .training-modal.active .modal-content {
@@ -5094,6 +5110,7 @@ button, a, input, select, textarea { transition: all var(--t) var(--ease); }
 .modal-close:hover {
   border-color: var(--gold);
   color: var(--gold);
+  transform: rotate(90deg);
 }
 
 .modal-icon {
@@ -5855,6 +5872,8 @@ button, a, input, select, textarea { transition: all var(--t) var(--ease); }
   margin: 30px auto 0;
   max-width: 900px;
   border-bottom: 2px solid var(--border);
+  /* Performance */
+  contain: layout;
 }
 
 .tab-btn {
@@ -5867,9 +5886,10 @@ button, a, input, select, textarea { transition: all var(--t) var(--ease); }
   font-size: 0.9rem;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: color 0.2s, border-bottom-color 0.2s;
   position: relative;
   bottom: -2px;
+  will-change: color, border-bottom-color;
 }
 
 .tab-btn:hover {
@@ -5891,7 +5911,9 @@ button, a, input, select, textarea { transition: all var(--t) var(--ease); }
 
 .tab-panel {
   display: none;
-  animation: fadeInPanel 0.4s ease;
+  animation: fadeInPanel 0.3s ease;
+  /* Performance */
+  contain: layout style paint;
 }
 
 .tab-panel.active {
@@ -5899,7 +5921,7 @@ button, a, input, select, textarea { transition: all var(--t) var(--ease); }
 }
 
 @keyframes fadeInPanel {
-  from { opacity: 0; transform: translateY(10px); }
+  from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
 }
 

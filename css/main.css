@@ -617,8 +617,6 @@ a:hover { color: var(--gold-light); }
   border-color: var(--gold);
 }
 
-.bio-actions { display: none; }
-
 @media (max-width: 1080px) {
   #map-controls {
     bottom: 82px;

@@ -4870,6 +4870,19 @@ button, a, input, select, textarea { transition: all var(--t) var(--ease); }
   }
   .home-featured-icon { width: 56px; height: 56px; }
   .home-featured-arrow { position: absolute; top: 28px; right: 24px; }
+  .home-3d-deck {
+    height: auto;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+  .home-stele {
+    width: calc(50% - 8px);
+    height: 140px;
+    transform: none;
+  }
+  .home-stele:hover {
+    transform: translateY(-4px);
+  }
 }
 @media (max-width: 520px) {
   .home-hero-title { font-size: 1.8rem; }
@@ -4881,6 +4894,9 @@ button, a, input, select, textarea { transition: all var(--t) var(--ease); }
   .home-card-icon { margin-bottom: 0; width: 34px; height: 34px; flex-shrink: 0; }
   .home-card-desc { display: none; }
   .home-card-arrow { position: static; opacity: 0.3; flex-shrink: 0; }
+  .home-stele {
+    width: 100%;
+  }
 }
 
 /* ── Light theme: Home ── */

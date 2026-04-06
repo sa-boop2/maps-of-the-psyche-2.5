@@ -96,6 +96,23 @@ window.PsycheApp.ViewsTrainings = (function() {
     window.PsycheApp?.showToast?.(`Beginning ${training.title}...`);
   }
 
+  function resumeTraining(trainingId) {
+    const training = D.trainings?.find(t => t.id === trainingId);
+    if (!training) return;
+    activeTraining = training;
+    hallMode = false;
+    if (!trainingState) {
+      trainingState = {
+        startDate: new Date().toISOString(),
+        completedHabits: {},
+        reflectionCompleted: false
+      };
+    }
+    saveState();
+    reRender();
+    window.PsycheApp?.showToast?.(`Resuming ${training.title}...`);
+  }
+
   function abandonTraining() {
     if (!confirm('Abandon your current training? All progress will be lost.')) return;
     activeTraining = null;
@@ -171,7 +188,7 @@ window.PsycheApp.ViewsTrainings = (function() {
                 <h3>Resume Your Journey</h3>
                 <p>You have an active training: <strong>${savedTraining.title}</strong></p>
               </div>
-              <button class="resume-btn" onclick="PsycheApp.ViewsTrainings.beginTraining('${savedTraining.id}')">
+              <button class="resume-btn" onclick="PsycheApp.ViewsTrainings.resumeTraining('${savedTraining.id}')">
                 Continue →
               </button>
             </div>
@@ -557,6 +574,7 @@ window.PsycheApp.ViewsTrainings = (function() {
   return {
     render,
     beginTraining,
+    resumeTraining,
     abandonTraining,
     pauseTraining,
     toggleHabit,

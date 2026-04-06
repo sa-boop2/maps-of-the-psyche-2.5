@@ -347,7 +347,7 @@
     const subNav = document.getElementById('sub-nav');
     const appMain = document.getElementById('app-main');
 
-    if (viewId === 'home') {
+    if (viewId === 'home' || viewId === 'trainings') {
       // Full immersive — hide all nav chrome
       mapView.classList.remove('active');
       secView.classList.add('active');

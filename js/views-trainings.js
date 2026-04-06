@@ -9,10 +9,10 @@ window.PsycheApp.ViewsTrainings = (function() {
   const D = window.PsycheData || {};
   
   let activeTraining = null;
-  let trainingState = null; // { startDate, completedHabits: { day1: ['h1', 'h2'], ... }, reflectionUnlocked, reflectionCompleted }
-  let currentScreen = 'hall'; // 'hall' | 'dashboard'
+  let trainingState = null;
+  let currentContainer = null;
 
-  // ── STORAGE HELPERS ──
+  // ── STORAGE ──
   function loadState() {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
@@ -37,7 +37,7 @@ window.PsycheApp.ViewsTrainings = (function() {
     }
   }
 
-  // ── DATE HELPERS ──
+  // ── DATE/PROGRESS HELPERS ──
   function getCurrentDay() {
     if (!trainingState?.startDate) return 1;
     const start = new Date(trainingState.startDate);
@@ -53,12 +53,9 @@ window.PsycheApp.ViewsTrainings = (function() {
 
   function getProgress() {
     if (!activeTraining || !trainingState) return 0;
-    const totalDays = activeTraining.durationDays || 7;
-    const currentDay = getCurrentDay();
-    return Math.min(100, Math.round((currentDay / totalDays) * 100));
+    return Math.min(100, Math.round((getCurrentDay() / (activeTraining.durationDays || 7)) * 100));
   }
 
-  // ── HABIT HELPERS ──
   function isHabitCompleted(habitId) {
     const dayKey = `day${getCurrentDay()}`;
     return trainingState?.completedHabits?.[dayKey]?.includes(habitId) || false;
@@ -77,10 +74,10 @@ window.PsycheApp.ViewsTrainings = (function() {
       trainingState.completedHabits[dayKey].splice(idx, 1);
     }
     saveState();
-    render();
+    reRender();
   }
 
-  // ── TRAINING ACTIONS ──
+  // ── ACTIONS ──
   function beginTraining(trainingId) {
     const training = D.trainings?.find(t => t.id === trainingId);
     if (!training) return;
@@ -89,13 +86,10 @@ window.PsycheApp.ViewsTrainings = (function() {
     trainingState = {
       startDate: new Date().toISOString(),
       completedHabits: {},
-      reflectionUnlocked: false,
       reflectionCompleted: false
     };
-    currentScreen = 'dashboard';
     saveState();
-    render();
-    
+    reRender();
     window.PsycheApp?.showToast?.(`Beginning ${training.title}...`);
   }
 
@@ -103,9 +97,8 @@ window.PsycheApp.ViewsTrainings = (function() {
     if (!confirm('Abandon your current training? All progress will be lost.')) return;
     activeTraining = null;
     trainingState = null;
-    currentScreen = 'hall';
     saveState();
-    render();
+    reRender();
     window.PsycheApp?.showToast?.('Training abandoned.');
   }
 
@@ -113,317 +106,329 @@ window.PsycheApp.ViewsTrainings = (function() {
     if (!trainingState) return;
     trainingState.reflectionCompleted = true;
     saveState();
-    render();
+    reRender();
     window.PsycheApp?.showToast?.('Reflection completed. The path continues...');
   }
 
-  // ── RENDER: 3D HALL OF MONOLITHS ──
+  function goToHall() {
+    activeTraining = null;
+    trainingState = null;
+    reRender();
+  }
+
+  function goHome() {
+    window.PsycheApp?.goToView?.('home');
+  }
+
+  // ── RENDER: HALL ──
   function renderHall() {
     const trainings = D.trainings || [];
     
     return `
-      <div class="trainings-hall">
-        <div class="hall-header">
-          <h1 class="hall-title">The Hall of Praxis</h1>
-          <p class="hall-subtitle">Choose your path. Live the tradition.</p>
-        </div>
-        
-        <div class="hall-corridor">
-          <div class="hall-floor"></div>
-          <div class="monoliths-container">
-            ${trainings.map((t, i) => `
-              <div class="monolith" data-id="${t.id}" style="--hue: ${t.hue}; --index: ${i};">
-                <div class="monolith-inner">
-                  <div class="monolith-glow"></div>
-                  <div class="monolith-face monolith-front">
-                    <span class="monolith-icon">${t.icon}</span>
-                    <h2 class="monolith-title">${t.title}</h2>
-                    <span class="monolith-duration">${t.duration}</span>
-                  </div>
-                  <div class="monolith-face monolith-back"></div>
-                  <div class="monolith-face monolith-left"></div>
-                  <div class="monolith-face monolith-right"></div>
-                  <div class="monolith-face monolith-top"></div>
-                </div>
-                <div class="monolith-reflection"></div>
-              </div>
+      <div class="trainings-page">
+        <button class="trainings-home-btn" onclick="PsycheApp.ViewsTrainings.goHome()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+            <polyline points="9,22 9,12 15,12 15,22"/>
+          </svg>
+          Home
+        </button>
+
+        <div class="trainings-hall-content">
+          <header class="trainings-header">
+            <div class="trainings-sigil">⚗</div>
+            <h1>The Hall of Praxis</h1>
+            <p class="trainings-subtitle">Stop intellectualizing. Start living.</p>
+            <p class="trainings-desc">Choose a path below. For the next 7-14 days, you will adopt the persona of an initiate in that tradition — following their rhythms, their practices, their culture.</p>
+          </header>
+
+          <div class="trainings-grid">
+            ${trainings.map(t => `
+              <article class="training-card" data-training="${t.id}" style="--hue: ${t.hue};">
+                <div class="training-card-glow"></div>
+                <div class="training-card-icon">${t.icon}</div>
+                <h2 class="training-card-title">${t.title}</h2>
+                <p class="training-card-philosophy">${t.philosophy}</p>
+                <p class="training-card-duration">${t.duration}</p>
+                <blockquote class="training-card-quote">"${t.quote}"</blockquote>
+                <p class="training-card-overview">${t.overview.slice(0, 150)}...</p>
+                <button class="training-card-btn">Begin Path</button>
+              </article>
             `).join('')}
           </div>
-        </div>
-        
-        <div class="hall-quote">
-          <blockquote>"There are nowadays professors of philosophy, but not philosophers."</blockquote>
-          <cite>— Thoreau</cite>
+
+          <footer class="trainings-footer">
+            <blockquote>"There are nowadays professors of philosophy, but not philosophers."</blockquote>
+            <cite>— Thoreau</cite>
+          </footer>
         </div>
       </div>
     `;
   }
 
-  // ── RENDER: TRAINING DASHBOARD ──
+  // ── RENDER: DASHBOARD ──
   function renderDashboard() {
-    if (!activeTraining) return renderHall();
-    
     const t = activeTraining;
+    if (!t) return renderHall();
+    
     const day = getCurrentDay();
     const progress = getProgress();
     const isLastDay = isReflectionDay();
-    const allHabitsToday = t.habits.every(h => isHabitCompleted(h.id));
-    
+    const habitsComplete = t.habits.filter(h => isHabitCompleted(h.id)).length;
+    const circumference = 2 * Math.PI * 45;
+    const dashOffset = circumference - (progress / 100) * circumference;
+
     return `
-      <div class="training-dashboard" style="--hue: ${t.hue};">
-        <div class="dashboard-header">
-          <button class="dashboard-back" onclick="PsycheApp.ViewsTrainings.goToHall()">
-            ← Hall
+      <div class="trainings-page training-active" style="--hue: ${t.hue};">
+        <div class="dashboard-topbar">
+          <button class="dashboard-back-btn" onclick="PsycheApp.ViewsTrainings.goToHall()">
+            ← Back to Hall
           </button>
-          <div class="dashboard-title-block">
-            <span class="dashboard-icon">${t.icon}</span>
-            <div>
-              <h1 class="dashboard-title">${t.title}</h1>
-              <span class="dashboard-philosophy">${t.philosophy}</span>
-            </div>
+          <div class="dashboard-topbar-title">
+            <span class="dashboard-topbar-icon">${t.icon}</span>
+            <span>${t.title}</span>
           </div>
-          <button class="dashboard-abandon" onclick="PsycheApp.ViewsTrainings.abandonTraining()">
+          <button class="dashboard-abandon-btn" onclick="PsycheApp.ViewsTrainings.abandonTraining()">
             Abandon
           </button>
         </div>
 
-        <div class="dashboard-progress-section">
-          <div class="progress-ring-container">
-            <svg class="progress-ring" viewBox="0 0 120 120">
-              <circle class="progress-ring-bg" cx="60" cy="60" r="52" />
-              <circle class="progress-ring-fill" cx="60" cy="60" r="52" 
-                style="stroke-dasharray: ${(progress / 100) * 327} 327;" />
-            </svg>
-            <div class="progress-ring-text">
-              <span class="progress-day">Day ${day}</span>
-              <span class="progress-of">of ${t.durationDays}</span>
+        <div class="dashboard-content">
+          <!-- HERO SECTION -->
+          <section class="dashboard-hero">
+            <div class="dashboard-progress-ring">
+              <svg viewBox="0 0 100 100">
+                <circle class="progress-bg" cx="50" cy="50" r="45"/>
+                <circle class="progress-fill" cx="50" cy="50" r="45" 
+                  style="stroke-dasharray: ${circumference}; stroke-dashoffset: ${dashOffset};"/>
+              </svg>
+              <div class="progress-text">
+                <span class="progress-day">Day ${day}</span>
+                <span class="progress-total">of ${t.durationDays}</span>
+              </div>
             </div>
-          </div>
-          <div class="progress-quote">
-            <blockquote>"${t.quote}"</blockquote>
-            <cite>— ${t.author}</cite>
-          </div>
-        </div>
-
-        <div class="dashboard-grid">
-          <!-- ETHOS CARD -->
-          <div class="dashboard-card ethos-card">
-            <h3 class="card-title">⚔ Your Ethos</h3>
-            <p class="ethos-text">${t.immersion.ethos}</p>
-            <div class="ethos-persona">
-              <h4>The Persona</h4>
-              <p>${t.immersion.persona}</p>
+            <div class="dashboard-hero-info">
+              <h1>${t.title}</h1>
+              <p class="dashboard-philosophy">${t.philosophy}</p>
+              <blockquote>"${t.quote}" <cite>— ${t.author}</cite></blockquote>
             </div>
-          </div>
+          </section>
 
-          <!-- DAILY RITUALS -->
-          <div class="dashboard-card rituals-card">
-            <h3 class="card-title">☽ Daily Rituals</h3>
-            <ul class="rituals-list">
-              ${t.immersion.rituals.map(r => `<li>${r}</li>`).join('')}
-            </ul>
-          </div>
+          <!-- MAIN GRID -->
+          <div class="dashboard-grid">
+            
+            <!-- ETHOS -->
+            <section class="dash-card dash-ethos">
+              <h3>⚔ Your Ethos</h3>
+              <p class="ethos-main">${t.immersion.ethos}</p>
+              <div class="ethos-persona">
+                <h4>The Persona</h4>
+                <p>${t.immersion.persona}</p>
+              </div>
+            </section>
 
-          <!-- HABITS CHECKLIST -->
-          <div class="dashboard-card habits-card">
-            <h3 class="card-title">◉ Today's Practice</h3>
-            <div class="habits-list">
-              ${t.habits.map(h => `
-                <div class="habit-item ${isHabitCompleted(h.id) ? 'completed' : ''}" 
-                     onclick="PsycheApp.ViewsTrainings.toggleHabit('${h.id}')">
-                  <div class="habit-checkbox">
-                    ${isHabitCompleted(h.id) ? '✓' : ''}
+            <!-- TODAY'S PRACTICE -->
+            <section class="dash-card dash-habits">
+              <h3>◉ Today's Practice <span class="habits-count">${habitsComplete}/${t.habits.length}</span></h3>
+              <div class="habits-list">
+                ${t.habits.map(h => `
+                  <div class="habit-row ${isHabitCompleted(h.id) ? 'done' : ''}" data-habit="${h.id}">
+                    <div class="habit-check">${isHabitCompleted(h.id) ? '✓' : ''}</div>
+                    <div class="habit-info">
+                      <strong>${h.task}</strong>
+                      <span class="habit-time">${h.duration}</span>
+                      <p>${h.description}</p>
+                    </div>
                   </div>
-                  <div class="habit-content">
-                    <span class="habit-task">${h.task}</span>
-                    <span class="habit-duration">${h.duration}</span>
-                    <p class="habit-desc">${h.description}</p>
-                  </div>
+                `).join('')}
+              </div>
+            </section>
+
+            <!-- DAILY RITUALS -->
+            <section class="dash-card dash-rituals">
+              <h3>☽ Daily Rituals</h3>
+              <ul>
+                ${t.immersion.rituals.map(r => `<li>${r}</li>`).join('')}
+              </ul>
+            </section>
+
+            <!-- IMMERSION HUB -->
+            <section class="dash-card dash-immersion">
+              <h3>🎭 Immersion Hub</h3>
+              <div class="immersion-tabs">
+                <div class="immersion-tab">
+                  <h4>♫ Music</h4>
+                  <ul>${t.immersion.culture.music.map(m => `<li>${m}</li>`).join('')}</ul>
                 </div>
-              `).join('')}
-            </div>
-            ${allHabitsToday ? '<div class="habits-complete-msg">✨ All practices complete for today</div>' : ''}
-          </div>
+                <div class="immersion-tab">
+                  <h4>📖 Reading</h4>
+                  <ul>${t.immersion.culture.reading.map(r => `<li>${r}</li>`).join('')}</ul>
+                </div>
+                <div class="immersion-tab">
+                  <h4>🎨 Art</h4>
+                  <ul>${t.immersion.culture.art.map(a => `<li>${a}</li>`).join('')}</ul>
+                </div>
+                <div class="immersion-tab">
+                  <h4>🎬 Media</h4>
+                  <ul>${t.immersion.culture.media.map(m => `<li>${m}</li>`).join('')}</ul>
+                </div>
+              </div>
+              <div class="immersion-env">
+                <h4>🕯 Environment</h4>
+                <p>${t.immersion.environment}</p>
+              </div>
+            </section>
 
-          <!-- IMMERSION HUB -->
-          <div class="dashboard-card immersion-card">
-            <h3 class="card-title">🎭 Immersion Hub</h3>
-            
-            <div class="immersion-section">
-              <h4>♫ Music</h4>
-              <ul>${t.immersion.culture.music.map(m => `<li>${m}</li>`).join('')}</ul>
-            </div>
-            
-            <div class="immersion-section">
-              <h4>🎨 Art & Visual</h4>
-              <ul>${t.immersion.culture.art.map(a => `<li>${a}</li>`).join('')}</ul>
-            </div>
-            
-            <div class="immersion-section">
-              <h4>📖 Reading</h4>
-              <ul>${t.immersion.culture.reading.map(r => `<li>${r}</li>`).join('')}</ul>
-            </div>
-            
-            <div class="immersion-section">
-              <h4>🎬 Media</h4>
-              <ul>${t.immersion.culture.media.map(m => `<li>${m}</li>`).join('')}</ul>
-            </div>
-            
-            <div class="immersion-environment">
-              <h4>🕯 Environment</h4>
-              <p>${t.immersion.environment}</p>
-            </div>
-          </div>
+            <!-- COMPANIONS & TABOOS -->
+            <section class="dash-card dash-boundaries">
+              <h3>⚖ Boundaries</h3>
+              <div class="boundaries-grid">
+                <div>
+                  <h4>Companions</h4>
+                  <ul>${t.immersion.companions.map(c => `<li>◈ ${c}</li>`).join('')}</ul>
+                </div>
+                <div>
+                  <h4>Taboos</h4>
+                  <ul class="taboos-list">${t.immersion.taboos.map(tb => `<li>⊘ ${tb}</li>`).join('')}</ul>
+                </div>
+              </div>
+            </section>
 
-          <!-- TABOOS & COMPANIONS -->
-          <div class="dashboard-card companions-card">
-            <h3 class="card-title">⚖ Boundaries</h3>
-            
-            <div class="companions-section">
-              <h4>Your Companions</h4>
-              <ul>${t.immersion.companions.map(c => `<li>${c}</li>`).join('')}</ul>
-            </div>
-            
-            <div class="taboos-section">
-              <h4>Taboos</h4>
-              <ul>${t.immersion.taboos.map(tb => `<li>${tb}</li>`).join('')}</ul>
-            </div>
-          </div>
-
-          <!-- REFLECTION (LOCKED UNTIL FINAL DAY) -->
-          <div class="dashboard-card reflection-card ${isLastDay ? 'unlocked' : 'locked'}">
-            <h3 class="card-title">
-              ${isLastDay ? '🔓' : '🔒'} Terminal Reflection
-            </h3>
-            ${isLastDay ? `
-              <div class="reflection-content">
-                <p class="reflection-prompt">${t.reflection.prompt.replace(/\n/g, '<br><br>')}</p>
-                <div class="reflection-journal-prompts">
+            <!-- REFLECTION -->
+            <section class="dash-card dash-reflection ${isLastDay ? 'unlocked' : 'locked'}">
+              <h3>${isLastDay ? '🔓' : '🔒'} Terminal Reflection</h3>
+              ${isLastDay ? `
+                <div class="reflection-open">
+                  <p>${t.reflection.prompt.replace(/\n/g, '<br><br>')}</p>
                   <h4>Journal Prompts</h4>
                   <ul>${t.reflection.journalPrompts.map(p => `<li>${p}</li>`).join('')}</ul>
+                  ${!trainingState.reflectionCompleted ? `
+                    <button class="reflection-btn" onclick="PsycheApp.ViewsTrainings.completeReflection()">
+                      Mark Reflection Complete
+                    </button>
+                  ` : `
+                    <div class="reflection-done">✨ Reflection completed. The work continues...</div>
+                  `}
                 </div>
-                ${!trainingState.reflectionCompleted ? `
-                  <button class="reflection-complete-btn" onclick="PsycheApp.ViewsTrainings.completeReflection()">
-                    Mark Reflection Complete
-                  </button>
-                ` : `
-                  <div class="reflection-completed-msg">
-                    ✨ Reflection completed. The work continues...
-                  </div>
-                `}
-              </div>
-            ` : `
-              <div class="reflection-locked-msg">
-                <span class="lock-icon">🔒</span>
-                <p>The reflection gateway opens on Day ${t.durationDays}.</p>
-                <p class="days-remaining">${t.durationDays - day} days remaining</p>
-              </div>
-            `}
+              ` : `
+                <div class="reflection-locked">
+                  <span class="lock-big">🔒</span>
+                  <p>Opens on Day ${t.durationDays}</p>
+                  <p class="days-left">${t.durationDays - day} days remaining</p>
+                </div>
+              `}
+            </section>
+
           </div>
         </div>
       </div>
     `;
   }
 
-  // ── RENDER: TRAINING PREVIEW MODAL ──
-  function renderPreview(trainingId) {
-    const t = D.trainings?.find(tr => tr.id === trainingId);
-    if (!t) return;
-    
-    const modal = document.createElement('div');
-    modal.className = 'training-preview-modal';
-    modal.innerHTML = `
-      <div class="preview-backdrop" onclick="this.parentElement.remove()"></div>
-      <div class="preview-content" style="--hue: ${t.hue};">
-        <button class="preview-close" onclick="this.closest('.training-preview-modal').remove()">×</button>
-        
-        <div class="preview-header">
-          <span class="preview-icon">${t.icon}</span>
-          <h2>${t.title}</h2>
-          <span class="preview-duration">${t.duration}</span>
-        </div>
-        
-        <blockquote class="preview-quote">
-          "${t.quote}"
-          <cite>— ${t.author}</cite>
-        </blockquote>
-        
-        <p class="preview-overview">${t.overview}</p>
-        
-        <div class="preview-ethos">
-          <h4>Your Ethos</h4>
-          <p>${t.immersion.ethos}</p>
-        </div>
-        
-        <div class="preview-habits">
-          <h4>Daily Practices</h4>
-          <ul>
-            ${t.habits.map(h => `<li><strong>${h.task}</strong> (${h.duration})</li>`).join('')}
-          </ul>
-        </div>
-        
-        <div class="preview-actions">
-          <button class="preview-begin-btn" onclick="PsycheApp.ViewsTrainings.beginTraining('${t.id}'); this.closest('.training-preview-modal').remove();">
-            Begin This Path
-          </button>
-          <button class="preview-cancel-btn" onclick="this.closest('.training-preview-modal').remove()">
-            Not Yet
-          </button>
-        </div>
-      </div>
-    `;
-    document.body.appendChild(modal);
-    requestAnimationFrame(() => modal.classList.add('active'));
-  }
+  // ── BIND EVENTS ──
+  function bindEvents() {
+    // Training card clicks
+    document.querySelectorAll('.training-card').forEach(card => {
+      card.addEventListener('click', (e) => {
+        if (e.target.classList.contains('training-card-btn')) {
+          const id = card.dataset.training;
+          beginTraining(id);
+        }
+      });
+      // Also allow clicking the whole card
+      card.addEventListener('click', (e) => {
+        if (!e.target.classList.contains('training-card-btn')) {
+          const id = card.dataset.training;
+          showPreview(id);
+        }
+      });
+    });
 
-  // ── MAIN RENDER ──
-  function render(container) {
-    // Accept container argument or fallback to secondary-view
-    const target = container || document.getElementById('secondary-view');
-    if (!target) return;
-    
-    // Wrap content in a trainings container div
-    loadState();
-    
-    if (activeTraining && trainingState) {
-      currentScreen = 'dashboard';
-      target.innerHTML = `<div id="view-trainings">${renderDashboard()}</div>`;
-    } else {
-      currentScreen = 'hall';
-      target.innerHTML = `<div id="view-trainings">${renderHall()}</div>`;
-      bindMonolithClicks();
-    }
-  }
-
-  function bindMonolithClicks() {
-    document.querySelectorAll('.monolith').forEach(m => {
-      m.addEventListener('click', () => {
-        const id = m.dataset.id;
-        renderPreview(id);
+    // Habit toggles
+    document.querySelectorAll('.habit-row').forEach(row => {
+      row.addEventListener('click', () => {
+        const id = row.dataset.habit;
+        toggleHabit(id);
       });
     });
   }
 
-  function goToHall() {
-    currentScreen = 'hall';
-    const container = document.getElementById('secondary-view');
-    render(container);
+  function showPreview(trainingId) {
+    const t = D.trainings?.find(tr => tr.id === trainingId);
+    if (!t) return;
+
+    // Remove existing modal
+    document.querySelector('.training-modal')?.remove();
+
+    const modal = document.createElement('div');
+    modal.className = 'training-modal';
+    modal.innerHTML = `
+      <div class="modal-backdrop"></div>
+      <div class="modal-content" style="--hue: ${t.hue};">
+        <button class="modal-close">×</button>
+        <div class="modal-icon">${t.icon}</div>
+        <h2>${t.title}</h2>
+        <p class="modal-duration">${t.duration}</p>
+        <blockquote>"${t.quote}" <cite>— ${t.author}</cite></blockquote>
+        <p class="modal-overview">${t.overview}</p>
+        <div class="modal-ethos">
+          <h4>Your Ethos</h4>
+          <p>${t.immersion.ethos}</p>
+        </div>
+        <div class="modal-practices">
+          <h4>Daily Practices</h4>
+          <ul>${t.habits.map(h => `<li><strong>${h.task}</strong> — ${h.duration}</li>`).join('')}</ul>
+        </div>
+        <div class="modal-actions">
+          <button class="modal-begin">Begin This Path</button>
+          <button class="modal-cancel">Not Yet</button>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(modal);
+    requestAnimationFrame(() => modal.classList.add('active'));
+
+    // Events
+    modal.querySelector('.modal-backdrop').onclick = () => modal.remove();
+    modal.querySelector('.modal-close').onclick = () => modal.remove();
+    modal.querySelector('.modal-cancel').onclick = () => modal.remove();
+    modal.querySelector('.modal-begin').onclick = () => {
+      modal.remove();
+      beginTraining(trainingId);
+    };
   }
 
-  // ── INIT ──
-  function init() {
+  // ── MAIN RENDER ──
+  function render(container) {
+    currentContainer = container || document.getElementById('secondary-view');
+    if (!currentContainer) return;
+    
     loadState();
-    render();
+    
+    if (activeTraining && trainingState) {
+      currentContainer.innerHTML = renderDashboard();
+    } else {
+      currentContainer.innerHTML = renderHall();
+    }
+    
+    bindEvents();
+  }
+
+  function reRender() {
+    if (currentContainer) {
+      render(currentContainer);
+    }
   }
 
   // ── PUBLIC API ──
   return {
-    init,
     render,
     beginTraining,
     abandonTraining,
     toggleHabit,
     completeReflection,
-    goToHall
+    goToHall,
+    goHome
   };
 })();

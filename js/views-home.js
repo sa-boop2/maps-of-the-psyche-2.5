@@ -17,6 +17,16 @@ window.PsycheApp.ViewsHome = (function() {
       tags: ['3D Map', 'Compare', 'Lineage', 'Timeline']
     },
     {
+      id: 'trainings',
+      title: 'Trainings',
+      subtitle: 'The Path of Practice',
+      description: 'Stop intellectualizing. Start living. Week-long immersive protocols: Hermeticism, Daoism, Jungian Individuation.',
+      icon: `<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M24 6 L24 18 M20 14 L24 18 L28 14" stroke-width="2"/><circle cx="24" cy="28" r="10" opacity="0.3"/><circle cx="24" cy="28" r="6"/><path d="M18 38 L30 38" stroke-width="2" opacity="0.5"/><path d="M14 42 L34 42" stroke-width="1.5" opacity="0.3"/></svg>`,
+      accent: 'var(--accent-purple)',
+      highlight: true,
+      tags: ['7-14 Days', 'Immersion', 'Practice']
+    },
+    {
       id: 'ego',
       title: 'Ego',
       subtitle: 'The center of identity',
@@ -64,15 +74,6 @@ window.PsycheApp.ViewsHome = (function() {
       description: 'The Persona, Shadow, Anima/Animus, and Self — Jung\'s primordial images that shape every human story.',
       icon: `<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M24 8 L14 20 L18 20 L12 32 L17 32 L8 44 L40 44 L31 32 L36 32 L30 20 L34 20 Z" opacity="0.3"/><circle cx="24" cy="18" r="6"/><path d="M18 26 Q24 34 30 26"/></svg>`,
       accent: 'var(--gold-light)'
-    },
-    {
-      id: 'trainings',
-      title: 'Trainings',
-      subtitle: 'Guided programs',
-      description: 'Structured learning paths for deep psychological work. Coming soon.',
-      icon: `<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="8" y="12" width="32" height="24" rx="3" opacity="0.3"/><path d="M8 20 L40 20" opacity="0.2"/><path d="M16 28 L32 28" stroke-width="2"/><path d="M20 32 L28 32" opacity="0.5"/><circle cx="24" cy="8" r="3"/></svg>`,
-      accent: 'var(--text-dim)',
-      comingSoon: true
     },
     {
       id: 'personal',
@@ -149,10 +150,6 @@ window.PsycheApp.ViewsHome = (function() {
     container.querySelectorAll('[data-navigate]').forEach(el => {
       el.addEventListener('click', () => {
         const viewId = el.dataset.navigate;
-        if (viewId === 'trainings') {
-          window.PsycheApp.showToast?.('Trainings are coming soon — stay tuned.');
-          return;
-        }
         window.PsycheApp.Sound?.playUIClick();
         window.PsycheApp.goToView(viewId);
       });
@@ -202,9 +199,14 @@ window.PsycheApp.ViewsHome = (function() {
   }
 
   function renderCard(card, index) {
+    const classes = ['home-card', 'fade-in'];
+    if (card.comingSoon) classes.push('home-card--soon');
+    if (card.highlight) classes.push('home-card--highlight');
+    
     return `
-      <div class="home-card fade-in ${card.comingSoon ? 'home-card--soon' : ''}" style="animation-delay: ${0.4 + index * 0.07}s" data-navigate="${card.id}">
+      <div class="${classes.join(' ')}" style="animation-delay: ${0.4 + index * 0.07}s" data-navigate="${card.id}">
         ${card.comingSoon ? '<span class="home-badge">Coming Soon</span>' : ''}
+        ${card.highlight ? '<span class="home-badge home-badge--new">Start Here</span>' : ''}
         <div class="home-card-icon" style="color: ${card.accent}">
           ${card.icon}
         </div>

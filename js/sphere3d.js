@@ -662,6 +662,7 @@ window.PsycheApp.Sphere3D = (function() {
 
   function setBiologicalMode(enabled, options = {}) {
     const resetContent = options.resetContent !== false;
+    const clearSelectionOnClose = options.clearSelectionOnClose !== false;
     biologicalMirrorEnabled = !!enabled;
     const mapView = document.getElementById('map-view');
     const btn = document.getElementById('btn-toggle-biological-mirror');
@@ -671,6 +672,10 @@ window.PsycheApp.Sphere3D = (function() {
     btn?.classList.toggle('active', biologicalMirrorEnabled);
     if (biologicalMirrorEnabled && resetContent) {
       updateBiologicalMirror(null, { modeActive: true });
+      return;
+    }
+    if (!biologicalMirrorEnabled && clearSelectionOnClose) {
+      window.PsycheApp?.Sidebar?.hide?.();
     }
   }
 

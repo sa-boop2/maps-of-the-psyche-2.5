@@ -429,7 +429,7 @@ a:hover { color: var(--gold-light); }
 
 .legend-training-links-fixed {
   position: static;
-  background: linear-gradient(180deg, rgba(8,10,18,0.05), rgba(8,10,18,0.75) 28%, rgba(8,10,18,0.92));
+  background: transparent;
   padding-top: 8px;
   margin-top: 8px;
   border-top: 1px solid var(--border);
@@ -1524,7 +1524,7 @@ a:hover { color: var(--gold-light); }
 [data-theme="light"] #keyboard-hints { background: rgba(250,250,247,0.7); }
 [data-theme="light"] .legend-num { background: rgba(122,104,48,0.08); }
 [data-theme="light"] .legend-training-links-fixed {
-  background: linear-gradient(180deg, rgba(122,104,48,0.03), rgba(122,104,48,0.06));
+  background: transparent;
   border-top-color: rgba(0,0,0,0.08);
 }
 [data-theme="light"] .legend-training-title { color: #7a6830; }
@@ -6795,8 +6795,14 @@ button, a, input, select, textarea { transition: all var(--t) var(--ease); }
 
 /* Map: requested layout exactly (longer bio, thinner legend, timeline below) */
 #map-view #biological-mirror-panel {
-  height: min(82vh, 840px) !important;
-  max-height: min(82vh, 840px) !important;
+  width: var(--sidebar-w) !important;
+  height: calc(100vh - var(--nav-h) - var(--sub-nav-h)) !important;
+  max-height: calc(100vh - var(--nav-h) - var(--sub-nav-h)) !important;
+  top: 0 !important;
+  right: 0 !important;
+  bottom: auto !important;
+  border-radius: 0 !important;
+  border-left: 1px solid var(--border) !important;
 }
 #map-view #map-legend {
   width: min(240px, 22vw) !important;
@@ -6823,7 +6829,7 @@ button, a, input, select, textarea { transition: all var(--t) var(--ease); }
 
 /* Light mode: ensure related trainings + legend surfaces are corrected */
 [data-theme="light"] #map-view .legend-training-links-fixed {
-  background: linear-gradient(180deg, rgba(122,104,48,0.03), rgba(122,104,48,0.08)) !important;
+  background: transparent !important;
   border-top-color: rgba(0,0,0,0.08) !important;
 }
 [data-theme="light"] #map-view .legend-training-title {
@@ -6845,8 +6851,11 @@ button, a, input, select, textarea { transition: all var(--t) var(--ease); }
     width: min(68vw, 450px) !important;
   }
   #map-view #biological-mirror-panel {
-    height: min(78vh, 760px) !important;
-    max-height: min(78vh, 760px) !important;
+    width: var(--sidebar-w) !important;
+    height: calc(100vh - var(--nav-h) - var(--sub-nav-h)) !important;
+    max-height: calc(100vh - var(--nav-h) - var(--sub-nav-h)) !important;
+    border-left: none !important;
+    border-top: 1px solid var(--border) !important;
   }
 }
 

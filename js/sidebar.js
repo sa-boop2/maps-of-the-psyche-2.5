@@ -47,16 +47,17 @@ window.PsycheApp.Sidebar = (function() {
         if (trainingLink) {
           const trainingId = trainingLink.dataset.trainingId;
           if (!trainingId) return;
-          window.PsycheApp?.goToView?.('trainings');
-          setTimeout(() => window.PsycheApp?.ViewsTrainings?.beginTraining(trainingId), 100);
+          window.PsycheApp?.openTraining?.(trainingId);
+          return;
         }
       };
       contentEl.addEventListener('click', contentClickHandler);
     }
-    // Auto-open first two sections
+    // Auto-open all sections for fast overview
     const headers = contentEl.querySelectorAll('.sb-section-header');
-    headers.forEach((h, i) => {
-      if (i < 2) { h.classList.add('open'); h.nextElementSibling?.classList.add('open'); }
+    headers.forEach((h) => {
+      h.classList.add('open');
+      h.nextElementSibling?.classList.add('open');
     });
   }
 
@@ -76,6 +77,19 @@ window.PsycheApp.Sidebar = (function() {
           <p>${esc(lead)}</p>
         </div>
       `;
+    }
+
+    const stats = [];
+    if (data.crossRefs?.length) stats.push({ label: 'Resonances', value: data.crossRefs.length });
+    if (data.practices?.length) stats.push({ label: 'Practices', value: data.practices.length });
+    if (data.reflections?.length) stats.push({ label: 'Prompts', value: data.reflections.length });
+    if (stats.length) {
+      html += `<div class="sb-meta-grid">${stats.map(s => `
+        <div class="sb-meta-card">
+          <div class="sb-meta-value">${esc(String(s.value))}</div>
+          <div class="sb-meta-label">${esc(s.label)}</div>
+        </div>
+      `).join('')}</div>`;
     }
     
     // Core Data
@@ -130,7 +144,7 @@ window.PsycheApp.Sidebar = (function() {
   }
 
   function section(title, body, icon = '') {
-    return `<div class="sb-section"><div class="sb-section-header"><span class="sb-section-icon">${icon}</span>${esc(title)}</div><div class="sb-section-body">${body}</div></div>`;
+    return `<div class="sb-section"><div class="sb-section-header open"><span class="sb-section-icon">${icon}</span>${esc(title)}</div><div class="sb-section-body open">${body}</div></div>`;
   }
 
   function esc(str) {

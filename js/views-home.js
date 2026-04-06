@@ -23,7 +23,6 @@ window.PsycheApp.ViewsHome = (function() {
       description: 'Stop intellectualizing. Start living. Week-long immersive protocols: Hermeticism, Daoism, Jungian Individuation.',
       icon: `<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M24 6 L24 18 M20 14 L24 18 L28 14" stroke-width="2"/><circle cx="24" cy="28" r="10" opacity="0.3"/><circle cx="24" cy="28" r="6"/><path d="M18 38 L30 38" stroke-width="2" opacity="0.5"/><path d="M14 42 L34 42" stroke-width="1.5" opacity="0.3"/></svg>`,
       accent: 'var(--accent-purple)',
-      highlight: true,
       tags: ['7-14 Days', 'Immersion', 'Practice']
     },
     {

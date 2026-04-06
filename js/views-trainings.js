@@ -489,7 +489,7 @@ window.PsycheApp.ViewsTrainings = (function() {
       if (frameworkBtn) {
         const frameworkId = frameworkBtn.dataset.frameworkId;
         if (frameworkId) {
-          window.PsycheApp?.setFrameworkById?.(frameworkId, null, false);
+          window.PsycheApp?.setFrameworkById?.(frameworkId, 0, false);
           window.PsycheApp?.showToast?.('Jumping to related framework...');
         }
         return;

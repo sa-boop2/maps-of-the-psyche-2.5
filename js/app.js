@@ -149,6 +149,13 @@
     const trainings = D.trainings || [];
     return trainings.filter(t => (trainingFrameworkMap[t.id] || []).includes(frameworkId));
   };
+  App.openTraining = function(trainingId) {
+    if (!trainingId) return;
+    setView('trainings');
+    requestAnimationFrame(() => {
+      window.PsycheApp?.ViewsTrainings?.beginTraining(trainingId);
+    });
+  };
 
   // ── FRAMEWORK TABS ──
   function buildFrameworkTabs() {
@@ -353,9 +360,11 @@
   function buildViewTabs() {
     const container = document.getElementById('view-tabs');
     if (!container) return;
+    const compactViews = new Set(['figures', 'cases', 'disagree', 'relationships', 'personal', 'quiz', 'resources']);
     container.innerHTML = views.map(v => {
-      if (v.sep) return '<div class="view-sep"></div>';
-      return `<button class="view-btn ${v.id === 'map' ? 'active':''}" data-view="${v.id}" title="${v.label}"><span class="view-btn-icon">${v.icon}</span><span class="view-btn-label">${v.label}</span></button>`;
+      if (v.sep) return '';
+      const compactClass = compactViews.has(v.id) ? ' compact' : '';
+      return `<button class="view-btn${compactClass} ${v.id === 'map' ? 'active':''}" data-view="${v.id}" title="${v.label}"><span class="view-btn-icon">${v.icon}</span><span class="view-btn-label">${v.label}</span></button>`;
     }).join('');
     container.querySelectorAll('.view-btn').forEach(btn => {
       btn.addEventListener('click', () => { setView(btn.dataset.view); App.Sound?.playUIClick(); });

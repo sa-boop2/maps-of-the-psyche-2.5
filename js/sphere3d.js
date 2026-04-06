@@ -306,16 +306,30 @@ window.PsycheApp.Sphere3D = (function() {
   function updateLegend(fw) {
     const legend = document.getElementById('map-legend');
     if (!legend || !fw) return;
+    const relatedTrainings = window.PsycheApp?.getTrainingsForFramework?.(fw.id) || [];
     legend.innerHTML =
       `<div style="font-family:var(--font-display);color:var(--gold-light);font-size:0.85rem;margin-bottom:4px;letter-spacing:0.05em">${fw.name}</div>` +
       `<div style="font-size:0.68rem;color:var(--text-dim);margin-bottom:8px;letter-spacing:0.04em">OUTER → CORE</div>` +
       fw.layers.map((l, i) =>
         `<div class="legend-item" data-idx="${i}"><span class="legend-num">${i+1}</span><span class="legend-dot" style="background:${l.color};color:${l.color}"></span><span class="legend-name">${l.name}</span></div>`
-      ).join('');
+      ).join('') +
+      (relatedTrainings.length ? `
+        <div class="legend-training-links">
+          <div class="legend-training-title">Related Trainings</div>
+          ${relatedTrainings.map(t => `<button class="legend-training-btn" data-training-id="${t.id}">${t.icon} ${t.title}</button>`).join('')}
+        </div>
+      ` : '');
     legend.querySelectorAll('.legend-item').forEach(el => {
       el.addEventListener('click', () => {
         const idx = parseInt(el.dataset.idx);
         if (nodeObjects[idx]) selectNode(nodeObjects[idx]);
+      });
+    });
+    legend.querySelectorAll('.legend-training-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const trainingId = btn.dataset.trainingId;
+        if (!trainingId) return;
+        window.PsycheApp?.openTraining?.(trainingId);
       });
     });
   }

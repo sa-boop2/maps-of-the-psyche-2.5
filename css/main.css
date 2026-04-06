@@ -152,20 +152,18 @@ a:hover { color: var(--gold-light); }
 }
 .nav-icon-btn:active { transform: scale(0.94); }
 
-/* View tabs in top nav — scrollable, grouped, with icons */
+/* View tabs in top nav — all visible, compact */
 .view-pill-group {
   display: flex;
   align-items: center;
-  gap: 2px;
-  overflow-x: auto;
-  overflow-y: hidden;
-  scrollbar-width: none;
+  gap: 1px;
+  overflow: hidden;
   flex: 1;
   min-width: 0;
-  padding: 0 4px;
-  -webkit-overflow-scrolling: touch;
+  padding: 0 2px;
+  justify-content: space-between;
+  flex-wrap: nowrap;
 }
-.view-pill-group::-webkit-scrollbar { display: none; }
 
 /* Group separator */
 .view-sep {
@@ -180,11 +178,11 @@ a:hover { color: var(--gold-light); }
 .view-btn {
   display: flex;
   align-items: center;
-  gap: 4px;
-  padding: 4px 9px;
+  gap: 3px;
+  padding: 3px 6px;
   font-family: var(--font);
-  font-size: 0.72rem;
-  font-weight: 500;
+  font-size: 0.64rem;
+  font-weight: 600;
   letter-spacing: 0.02em;
   color: var(--text-dim);
   background: transparent;
@@ -192,11 +190,13 @@ a:hover { color: var(--gold-light); }
   border-radius: 6px;
   cursor: pointer;
   transition: all var(--t) var(--ease);
+  min-width: 0;
+  flex: 1 1 0;
+  justify-content: center;
   white-space: nowrap;
-  flex-shrink: 0;
 }
 .view-btn-icon {
-  font-size: 0.72rem;
+  font-size: 0.66rem;
   opacity: 0.5;
   transition: opacity var(--t);
 }
@@ -216,6 +216,10 @@ a:hover { color: var(--gold-light); }
 .view-btn.active .view-btn-icon {
   opacity: 1;
   color: var(--gold);
+}
+
+.view-btn.compact .view-btn-label {
+  font-size: 0.6rem;
 }
 
 /* === SUB-NAV BAR — Traditions + Framework tabs === */
@@ -512,6 +516,36 @@ a:hover { color: var(--gold-light); }
   line-height: 1.7;
 }
 
+.sb-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.sb-meta-card {
+  padding: 10px 8px;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--border);
+  background: linear-gradient(145deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01));
+  text-align: center;
+}
+
+.sb-meta-value {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  color: var(--gold-light);
+  line-height: 1.1;
+}
+
+.sb-meta-label {
+  margin-top: 4px;
+  font-size: 0.64rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
 /* Sidebar sections */
 .sb-section {
   margin-bottom: 18px;
@@ -552,6 +586,14 @@ a:hover { color: var(--gold-light); }
   font-size: 0.87rem;
   color: var(--text-secondary);
   line-height: 1.7;
+}
+
+.sb-section-header {
+  cursor: default;
+}
+
+.sb-section-header::before {
+  display: none;
 }
 
 /* Deep Dive Grid Cards */
@@ -645,6 +687,40 @@ a:hover { color: var(--gold-light); }
   color: var(--gold-light);
 }
 .sb-crossref::before { content: '↔'; font-size: 0.7rem; }
+
+.legend-training-links {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.legend-training-title {
+  font-size: 0.68rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.legend-training-btn {
+  padding: 6px 10px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.04);
+  color: var(--text-secondary);
+  font-size: 0.74rem;
+  text-align: left;
+  cursor: pointer;
+  transition: all var(--t) var(--ease);
+}
+
+.legend-training-btn:hover {
+  border-color: var(--border-hover);
+  color: var(--gold-light);
+  background: rgba(201,168,76,0.08);
+}
 
 /* === SECONDARY VIEWS === */
 #secondary-view {

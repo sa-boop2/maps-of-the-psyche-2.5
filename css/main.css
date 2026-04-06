@@ -415,6 +415,81 @@ a:hover { color: var(--gold-light); }
 .map-ctrl-btn:hover { color: var(--gold); border-color: var(--border-hover); }
 .map-ctrl-btn.active { color: var(--gold); border-color: var(--gold); background: rgba(201,168,76,0.08); }
 
+#biological-mirror-panel {
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+  width: 360px;
+  max-height: 48vh;
+  overflow-y: auto;
+  background: var(--bg-glass);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 12px 14px;
+  backdrop-filter: blur(12px);
+  z-index: 55;
+}
+
+#biological-mirror-panel.hidden {
+  display: none;
+}
+
+.bio-header h4 {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--gold-light);
+}
+
+.bio-header span {
+  display: block;
+  margin-top: 2px;
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.bio-empty {
+  margin-top: 12px;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+}
+
+.bio-node-title {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-family: var(--font-display);
+  color: var(--gold);
+  font-size: 0.9rem;
+}
+
+.bio-card {
+  padding: 10px;
+  margin-bottom: 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  background: rgba(255,255,255,0.03);
+}
+
+.bio-region {
+  font-size: 0.8rem;
+  color: var(--gold-light);
+  margin-bottom: 4px;
+}
+
+.bio-circuit,
+.bio-affective {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+}
+
+.bio-card p {
+  font-size: 0.78rem;
+  color: var(--text);
+  line-height: 1.5;
+}
+
 /* Hovered label (floating near cursor on 3D map) */
 #hovered-label {
   position: absolute;

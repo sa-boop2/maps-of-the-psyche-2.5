@@ -25,7 +25,46 @@ window.PsycheApp.Sphere3D = (function() {
   let canvasRect = null;
   let hoverEvent = null;
   let hoverScheduled = false;
+  let biologicalMirrorEnabled = false;
+  let biologicalMirrorPanel = null;
   const DAMPING = 0.08;
+  const neuroMap = [
+    {
+      keys: ['ego', 'persona', 'will', 'executive', 'choice'],
+      region: 'Prefrontal Cortex (mPFC / dlPFC)',
+      circuit: 'Top-down regulation + valuation',
+      affective: 'SEEKING gating, impulse control, narrative self',
+      relevance: 'Supports ego coherence, goal maintenance, and reflective override of impulsive affect.'
+    },
+    {
+      keys: ['shadow', 'fear', 'threat', 'repression', 'trauma'],
+      region: 'Amygdala + Extended Limbic Network',
+      circuit: 'Threat salience + emotional memory',
+      affective: 'FEAR / RAGE activations',
+      relevance: 'Encodes emotionally-charged disowned material that returns as projection or compulsive defense.'
+    },
+    {
+      keys: ['collective unconscious', 'myth', 'archetype', 'symbol'],
+      region: 'Default Mode Network + Midline Integrative Hubs',
+      circuit: 'Self-world simulation + symbolic integration',
+      affective: 'SEEKING + CARE + meaning generation',
+      relevance: 'Supports transpersonal narrative scaffolding and mythic pattern recognition.'
+    },
+    {
+      keys: ['eternal return', 'compulsion', 'obsession', 'loop', 'addiction'],
+      region: 'Mesolimbic Dopamine Pathway (VTA -> Nucleus Accumbens)',
+      circuit: 'Prediction error + motivational reinforcement',
+      affective: 'SEEKING over-coupling',
+      relevance: 'Drives repetitive motivational loops; high dopaminergic salience can bind thought to recurrence patterns.'
+    },
+    {
+      keys: ['self', 'witness', 'being', 'nondual', 'unity', 'transcendent'],
+      region: 'Periaqueductal Gray + Insula + Anterior Cingulate',
+      circuit: 'Embodied affect integration',
+      affective: 'CARE / PANIC modulation + interoceptive coherence',
+      relevance: 'Supports deep affective grounding and unified embodied awareness states.'
+    }
+  ];
 
   function init() {
     canvas = document.getElementById('three-canvas');
@@ -96,6 +135,17 @@ window.PsycheApp.Sphere3D = (function() {
       this.classList.toggle('active', showLabels);
       labelSprites.forEach(s => s.visible = showLabels);
     });
+    document.getElementById('btn-toggle-biological-mirror')?.addEventListener('click', function() {
+      biologicalMirrorEnabled = !biologicalMirrorEnabled;
+      this.classList.toggle('active', biologicalMirrorEnabled);
+      if (biologicalMirrorEnabled) {
+        biologicalMirrorPanel?.classList.remove('hidden');
+        updateBiologicalMirror(selectedNode?.userData?.layer || null);
+      } else {
+        biologicalMirrorPanel?.classList.add('hidden');
+      }
+    });
+    biologicalMirrorPanel = document.getElementById('biological-mirror-panel');
 
     animate();
   }
@@ -427,6 +477,9 @@ window.PsycheApp.Sphere3D = (function() {
     data.frameworkId = node.userData.framework.id;
     data.crossRefs = findCrossRefs(node.userData.framework, node.userData.layerIndex);
     window.PsycheApp.Sidebar.show(data);
+    if (biologicalMirrorEnabled) {
+      updateBiologicalMirror(data);
+    }
 
     // ── SPOTLIGHT EFFECT — dim everything except selected node ──
     spotlightActive = true;
@@ -603,6 +656,29 @@ window.PsycheApp.Sphere3D = (function() {
       canvas.style.cursor = 'grab';
       if (label) label.classList.add('hidden');
     }
+  }
+
+  function updateBiologicalMirror(layerData) {
+    const container = document.getElementById('biological-mirror-content');
+    if (!container) return;
+    if (!layerData) {
+      container.innerHTML = `<p class="bio-empty">Select a node to map psyche layers to neuro systems.</p>`;
+      return;
+    }
+    const hay = `${layerData.name || ''} ${layerData.subtitle || ''} ${layerData.description || ''} ${layerData.shadow || ''} ${layerData.pathology || ''}`.toLowerCase();
+    const matches = neuroMap.filter(n => n.keys.some(k => hay.includes(k)));
+    const results = matches.length ? matches : [neuroMap[0]];
+    container.innerHTML = `
+      <div class="bio-node-title">${layerData.name || 'Selected Layer'}</div>
+      ${results.map(m => `
+        <div class="bio-card">
+          <div class="bio-region">${m.region}</div>
+          <div class="bio-circuit"><strong>Circuit:</strong> ${m.circuit}</div>
+          <div class="bio-affective"><strong>Affective system:</strong> ${m.affective}</div>
+          <p>${m.relevance}</p>
+        </div>
+      `).join('')}
+    `;
   }
 
   function onResize() {

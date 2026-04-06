@@ -1964,5 +1964,391 @@ window.PsycheData.trainings = [
         "What integral practice is now non-negotiable?"
       ]
     }
+  },
+
+  // ══════════════════════════════════════════════════════════
+  // STOICISM — The Art of Living
+  // ══════════════════════════════════════════════════════════
+  {
+    id: "stoicism",
+    title: "The Stoic Path",
+    philosophy: "Stoicism",
+    tradition: "western",
+    duration: "7 Days",
+    durationDays: 7,
+    icon: "🏛",
+    hue: 40,
+    quote: "You don't control events. You control your response.",
+    author: "Epictetus",
+
+    overview: "You practice freedom through discipline: training your judgment to separate what is in your control from what is not, finding peace not through escape but through clear-eyed engagement.",
+
+    immersion: {
+      ethos: "The Sage of Action. You develop the rare capacity to care deeply while remaining unshaken by outcomes.",
+      persona: "Steady, reasonable, and virtuous under pressure.",
+      rituals: [
+        "Morning premeditatio malorum: visualize one potential difficulty and practice your response.",
+        "Throughout day: pause and ask 'Is this in my control?'",
+        "Evening virtue examination: where did reason govern your day?"
+      ],
+      companions: ["Marcus Aurelius", "Epictetus", "Seneca", "The Stoa as meeting place"],
+      taboos: [
+        "Do not confuse indifference with non-engagement",
+        "Do not use Stoicism to avoid emotional truth",
+        "Do not become rigid in your rigorous practice"
+      ],
+      culture: {
+        music: ["Minimalist, structured classical (Bach, Satie)", "Focused ambient for practice"],
+        art: ["Roman busts and architectural austerity", "Stoic symbols (the threshold, the threshold guardian)"],
+        reading: ["Meditations by Marcus Aurelius (Primary)", "Enchiridion by Epictetus", "Essays by Seneca"],
+        media: ["Documentaries on Roman Stoicism", "Lectures on Modern Stoicism"]
+      },
+      environment: "Keep your space organized and minimal. Simplicity supports clear thinking."
+    },
+
+    habits: [
+      { 
+        id: "h1", 
+        task: "Dichotomy of Control",
+        duration: "8 mins",
+        description: "List one situation. Separate what's in your control (your effort, response, judgment) from what isn't (outcomes, others' minds). Act only on what you control."
+      },
+      { 
+        id: "h2", 
+        task: "Premeditate Difficulty",
+        duration: "10 mins",
+        description: "Visualize one upcoming challenge. Practice responding with virtue, not reactivity. This mental rehearsal shifts your actual response."
+      },
+      { 
+        id: "h3", 
+        task: "Virtue in Action",
+        duration: "Throughout day",
+        description: "When friction arises, ask: 'How do wisdom, courage, temperance, or justice apply here?' Act from reason, not impulse."
+      },
+      {
+        id: "h4",
+        task: "Evening Examination",
+        duration: "12 mins",
+        description: "Review your day. Where did you act with virtue? Where did you abandon reason? Prepare tomorrow with lessons learned."
+      }
+    ],
+
+    reflection: {
+      prompt: "This week, you separated what is in your control from what is not. In that clarity, what happened to your anxiety? Your agency? Your peace?\n\nReflect: Where do you still waste energy on outcomes? Where can you now release your grip and trust your own virtue instead?",
+      journalPrompts: [
+        "Write one situation where accepting 'not in my control' freed you.",
+        "Where did virtue guide you this week?",
+        "What Stoic principle will you carry beyond this training?"
+      ]
+    }
+  },
+
+  // ══════════════════════════════════════════════════════════
+  // ADLERIAN PSYCHOLOGY — The Courage to Belong
+  // ══════════════════════════════════════════════════════════
+  {
+    id: "adlerian",
+    title: "The Adlerian Path",
+    philosophy: "Adlerian Psychology",
+    tradition: "western",
+    duration: "7 Days",
+    durationDays: 7,
+    icon: "♦",
+    hue: 268,
+    quote: "Courage is not the absence of fear. It is action in the face of discouragement.",
+    author: "Alfred Adler",
+
+    overview: "You leave behind inferiority complexes and move toward contribution: discovering that belonging comes through finding your place, not through competition.",
+
+    immersion: {
+      ethos: "The Community-Builder. You understand that your worth is not proven through victory but expressed through service.",
+      persona: "Encouraging, cooperative, and purposeful.",
+      rituals: [
+        "Morning: name one way you belong to your community today.",
+        "Identify and reframe one inferiority belief into an encouragement.",
+        "Evening: reflect on your unique contribution to others."
+      ],
+      companions: ["Alfred Adler", "The community as mirror", "Encouragement as practice"],
+      taboos: [
+        "Do not pursue superiority through achievement",
+        "Do not isolate to avoid comparison",
+        "Do not neglect the 'social feeling' dimension"
+      ],
+      culture: {
+        music: ["Cooperative, ensemble-based music", "Folk traditions of belonging"],
+        art: ["Community art, murals, collaborative installations"],
+        reading: ["Understanding Life by Adler", "Courage to Be Disliked (modern dialogue)"],
+        media: ["Adlerian psychology lectures", "Community-focused documentaries"]
+      },
+      environment: "Post visible statements of encouragement around your space for yourself and others."
+    },
+
+    habits: [
+      { 
+        id: "h1", 
+        task: "Identify False Goals",
+        duration: "10 mins",
+        description: "Notice one area where you compete to prove worth instead of contributing. What would happen if you stopped competing and started contributing?"
+      },
+      { 
+        id: "h2", 
+        task: "Encouragement Practice",
+        duration: "15 mins",
+        description: "Offer genuine encouragement to one person. Not praise (which conditions them), but encouragement (which recognizes their effort and potential)."
+      },
+      { 
+        id: "h3", 
+        task: "Social Feeling Action",
+        duration: "20 mins",
+        description: "Do one act that contributes to community wellbeing with no expectation of recognition."
+      },
+      {
+        id: "h4",
+        task: "Belonging Reflection",
+        duration: "10 mins",
+        description: "Where did you feel truly part of something larger? When did your contribution matter?"
+      }
+    ],
+
+    reflection: {
+      prompt: "You spent seven days shifting from proving your worth to expressing it through contribution. What changed in how you move through the world?\n\nReflect: Where do you still compare yourself? Where have you found genuine belonging?",
+      journalPrompts: [
+        "When did encouragement work better than praise?",
+        "What false goal are you ready to release?",
+        "How will contribution guide your next chapter?"
+      ]
+    }
+  },
+
+  // ══════════════════════════════════════════════════════════
+  // TANTRA — Sacred Embodiment
+  // ══════════════════════════════════════════════════════════
+  {
+    id: "tantra",
+    title: "The Tantric Path",
+    philosophy: "Tantra",
+    tradition: "eastern",
+    duration: "9 Days",
+    durationDays: 9,
+    icon: "✦",
+    hue: 356,
+    quote: "The body is the temple. Energy is the offering.",
+    author: "Tantric Aphorism",
+
+    overview: "You reject the false split between sacred and profane by engaging the body, senses, and desire as pathways to awakening. Tantra is not what the West fantasizes—it's rigorous, disciplined, and transformative.",
+
+    immersion: {
+      ethos: "The Sacred Embodiment Practitioner. You recognize that enlightenment is not escape from the body but full inhabitation of it.",
+      persona: "Sensual without being indulgent. Present. Powerful.",
+      rituals: [
+        "Morning body scan with gratitude for each part.",
+        "One sensory meditation daily (taste, touch, sound, sight, smell).",
+        "Evening: honor the five elements through your body's expression."
+      ],
+      companions: ["Shakti (divine energy)", "Your own nervous system as guru", "The cycle of creation/destruction"],
+      taboos: [
+        "Do not spiritualize rejection of the body",
+        "Do not confuse sensation with depth",
+        "Do not exploit others for your practice"
+      ],
+      culture: {
+        music: ["Indian classical ragas", "Binaural frequency work", "Rhythmic chanting"],
+        art: ["Tantric yantras and iconography", "The divine feminine in art"],
+        reading: ["The Kama Sutra (beyond sexuality)", "Tantra: The Path of Ecstasy by Georg Feuerstein"],
+        media: ["Documentaries on Tantric practice", "Lectures on sacred sexuality"]
+      },
+      environment: "Create a clean, sensory-rich space. Scent, texture, light all matter. Your body reads the environment."
+    },
+
+    habits: [
+      { 
+        id: "h1", 
+        task: "Body Gratitude Scan",
+        duration: "12 mins",
+        description: "Slowly scan from feet to crown. Thank each part: legs that carry you, belly that digests, heart that feels, hands that create."
+      },
+      { 
+        id: "h2", 
+        task: "Sensory Awakening",
+        duration: "15 mins",
+        description: "Isolate one sense fully. Taste slowly. Listen completely. Feel texture deeply. Reclaim your sensorium from autopilot."
+      },
+      { 
+        id: "h3", 
+        task: "Energy Circulation",
+        duration: "20 mins",
+        description: "Practice bringing awareness to internal energy channels. Feel vibration, temperature, flow. Microcosmic orbit, full breath awareness."
+      },
+      {
+        id: "h4",
+        task: "Integration Journal",
+        duration: "10 mins",
+        description: "How did your day change when your body was fully inhabited rather than distant?"
+      }
+    ],
+
+    reflection: {
+      prompt: "You spent nine days reclaiming your body as sacred. What separations dissolved? What pleasure became possible when you removed shame?\n\nReflect: Where does enlightenment call you next?",
+      journalPrompts: [
+        "How did body-awareness change your clarity?",
+        "Where did you move from rejection to embrace?",
+        "What embodied practice will you sustain?"
+      ]
+    }
+  },
+
+  // ══════════════════════════════════════════════════════════
+  // NONVIOLENT COMMUNICATION — The Heart's Language
+  // ══════════════════════════════════════════════════════════
+  {
+    id: "nvc",
+    title: "The Compassionate Communication Path",
+    philosophy: "Nonviolent Communication (NVC)",
+    tradition: "modern",
+    duration: "7 Days",
+    durationDays: 7,
+    icon: "💬",
+    hue: 120,
+    quote: "All speech is either a gift or a prayer.",
+    author: "Marshall Rosenberg",
+
+    overview: "You train radical empathy through the four-step model: observation, feeling, need, request. Every conflict becomes a conversation toward mutual understanding.",
+
+    immersion: {
+      ethos: "The Bridge-Builder. You learn to hear the universal human need beneath every complaint, demand, or criticism.",
+      persona: "Vulnerable, curious, and genuinely engaged.",
+      rituals: [
+        "One difficult conversation approached with NVC structure.",
+        "Listen to one person with zero agenda but to hear their needs.",
+        "Name three feelings and three needs in your own life daily."
+      ],
+      companions: ["Marshall Rosenberg", "The concept of 'positive intent'", "Your own needs as guidance"],
+      taboos: [
+        "Do not use NVC as a tool to manipulate",
+        "Do not skip your own needs in service of others",
+        "Do not use it to bypass necessary boundaries"
+      ],
+      culture: {
+        music: ["Music of togetherness and healing", "Cross-cultural hymns"],
+        art: ["Art that bridges differences", "Collaborative installations"],
+        reading: ["Nonviolent Communication by Marshall Rosenberg (Primary)", "The Nonviolent Communication Companion"],
+        media: ["NVC in conflict resolution videos", "Restorative justice documentaries"]
+      },
+      environment: "Create a physical space for honest conversation—comfortable, calm, free of distractions."
+    },
+
+    habits: [
+      { 
+        id: "h1", 
+        task: "Observation Practice",
+        duration: "8 mins",
+        description: "Take one situation. State what happened (facts) without judgment or story. Pure observation."
+      },
+      { 
+        id: "h2", 
+        task: "Feeling Inventory",
+        duration: "10 mins",
+        description: "Name five feelings you're experiencing right now. Go beyond 'good/bad' to granular emotional truth."
+      },
+      { 
+        id: "h3", 
+        task: "Need Exploration",
+        duration: "15 mins",
+        description: "Behind every feeling is a need. What universal needs are alive in you: connection, safety, autonomy, meaning?"
+      },
+      {
+        id: "h4",
+        task: "Request Crafting",
+        duration: "10 mins",
+        description: "Make a clear, actionable request of one person from this place of vulnerability, not demand."
+      }
+    ],
+
+    reflection: {
+      prompt: "You spent seven days speaking the language of needs, not demands. How did conversations shift when you abandoned your position to understand theirs?\n\nReflect: What became possible when you connected through needs instead of fought over positions?",
+      journalPrompts: [
+        "Which conversation moved through listening to connection?",
+        "Where did you still resort to blame?",
+        "What bridges can you now build?"
+      ]
+    }
+  },
+
+  // ══════════════════════════════════════════════════════════
+  // PHENOMENOLOGY — The Art of Witnessing
+  // ══════════════════════════════════════════════════════════
+  {
+    id: "phenomenology",
+    title: "The Phenomenological Path",
+    philosophy: "Phenomenology (Husserl/Heidegger)",
+    tradition: "western",
+    duration: "8 Days",
+    durationDays: 8,
+    icon: "◉",
+    hue: 210,
+    quote: "Back to the things themselves.",
+    author: "Edmund Husserl",
+
+    overview: "You practice radical attention by setting aside all assumptions (bracketing) and directly experiencing the structure of consciousness and world as they appear.",
+
+    immersion: {
+      ethos: "The Phenomenological Observer. You develop the capacity to see clearly without your usual filters and projections.",
+      persona: "Present, curious, and unflinching in honest seeing.",
+      rituals: [
+        "Morning: set aside all knowledge and meet one thing as if for the first time.",
+        "Bracketing practice: question every assumption you're making.",
+        "Evening: describe your direct experience without interpretation."
+      ],
+      companions: ["Husserl and Heidegger as guides", "Naive perception as teacher", "The epoché (suspension)"],
+      taboos: [
+        "Do not retreat into interpretation",
+        "Do not layer your history onto present experience",
+        "Do not reject the data of your own consciousness"
+      ],
+      culture: {
+        music: ["Music of singular focus and presence", "The space between notes"],
+        art: ["Representational art for careful observation", "Art that strips bare"],
+        reading: ["Phenomenology of Spirit excerpts", "Being and Nothingness (accessible sections)", "Husserl essays"],
+        media: ["Lectures on phenomenological method", "Heidegger on dwelling and being"]
+      },
+      environment: "Create a space for meditation, journaling, and uninterrupted observation. Quiet. Simple."
+    },
+
+    habits: [
+      { 
+        id: "h1", 
+        task: "Bracketing Practice",
+        duration: "12 mins",
+        description: "Take one thing you strongly believe. Suspend it temporarily. What new data becomes visible when you set it aside?"
+      },
+      { 
+        id: "h2", 
+        task: "Phenomenological Observation",
+        duration: "20 mins",
+        description: "Watch one object, person, or moment. Don't interpret. Describe the pure structure of what appears: color, form, movement, quality."
+      },
+      { 
+        id: "h3", 
+        task: "Consciousness Inquiry",
+        duration: "15 mins",
+        description: "Notice how consciousness itself structures experience. What are you aware of? How does awareness work? What's the difference between knowing and experiencing?"
+      },
+      {
+        id: "h4",
+        task: "Integration Writing",
+        duration: "10 mins",
+        description: "Write one insight about how your assumptions were filtering reality."
+      }
+    ],
+
+    reflection: {
+      prompt: "You practiced seeing without your usual interpretations. What appeared when you bracketed your beliefs?\n\nReflect: What have you been missing because your assumptions were too loud? How will you practice this listening beyond this week?",
+      journalPrompts: [
+        "What false assumption did you most clearly see?",
+        "How did direct experience differ from your interpretation?",
+        "Where will you practice phenomenological awareness?"
+      ]
+    }
   }
 ];
+

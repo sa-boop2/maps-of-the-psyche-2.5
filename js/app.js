@@ -27,7 +27,12 @@
     ubuntu: ['bantu'],
     aztec: ['aztec'],
     greekvirtue: ['greek'],
-    integral: ['integral', 'maslow', 'gurdjieff', 'psychosynthesis']
+    integral: ['integral', 'maslow', 'gurdjieff', 'psychosynthesis'],
+    stoicism: ['greek'],
+    adlerian: ['freud'],
+    tantra: ['chakra', 'vedantic'],
+    nvc: ['functional'],
+    phenomenology: ['jungian', 'freud']
   };
 
   // Combine all frameworks

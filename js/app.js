@@ -37,6 +37,7 @@
     { id: 'disagree', label: 'Tensions', icon: '⚡', group: 'more' },
     { id: 'relationships', label: 'Relations', icon: '∞', group: 'more' },
     { id: 'meditation', label: 'Practice', icon: '◯', group: 'more' },
+    { id: 'trainings', label: 'Trainings', icon: '⚗', group: 'more' },
     { id: 'personal', label: 'My Map', icon: '◎', group: 'you' },
     { id: 'quiz', label: 'Find Path', icon: '⟐', group: 'you' },
     { id: 'resources', label: 'Library', icon: '⊡', group: 'you' },
@@ -392,12 +393,12 @@
       case 'ego': App.ViewsEgo?.render(container); break;
       case 'therapy': App.ViewsTherapy?.render(container); break;
       case 'meditation': App.ViewsMeditation?.render(container); break;
+      case 'trainings': App.ViewsTrainings?.render(container); break;
       case 'quiz': App.ViewsQuiz?.render(container); break;
       case 'personal': App.ViewsDevelop.renderPersonalMapping(container); break;
       case 'compare': App.ViewsMap.renderCulturalComparison(container); break;
       case 'resources': App.ViewsMap.renderResources(container); break;
       case 'lineage': App.Lineage?.render(container); break;
-      case 'trainings': container.innerHTML = '<div class="view-header"><h1>Trainings</h1><p>Structured learning paths for deep psychological work. This section is under development.</p></div><div style="text-align:center;padding:80px 20px;color:var(--text-dim)"><div style="font-size:3rem;margin-bottom:16px">🎯</div><p style="font-size:1rem">Coming Soon</p><p style="font-size:0.85rem;margin-top:8px;max-width:400px;margin-left:auto;margin-right:auto">We are crafting guided programs for shadow work, ego integration, and contemplative practice. Check back soon.</p></div>'; break;
       default: container.innerHTML = '<p style="text-align:center;color:var(--text-dim);padding:60px">View not found.</p>';
     }
   }

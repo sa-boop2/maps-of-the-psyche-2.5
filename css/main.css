@@ -6771,27 +6771,35 @@ button, a, input, select, textarea { transition: all var(--t) var(--ease); }
   margin-bottom: 6px !important;
 }
 .home-primary-row {
-  gap: 7px !important;
+  gap: 11px !important;
 }
 .home-primary-card {
-  border-radius: 18px !important;
-  min-height: 130px !important;
-  padding: 9px 9px 8px !important;
-  background: linear-gradient(165deg, rgba(24, 22, 40, 0.94), rgba(10, 10, 28, 0.86)) !important;
+  border-radius: 24px !important;
+  min-height: 166px !important;
+  padding: 14px 13px 12px !important;
+  background: linear-gradient(162deg, rgba(28, 25, 46, 0.95), rgba(13, 13, 30, 0.88)) !important;
   box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.06),
-    0 10px 28px rgba(0,0,0,0.32) !important;
+    inset 0 1px 0 rgba(255,255,255,0.1),
+    inset 0 -1px 0 rgba(255,255,255,0.03),
+    0 14px 34px rgba(0,0,0,0.32),
+    0 0 26px rgba(201,168,76,0.05) !important;
 }
 .home-primary-card:hover {
   border-color: rgba(201, 168, 76, 0.36) !important;
+  transform: translateY(-2px) !important;
   box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.08),
-    0 12px 32px rgba(0,0,0,0.36),
-    0 0 24px rgba(201,168,76,0.1) !important;
+    inset 0 1px 0 rgba(255,255,255,0.12),
+    0 18px 40px rgba(0,0,0,0.36),
+    0 0 30px rgba(201,168,76,0.1) !important;
 }
-.home-primary-title { font-size: 0.8rem !important; }
-.home-primary-subtitle { font-size: 0.57rem !important; margin-bottom: 4px !important; }
-.home-primary-desc { font-size: 0.61rem !important; line-height: 1.22 !important; }
+.home-primary-icon {
+  width: 26px !important;
+  height: 26px !important;
+  margin-bottom: 8px !important;
+}
+.home-primary-title { font-size: 0.9rem !important; }
+.home-primary-subtitle { font-size: 0.64rem !important; margin-bottom: 6px !important; }
+.home-primary-desc { font-size: 0.69rem !important; line-height: 1.33 !important; }
 
 /* Map: requested layout exactly (longer bio, thinner legend, timeline below) */
 #map-view #biological-mirror-panel {
@@ -6867,6 +6875,17 @@ button, a, input, select, textarea { transition: all var(--t) var(--ease); }
     width: min(230px, calc(100vw - 104px)) !important;
     max-height: min(34vh, 260px) !important;
   }
+}
+
+@media (max-height: 930px) and (min-width: 1024px) {
+  .home-primary-card {
+    min-height: 146px !important;
+    padding: 11px 11px 10px !important;
+    border-radius: 20px !important;
+  }
+  .home-primary-title { font-size: 0.84rem !important; }
+  .home-primary-subtitle { font-size: 0.6rem !important; }
+  .home-primary-desc { font-size: 0.64rem !important; line-height: 1.25 !important; }
 }
 
 /* ── HABITS (Practice Tab) ── */

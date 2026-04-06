@@ -419,13 +419,20 @@ window.PsycheApp.ViewsTrainings = (function() {
       if (target.classList.contains('tab-btn')) {
         const targetTab = target.dataset.tab;
         
-        // Update buttons
-        currentContainer.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        target.classList.add('active');
-        
-        // Update panels
-        currentContainer.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-        currentContainer.querySelector(`[data-panel="${targetTab}"]`)?.classList.add('active');
+        // Batch DOM updates to avoid layout thrashing
+        requestAnimationFrame(() => {
+          // Update buttons
+          currentContainer.querySelectorAll('.tab-btn').forEach(b => {
+            if (b.classList.contains('active')) b.classList.remove('active');
+          });
+          target.classList.add('active');
+          
+          // Update panels
+          currentContainer.querySelectorAll('.tab-panel').forEach(p => {
+            if (p.classList.contains('active')) p.classList.remove('active');
+          });
+          currentContainer.querySelector(`[data-panel="${targetTab}"]`)?.classList.add('active');
+        });
         return;
       }
       

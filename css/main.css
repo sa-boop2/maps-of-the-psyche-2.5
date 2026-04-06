@@ -4923,8 +4923,11 @@ button, a, input, select, textarea { transition: all var(--t) var(--ease); }
   border-radius: var(--r);
   padding: 40px 30px;
   cursor: pointer;
-  transition: all 0.4s var(--ease);
+  transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
   overflow: hidden;
+  /* Performance */
+  contain: content;
+  will-change: transform;
 }
 
 .training-card::before {

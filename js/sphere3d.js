@@ -27,6 +27,7 @@ window.PsycheApp.Sphere3D = (function() {
   let hoverScheduled = false;
   let biologicalMirrorEnabled = false;
   let biologicalMirrorPanel = null;
+  let biologicalMirrorNeedsSelection = true;
   const DAMPING = 0.08;
   const neuroMap = [
     {
@@ -140,12 +141,30 @@ window.PsycheApp.Sphere3D = (function() {
       this.classList.toggle('active', biologicalMirrorEnabled);
       if (biologicalMirrorEnabled) {
         biologicalMirrorPanel?.classList.remove('hidden');
-        updateBiologicalMirror(selectedNode?.userData?.layer || null);
+        const hasSelection = !!selectedNode?.userData?.layer;
+        biologicalMirrorNeedsSelection = !hasSelection;
+        updateBiologicalMirror(hasSelection ? selectedNode.userData.layer : null, { waitingForAnalyze: true });
       } else {
         biologicalMirrorPanel?.classList.add('hidden');
       }
     });
     biologicalMirrorPanel = document.getElementById('biological-mirror-panel');
+    document.getElementById('btn-close-biological-mirror')?.addEventListener('click', () => {
+      biologicalMirrorEnabled = false;
+      biologicalMirrorNeedsSelection = true;
+      biologicalMirrorPanel?.classList.add('hidden');
+      const btn = document.getElementById('btn-toggle-biological-mirror');
+      btn?.classList.remove('active');
+    });
+    document.getElementById('btn-analyze-biological-mirror')?.addEventListener('click', () => {
+      if (!biologicalMirrorEnabled) return;
+      if (!selectedNode?.userData?.layer) {
+        updateBiologicalMirror(null, { waitingForAnalyze: true });
+        return;
+      }
+      biologicalMirrorNeedsSelection = false;
+      updateBiologicalMirror(selectedNode.userData.layer, { waitingForAnalyze: false });
+    });
 
     animate();
   }
@@ -364,7 +383,7 @@ window.PsycheApp.Sphere3D = (function() {
         `<div class="legend-item" data-idx="${i}"><span class="legend-num">${i+1}</span><span class="legend-dot" style="background:${l.color};color:${l.color}"></span><span class="legend-name">${l.name}</span></div>`
       ).join('') +
       (relatedTrainings.length ? `
-        <div class="legend-training-links">
+        <div class="legend-training-links legend-training-links-fixed">
           <div class="legend-training-title">Related Trainings</div>
           ${relatedTrainings.map(t => `<button class="legend-training-btn" data-training-id="${t.id}">${t.icon} ${t.title}</button>`).join('')}
         </div>
@@ -477,8 +496,8 @@ window.PsycheApp.Sphere3D = (function() {
     data.frameworkId = node.userData.framework.id;
     data.crossRefs = findCrossRefs(node.userData.framework, node.userData.layerIndex);
     window.PsycheApp.Sidebar.show(data);
-    if (biologicalMirrorEnabled) {
-      updateBiologicalMirror(data);
+    if (biologicalMirrorEnabled && !biologicalMirrorNeedsSelection) {
+      updateBiologicalMirror(data, { waitingForAnalyze: false });
     }
 
     // ── SPOTLIGHT EFFECT — dim everything except selected node ──
@@ -658,11 +677,16 @@ window.PsycheApp.Sphere3D = (function() {
     }
   }
 
-  function updateBiologicalMirror(layerData) {
+  function updateBiologicalMirror(layerData, options = {}) {
+    const waitingForAnalyze = !!options.waitingForAnalyze;
     const container = document.getElementById('biological-mirror-content');
     if (!container) return;
+    if (!layerData && waitingForAnalyze) {
+      container.innerHTML = `<p class="bio-empty">Select a node to open its sidebar, then click <strong>Analyze Selected Node</strong> to run the biological mapping.</p>`;
+      return;
+    }
     if (!layerData) {
-      container.innerHTML = `<p class="bio-empty">Select a node to map psyche layers to neuro systems.</p>`;
+      container.innerHTML = `<p class="bio-empty">No node selected yet.</p>`;
       return;
     }
     const hay = `${layerData.name || ''} ${layerData.subtitle || ''} ${layerData.description || ''} ${layerData.shadow || ''} ${layerData.pathology || ''}`.toLowerCase();

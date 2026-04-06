@@ -362,8 +362,11 @@
   function buildViewTabs() {
     const container = document.getElementById('view-tabs');
     if (!container) return;
+    const mode = document.documentElement.getAttribute('data-views-mode') || 'core';
+    const primaryViews = new Set(['home','map','ego','therapy','darknight','development','scanner','archetypes','trainings','chronos']);
+    const sourceViews = mode === 'all' ? views : views.filter(v => v.sep || primaryViews.has(v.id));
     const compactViews = new Set(['figures', 'cases', 'disagree', 'relationships', 'chronos', 'alchemy', 'personal', 'quiz', 'resources']);
-    container.innerHTML = views.map(v => {
+    container.innerHTML = sourceViews.map(v => {
       if (v.sep) return '';
       const compactClass = compactViews.has(v.id) ? ' compact' : '';
       return `<button class="view-btn${compactClass} ${v.id === 'map' ? 'active':''}" data-view="${v.id}" title="${v.label}"><span class="view-btn-icon">${v.icon}</span><span class="view-btn-label">${v.label}</span></button>`;
@@ -371,6 +374,12 @@
     container.querySelectorAll('.view-btn').forEach(btn => {
       btn.addEventListener('click', () => { setView(btn.dataset.view); App.Sound?.playUIClick(); });
     });
+    const toggleBtn = document.getElementById('btn-toggle-view-set');
+    if (toggleBtn) {
+      toggleBtn.textContent = mode === 'all' ? 'Core' : 'More';
+      toggleBtn.title = mode === 'all' ? 'Show core views' : 'Show all views';
+      toggleBtn.classList.toggle('active', mode === 'all');
+    }
   }
   
   function bindLogoClick() {
@@ -487,6 +496,12 @@
   function bindUtilityButtons() {
     document.getElementById('btn-search')?.addEventListener('click', () => App.Search?.open());
     document.getElementById('btn-theme')?.addEventListener('click', toggleTheme);
+    document.getElementById('btn-toggle-view-set')?.addEventListener('click', () => {
+      const current = document.documentElement.getAttribute('data-views-mode') || 'core';
+      const next = current === 'all' ? 'core' : 'all';
+      document.documentElement.setAttribute('data-views-mode', next);
+      buildViewTabs();
+    });
     document.getElementById('btn-keyboard')?.addEventListener('click', () => {
       document.getElementById('keyboard-hints')?.classList.toggle('hidden');
     });

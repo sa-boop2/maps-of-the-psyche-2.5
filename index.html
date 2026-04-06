@@ -43,6 +43,9 @@
     </div>
       <div id="view-tabs" class="view-pill-group"></div>
       <div class="nav-right-group">
+        <button id="btn-toggle-view-set" class="nav-icon-btn nav-text-btn" title="Toggle view groups">
+          More
+        </button>
         <select id="atmosphere-select" title="Internal Weather" style="margin-right:12px; background:transparent; border:1px solid var(--border); color:var(--text); padding:4px 8px; border-radius:4px; font-family:var(--font-ui); font-size:0.75rem; cursor:pointer;">
           <option value="neutral">Neutral Sky (Default)</option>
           <option value="anxiety">Anxiety / Dissonance</option>
@@ -178,11 +181,17 @@
 
       <div id="biological-mirror-panel" class="hidden">
         <div class="bio-header">
-          <h4>Biological Mirror</h4>
-          <span>Affective Neuroscience + Neuro-Psychoanalysis</span>
+          <div>
+            <h4>Biological Mirror</h4>
+            <span>Affective Neuroscience + Neuro-Psychoanalysis</span>
+          </div>
+          <button id="btn-close-biological-mirror" class="bio-close-btn" title="Close Biological Mirror">✕</button>
         </div>
         <div id="biological-mirror-content">
-          <p class="bio-empty">Select a node to map psyche layers to neuro systems.</p>
+          <p class="bio-empty">Select a node for sidebar details, then click Analyze to map it biologically.</p>
+        </div>
+        <div class="bio-actions">
+          <button id="btn-analyze-biological-mirror" class="legend-training-btn" type="button">Analyze Selected Node</button>
         </div>
       </div>
 

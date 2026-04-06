@@ -11,12 +11,13 @@ html {
 }
 
 :root {
-  --bg-primary: #0a0a1a;
-  --bg-secondary: #0e0e22;
-  --bg-tertiary: #121228;
-  --bg-card: rgba(10, 10, 30, 0.9);
-  --bg-glass: rgba(8, 8, 24, 0.94);
-  --bg-glass-light: rgba(20, 20, 55, 0.75);
+  --bg-primary: #191429;
+  --bg-secondary: #221a35;
+  --bg-tertiary: #2f2346;
+  --bg-card: rgba(40, 30, 62, 0.88);
+  --bg-glass: rgba(34, 24, 54, 0.9);
+  --bg-glass-light: rgba(58, 42, 86, 0.72);
+  --gold-glow: rgba(201, 168, 76, 0.3);
   --gold: #c9a84c;
   --gold-light: #e8d48b;
   --gold-dark: #8a7233;

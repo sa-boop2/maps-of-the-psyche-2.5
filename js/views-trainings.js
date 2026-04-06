@@ -10,7 +10,9 @@ window.PsycheApp.ViewsTrainings = (function() {
   
   let activeTraining = null;
   let trainingState = null;
+  let hallMode = false;
   let currentContainer = null;
+  let delegatedClickHandler = null;
 
   // ── STORAGE ──
   function loadState() {
@@ -83,6 +85,7 @@ window.PsycheApp.ViewsTrainings = (function() {
     if (!training) return;
     
     activeTraining = training;
+    hallMode = false;
     trainingState = {
       startDate: new Date().toISOString(),
       completedHabits: {},
@@ -97,6 +100,7 @@ window.PsycheApp.ViewsTrainings = (function() {
     if (!confirm('Abandon your current training? All progress will be lost.')) return;
     activeTraining = null;
     trainingState = null;
+    hallMode = true;
     saveState();
     reRender();
     window.PsycheApp?.showToast?.('Training abandoned.');
@@ -111,8 +115,7 @@ window.PsycheApp.ViewsTrainings = (function() {
   }
 
   function goToHall() {
-    // Don't clear state - just show hall view
-    // This allows users to resume their training
+    hallMode = true;
     reRender();
   }
 
@@ -123,8 +126,7 @@ window.PsycheApp.ViewsTrainings = (function() {
   }
   
   function pauseTraining() {
-    // Temporarily hide training view without losing progress
-    activeTraining = null;
+    hallMode = true;
     reRender();
   }
 
@@ -224,7 +226,7 @@ window.PsycheApp.ViewsTrainings = (function() {
             <span class="dashboard-topbar-icon">${t.icon}</span>
             <span>${t.title}</span>
           </div>
-          <button class="dashboard-back-btn" onclick="PsycheApp.ViewsTrainings.pauseTraining()">
+          <button class="dashboard-back-btn" onclick="PsycheApp.ViewsTrainings.goToHall()">
             Hall →
           </button>
         </div>
@@ -410,9 +412,13 @@ window.PsycheApp.ViewsTrainings = (function() {
   // ── BIND EVENTS (Optimized with Event Delegation) ──
   function bindEvents() {
     if (!currentContainer) return;
-    
-    // Single event listener for all interactions using delegation
-    currentContainer.addEventListener('click', (e) => {
+
+    if (delegatedClickHandler) {
+      currentContainer.removeEventListener('click', delegatedClickHandler);
+    }
+
+    // Single event listener for all in-view interactions using delegation
+    delegatedClickHandler = (e) => {
       const target = e.target;
       
       // Tab switching
@@ -457,23 +463,9 @@ window.PsycheApp.ViewsTrainings = (function() {
         return;
       }
       
-      // Modal close
-      if (target.classList.contains('modal-close') || target.classList.contains('modal-backdrop')) {
-        document.querySelector('.training-modal')?.remove();
-        return;
-      }
-      
-      // Modal begin button
-      if (target.classList.contains('modal-begin')) {
-        const modal = target.closest('.training-modal');
-        const trainingId = modal?.dataset.trainingId;
-        if (trainingId) {
-          document.querySelector('.training-modal')?.remove();
-          beginTraining(trainingId);
-        }
-        return;
-      }
-    });
+    };
+
+    currentContainer.addEventListener('click', delegatedClickHandler);
   }
 
   function showPreview(trainingId) {
@@ -512,6 +504,18 @@ window.PsycheApp.ViewsTrainings = (function() {
 
     document.body.appendChild(modal);
     requestAnimationFrame(() => modal.classList.add('active'));
+
+    modal.addEventListener('click', (e) => {
+      const target = e.target;
+      if (target.classList.contains('modal-backdrop') || target.closest('.modal-close')) {
+        modal.remove();
+        return;
+      }
+      if (target.closest('.modal-begin')) {
+        modal.remove();
+        beginTraining(trainingId);
+      }
+    });
   }
 
   // ── MAIN RENDER ──
@@ -534,7 +538,7 @@ window.PsycheApp.ViewsTrainings = (function() {
       }
     }
     
-    if (activeTraining && trainingState) {
+    if (activeTraining && trainingState && !hallMode) {
       currentContainer.innerHTML = renderDashboard();
     } else {
       currentContainer.innerHTML = renderHall();

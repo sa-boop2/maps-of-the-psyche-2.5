@@ -38,6 +38,8 @@
     { id: 'relationships', label: 'Relations', icon: '∞', group: 'more' },
     { id: 'meditation', label: 'Practice', icon: '◯', group: 'more' },
     { id: 'trainings', label: 'Trainings', icon: '⚗', group: 'more' },
+    { id: 'compare', label: 'Compare', icon: '⟷', group: 'more' },
+    { id: 'lineage', label: 'Lineage', icon: '⇢', group: 'more' },
     { id: 'personal', label: 'My Map', icon: '◎', group: 'you' },
     { id: 'quiz', label: 'Find Path', icon: '⟐', group: 'you' },
     { id: 'resources', label: 'Library', icon: '⊡', group: 'you' },
@@ -347,13 +349,23 @@
     const subNav = document.getElementById('sub-nav');
     const appMain = document.getElementById('app-main');
 
-    if (viewId === 'home' || viewId === 'trainings') {
-      // Full immersive — hide all nav chrome
+    if (viewId === 'home') {
+      // Full immersive home
       mapView.classList.remove('active');
       secView.classList.add('active');
       if (mainNav) mainNav.classList.add('nav-hidden');
       if (subNav) subNav.style.display = 'none';
       if (appMain) appMain.classList.add('home-active');
+      App.View2D?.hide();
+      secView.scrollTop = 0;
+      renderSecondaryView(secView, viewId);
+    } else if (viewId === 'trainings') {
+      // Trainings keep top navigation visible
+      mapView.classList.remove('active');
+      secView.classList.add('active');
+      if (mainNav) mainNav.classList.remove('nav-hidden');
+      if (subNav) subNav.style.display = 'none';
+      if (appMain) appMain.classList.remove('home-active');
       App.View2D?.hide();
       secView.scrollTop = 0;
       renderSecondaryView(secView, viewId);

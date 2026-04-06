@@ -96,6 +96,7 @@ window.PsycheApp.ViewsHome = (function() {
   function render(container) {
     const featured = cards.find(c => c.featured);
     const rest = cards.filter(c => !c.featured);
+    const deck = cards.slice(0, 7);
 
     container.innerHTML = `
       <div class="home-page">
@@ -133,9 +134,21 @@ window.PsycheApp.ViewsHome = (function() {
             <p class="home-hero-desc">28 frameworks · 6 traditions · 65,000 years of human wisdom</p>
           </div>
 
+          <section class="home-3d-showcase fade-in" style="animation-delay: 0.2s">
+            <div class="home-3d-title">Consciousness Atlas</div>
+            <div class="home-3d-deck">
+              ${deck.map((card, i) => `
+                <button class="home-stele" data-navigate="${card.id}" style="--z:${(deck.length - i) * 36}px; --rx:${6 - i}deg; --ry:${(i % 2 === 0 ? -1 : 1) * (5 + i)}deg;">
+                  <span class="home-stele-icon">${card.icon}</span>
+                  <span class="home-stele-label">${card.title}</span>
+                </button>
+              `).join('')}
+            </div>
+          </section>
+
           ${renderFeaturedCard(featured)}
 
-          <div class="home-grid">
+          <div class="home-grid home-grid-3d">
             ${rest.map((card, i) => renderCard(card, i)).join('')}
           </div>
 
@@ -206,7 +219,6 @@ window.PsycheApp.ViewsHome = (function() {
     return `
       <div class="${classes.join(' ')}" style="animation-delay: ${0.4 + index * 0.07}s" data-navigate="${card.id}">
         ${card.comingSoon ? '<span class="home-badge">Coming Soon</span>' : ''}
-        ${card.highlight ? '<span class="home-badge home-badge--new">Start Here</span>' : ''}
         <div class="home-card-icon" style="color: ${card.accent}">
           ${card.icon}
         </div>

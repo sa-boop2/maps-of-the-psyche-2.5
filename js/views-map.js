@@ -263,13 +263,29 @@ window.PsycheApp.ViewsMap = (function() {
     const resources = D().resources;
     if (!resources) return;
     let activeIdx = 0;
+    const allTrainings = window.PsycheData?.trainings || [];
+
+    function findRelatedTrainings(topic) {
+      const q = topic.toLowerCase();
+      return allTrainings
+        .filter(t => {
+          const hay = `${t.title} ${t.philosophy} ${t.overview}`.toLowerCase();
+          return hay.includes(q.split(' ')[0]) || hay.includes(q.split(' & ')[0]);
+        })
+        .slice(0, 3);
+    }
+
     function render() {
       const topics = resources.byTopic;
       const active = topics[activeIdx];
+      const relatedTrainings = findRelatedTrainings(active.topic);
+      const papers = active.papers || [];
+      const media = active.media || [];
+      const courses = active.courses || [];
       container.innerHTML = `
         <div class="view-header">
-          <h1>Where to Explore Next</h1>
-          <p>Curated reading lists, key thinkers, and practices organized by area of interest.</p>
+          <h1>Living Library</h1>
+          <p>Expanded curation of books, papers, practices, thinkers, and related trainings to turn study into lived transformation.</p>
         </div>
         <div class="view-tabs">${topics.map((t, i) => `
           <button class="view-tab ${i === activeIdx ? 'active':''}" data-idx="${i}">${t.topic}</button>
@@ -278,16 +294,47 @@ window.PsycheApp.ViewsMap = (function() {
           <div class="card" style="cursor:default">
             <div class="card-subtitle" style="margin-bottom:12px">📚 Key Texts</div>
             ${active.books.map(b => `<div class="sb-resource"><span class="sb-resource-title">${b}</span></div>`).join('')}
+            ${papers.length ? `
+              <div class="card-subtitle" style="margin:18px 0 12px;">🧪 Papers & Essays</div>
+              ${papers.map(p => `<div class="sb-resource"><span class="sb-resource-title">${p}</span></div>`).join('')}
+            ` : ''}
           </div>
           <div class="card" style="cursor:default">
             <div class="card-subtitle" style="margin-bottom:12px">🧘 Practices</div>
             ${active.practices.map(p => `<div class="sb-tag" style="margin-bottom:4px">${p}</div>`).join('')}
             <div class="card-subtitle" style="margin-top:16px;margin-bottom:8px">🧠 Key Thinkers</div>
             ${active.thinkers.map(t => `<div class="sb-tag" style="background:rgba(76,140,212,0.06);border-color:rgba(76,140,212,0.2);color:var(--accent-blue)">${t}</div>`).join('')}
+            ${media.length ? `
+              <div class="card-subtitle" style="margin-top:16px;margin-bottom:8px">🎧 Media</div>
+              ${media.map(m => `<div class="sb-tag" style="background:rgba(154,76,212,0.08);border-color:rgba(154,76,212,0.24);color:var(--accent-purple)">${m}</div>`).join('')}
+            ` : ''}
+            ${courses.length ? `
+              <div class="card-subtitle" style="margin-top:16px;margin-bottom:8px">🧭 Courses & Programs</div>
+              ${courses.map(c => `<div class="sb-tag" style="background:rgba(76,212,154,0.08);border-color:rgba(76,212,154,0.24);color:var(--accent-green)">${c}</div>`).join('')}
+            ` : ''}
           </div>
+        </div>
+        ${relatedTrainings.length ? `
+          <div class="card fade-in" style="cursor:default;margin-top:20px;">
+            <div class="card-subtitle" style="margin-bottom:12px">⚗ Related Trainings</div>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;">
+              ${relatedTrainings.map(t => `<button class="view-tab go-training" data-training-id="${t.id}" style="font-size:0.76rem;">${t.icon} ${t.title}</button>`).join('')}
+            </div>
+          </div>
+        ` : ''}
+        <div class="card fade-in" style="cursor:default;margin-top:20px;">
+          <div class="card-subtitle" style="margin-bottom:10px">Integration Prompt</div>
+          <div class="card-text">Pick one text, one practice, and one training from this topic. Commit to a 7-day micro-immersion and track what changes in mood, behavior, and worldview.</div>
         </div>`;
       container.querySelectorAll('.view-tab').forEach(tab => {
         tab.addEventListener('click', () => { activeIdx = parseInt(tab.dataset.idx); render(); });
+      });
+      container.querySelectorAll('.go-training').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const trainingId = btn.dataset.trainingId;
+          window.PsycheApp.goToView('trainings');
+          setTimeout(() => window.PsycheApp?.ViewsTrainings?.beginTraining(trainingId), 100);
+        });
       });
     }
     render();

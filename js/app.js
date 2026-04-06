@@ -7,17 +7,27 @@
   const trainingFrameworkMap = {
     hermeticism: ['esoteric', 'alchemy', 'egyptian'],
     daoism: ['daoist'],
-    individuation: ['jungian', 'ifs'],
+    individuation: ['jungian', 'ifs', 'psychosynthesis'],
     buddhist: ['buddhist'],
-    chakra: ['chakra', 'vedantic'],
+    chakra: ['chakra'],
     egyptian: ['egyptian'],
     gnostic: ['gnostic'],
     kabbalah: ['kabbalah'],
     alchemy: ['alchemy', 'esoteric'],
-    ifs: ['ifs', 'jungian'],
+    ifs: ['ifs'],
     sufi: ['sufi'],
     frankl: ['frankl', 'erikson'],
-    spiral: ['spiral', 'integral']
+    spiral: ['spiral'],
+    vedanta: ['vedantic'],
+    freudian: ['freud', 'lacan'],
+    eriksonian: ['erikson', 'functional'],
+    yoruba: ['yoruba'],
+    dreaming: ['aboriginal'],
+    medicinewheel: ['nativeamerican'],
+    ubuntu: ['bantu'],
+    aztec: ['aztec'],
+    greekvirtue: ['greek'],
+    integral: ['integral', 'maslow', 'gurdjieff', 'psychosynthesis']
   };
 
   // Combine all frameworks

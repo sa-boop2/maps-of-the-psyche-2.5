@@ -1430,5 +1430,539 @@ window.PsycheData.trainings = [
         "What does Turquoise (holistic) consciousness feel like to you? Have you touched it?"
       ]
     }
+  },
+
+  // ══════════════════════════════════════════════════════════
+  // VEDANTA — The Five Sheaths
+  // ══════════════════════════════════════════════════════════
+  {
+    id: "vedanta",
+    title: "The Vedantic Path",
+    philosophy: "Vedanta",
+    tradition: "eastern",
+    duration: "10 Days",
+    durationDays: 10,
+    icon: "🕉",
+    hue: 62,
+    quote: "Neti, neti — not this, not this.",
+    author: "Upanishadic Method",
+    overview: "You practice dis-identification from each sheath (kosha) to rediscover the witness beneath body, energy, mind, intellect, and bliss states.",
+    immersion: {
+      ethos: "The Witness in training. You are not rejecting life; you are seeing clearly what you are and what you are not.",
+      persona: "Calm, observant, and precise. You name identifications and gently release them.",
+      rituals: [
+        "Morning: identify the dominant kosha today.",
+        "Midday: pause and ask, 'Who is aware of this?'",
+        "Evening: journal one dis-identified pattern."
+      ],
+      companions: [
+        "Silence",
+        "The Upanishadic inquiry spirit",
+        "Your breath as anchor"
+      ],
+      taboos: [
+        "Do not confuse numbness with transcendence",
+        "Do not bypass responsibilities",
+        "Do not chase mystical peak states"
+      ],
+      culture: {
+        music: ["Tanpura drone", "Vedic chant", "Soft bansuri flute"],
+        art: ["Sri Yantra contemplation", "Temple iconography"],
+        reading: ["Taittiriya Upanishad (Koshas)", "Ashtavakra Gita selections"],
+        media: ["Lectures on Advaita practice"]
+      },
+      environment: "Clean floor space, low evening light, and one steady candle during practice."
+    },
+    habits: [
+      { id: "h1", task: "Kosha Check-In", duration: "10 mins", description: "Track which sheath dominates your day." },
+      { id: "h2", task: "Neti Neti Inquiry", duration: "15 mins", description: "Dis-identify from thought/emotion/body states with gentle inquiry." },
+      { id: "h3", task: "Witness Meditation", duration: "20 mins", description: "Rest as awareness without suppressing experience." },
+      { id: "h4", task: "Integration Journal", duration: "10 mins", description: "Record what became less sticky when witnessed." }
+    ],
+    reflection: {
+      prompt: "After ten days, what do you now recognize as changing content versus stable awareness?",
+      journalPrompts: [
+        "Which kosha was hardest to dis-identify from?",
+        "What changed when you stopped saying 'I am this state'?",
+        "How can this clarity improve daily relationships?"
+      ]
+    }
+  },
+
+  // ══════════════════════════════════════════════════════════
+  // FREUDIAN DEPTH WORK
+  // ══════════════════════════════════════════════════════════
+  {
+    id: "freudian",
+    title: "The Freudian Path",
+    philosophy: "Freudian / Lacanian Analysis",
+    tradition: "western",
+    duration: "9 Days",
+    durationDays: 9,
+    icon: "🛋",
+    hue: 8,
+    quote: "Where id was, ego shall be.",
+    author: "Sigmund Freud",
+    overview: "You observe defenses, drives, and unconscious slips in real time, then map desire patterns without moralizing.",
+    immersion: {
+      ethos: "The analyst of your own speech. Nothing is random: jokes, slips, symptoms all speak.",
+      persona: "Curious, unsentimental, and non-judging.",
+      rituals: [
+        "Capture one slip, dream, or symptom daily.",
+        "Name likely defense mechanisms in conflict moments.",
+        "End day with free-writing."
+      ],
+      companions: ["Dream notes", "Symbol lists", "Language precision"],
+      taboos: [
+        "Do not pathologize everything",
+        "Do not use analysis to avoid emotion",
+        "Do not weaponize interpretations in relationships"
+      ],
+      culture: {
+        music: ["Minimal piano for reflection"],
+        art: ["Surrealist paintings (Dalí, Magritte)"],
+        reading: ["Introductory Freud essays", "Lacan primer excerpts"],
+        media: ["Lectures on defense mechanisms"]
+      },
+      environment: "Quiet chair, notebook, no multitasking during reflection windows."
+    },
+    habits: [
+      { id: "h1", task: "Morning Dream Recall", duration: "8 mins", description: "Write fragments before phone use." },
+      { id: "h2", task: "Defense Spotting", duration: "Throughout day", description: "Label denial, projection, rationalization as they appear." },
+      { id: "h3", task: "Free Association", duration: "15 mins", description: "Write without censorship from one trigger phrase." },
+      { id: "h4", task: "Transference Note", duration: "10 mins", description: "Where did old relational patterns replay today?" }
+    ],
+    reflection: {
+      prompt: "What unconscious pattern became visible this week, and what relational freedom does that open?",
+      journalPrompts: [
+        "Which defense protects you most often?",
+        "What symptom might be carrying meaning rather than only pain?",
+        "What desire did you avoid naming directly?"
+      ]
+    }
+  },
+
+  // ══════════════════════════════════════════════════════════
+  // ERIKSONIAN DEVELOPMENTAL REPAIR
+  // ══════════════════════════════════════════════════════════
+  {
+    id: "eriksonian",
+    title: "The Eriksonian Path",
+    philosophy: "Erikson + Functional Integration",
+    tradition: "western",
+    duration: "8 Days",
+    durationDays: 8,
+    icon: "🧭",
+    hue: 205,
+    quote: "Healthy children will not fear life if their elders have integrity enough not to fear death.",
+    author: "Erik Erikson",
+    overview: "You review major psychosocial stages and intentionally reinforce whichever virtue is currently underdeveloped.",
+    immersion: {
+      ethos: "A developmental restorer. You address the stage challenge in front of you instead of abstract self-critique.",
+      persona: "Patient, practical, and compassionate toward unfinished tasks.",
+      rituals: [
+        "Choose one stage challenge each morning.",
+        "Practice one opposite action in the real world.",
+        "Close day by naming one gained virtue."
+      ],
+      companions: ["Lifespan map", "Behavioral evidence", "Gentle accountability"],
+      taboos: [
+        "Do not collapse into blame narratives",
+        "Do not compare your timeline to others",
+        "Do not skip embodied action"
+      ],
+      culture: {
+        music: ["Grounding instrumental playlists"],
+        art: ["Life-stage visual timelines"],
+        reading: ["Erikson stage summaries", "Behavior change basics"],
+        media: ["Developmental psychology talks"]
+      },
+      environment: "Visible timeline sheet near desk with current stage focus."
+    },
+    habits: [
+      { id: "h1", task: "Stage Selection", duration: "10 mins", description: "Pick stage polarity to work on today." },
+      { id: "h2", task: "Opposite Action", duration: "15 mins", description: "Do one behavior that supports the target virtue." },
+      { id: "h3", task: "Relational Rehearsal", duration: "10 mins", description: "Practice healthy boundary/initiative statements." },
+      { id: "h4", task: "Virtue Debrief", duration: "8 mins", description: "Log concrete evidence of growth." }
+    ],
+    reflection: {
+      prompt: "Which stage conflict softened, and what changed in your daily functioning?",
+      journalPrompts: [
+        "Which virtue needs reinforcement this month?",
+        "Where do you still operate from shame, mistrust, or stagnation?",
+        "What is your next smallest functional step?"
+      ]
+    }
+  },
+
+  // ══════════════════════════════════════════════════════════
+  // YORUBA / IFA
+  // ══════════════════════════════════════════════════════════
+  {
+    id: "yoruba",
+    title: "The Yoruba Path",
+    philosophy: "Yoruba / Ifa",
+    tradition: "indigenous",
+    duration: "9 Days",
+    durationDays: 9,
+    icon: "🥁",
+    hue: 126,
+    quote: "Character is beauty.",
+    author: "Yoruba Proverb",
+    overview: "You train relational destiny alignment: body, community, and inner calling (Ori) as one coherent life.",
+    immersion: {
+      ethos: "A relational being, never isolated. Your choices echo through ancestors, community, and descendants.",
+      persona: "Respectful, rhythmic, and responsibility-centered.",
+      rituals: [
+        "Morning gratitude to lineage and elders.",
+        "Daily service action for community.",
+        "Evening Ori alignment question: 'Did I act in character today?'"
+      ],
+      companions: ["Drum rhythm", "Oral wisdom", "Community accountability"],
+      taboos: [
+        "Do not pursue growth disconnected from community",
+        "Do not ignore obligations",
+        "Do not treat destiny as ego fantasy"
+      ],
+      culture: {
+        music: ["Yoruba bata rhythms", "Call-and-response chants"],
+        art: ["Ifa visual symbols", "Mask and textile motifs"],
+        reading: ["Short Yoruba wisdom texts"],
+        media: ["Talks on Orisha ethics"]
+      },
+      environment: "Keep one symbolic object of lineage visible during the training."
+    },
+    habits: [
+      { id: "h1", task: "Ancestor Gratitude", duration: "6 mins", description: "Offer gratitude and name one inherited strength." },
+      { id: "h2", task: "Character Practice", duration: "Throughout day", description: "Choose integrity over convenience in one decision." },
+      { id: "h3", task: "Community Service", duration: "20 mins", description: "Perform a concrete act benefiting others." },
+      { id: "h4", task: "Ori Journal", duration: "10 mins", description: "Document alignment/misalignment with your calling." }
+    ],
+    reflection: {
+      prompt: "How did your sense of self change when you centered character and community over image?",
+      journalPrompts: [
+        "Where did you feel most aligned with Ori?",
+        "What obligations did you stop avoiding?",
+        "Which relationship became cleaner through right action?"
+      ]
+    }
+  },
+
+  // ══════════════════════════════════════════════════════════
+  // DREAMING / ABORIGINAL
+  // ══════════════════════════════════════════════════════════
+  {
+    id: "dreaming",
+    title: "The Dreaming Path",
+    philosophy: "Aboriginal Dreaming",
+    tradition: "indigenous",
+    duration: "7 Days",
+    durationDays: 7,
+    icon: "🌏",
+    hue: 28,
+    quote: "Country is not a place, it is a relation.",
+    author: "Aboriginal Teaching",
+    overview: "You practice place-based awareness: identity as relationship with land, story, and responsibility.",
+    immersion: {
+      ethos: "You are part of Country, not separate from it.",
+      persona: "Attentive, respectful, and ecologically reciprocal.",
+      rituals: [
+        "Daily slow walk with no headphones.",
+        "Observe one place repeatedly and note changes.",
+        "Speak less; listen to land patterns."
+      ],
+      companions: ["Silence outdoors", "Story memory", "Ecological attention"],
+      taboos: [
+        "Do not treat nature as scenery only",
+        "Do not rush place-based practice",
+        "Do not reduce living traditions to aesthetic"
+      ],
+      culture: {
+        music: ["Didgeridoo ambient", "Field recordings"],
+        art: ["Dot painting symbolism study"],
+        reading: ["Country and kinship essays"],
+        media: ["Indigenous ecological storytelling interviews"]
+      },
+      environment: "Choose one local route and return to it every day."
+    },
+    habits: [
+      { id: "h1", task: "Country Walk", duration: "25 mins", description: "Walk same route and observe new details." },
+      { id: "h2", task: "Pattern Note", duration: "8 mins", description: "Record signs of seasonal and ecological change." },
+      { id: "h3", task: "Reciprocity Act", duration: "10 mins", description: "Clean, care, or protect one local place." },
+      { id: "h4", task: "Evening Story Map", duration: "10 mins", description: "Map your day as relation, not achievement." }
+    ],
+    reflection: {
+      prompt: "How did your psychology shift when you related to place as kin rather than backdrop?",
+      journalPrompts: [
+        "What did repeated attention reveal?",
+        "Where are you extractive versus reciprocal?",
+        "How can you sustain this relationship monthly?"
+      ]
+    }
+  },
+
+  // ══════════════════════════════════════════════════════════
+  // MEDICINE WHEEL
+  // ══════════════════════════════════════════════════════════
+  {
+    id: "medicinewheel",
+    title: "The Medicine Wheel Path",
+    philosophy: "Native American Medicine Wheel",
+    tradition: "indigenous",
+    duration: "8 Days",
+    durationDays: 8,
+    icon: "🜂",
+    hue: 166,
+    quote: "Walk in balance with all directions.",
+    author: "Indigenous Teaching",
+    overview: "You rotate through physical, emotional, mental, and spiritual quadrants to restore whole-system balance.",
+    immersion: {
+      ethos: "No quadrant is optional; wholeness requires all four.",
+      persona: "Balanced, cyclical, and non-fragmented.",
+      rituals: [
+        "Assign each day to one direction and one balancing action.",
+        "Begin with body, end with spirit.",
+        "Use one simple directional altar marker."
+      ],
+      companions: ["Cardinal directions", "Seasonal rhythm", "Ceremonial attention"],
+      taboos: [
+        "Do not overdevelop one quadrant at expense of others",
+        "Do not confuse intensity with balance",
+        "Do not skip emotional processing"
+      ],
+      culture: {
+        music: ["Frame drum rhythms", "Ceremonial ambient"],
+        art: ["Medicine wheel diagrams"],
+        reading: ["Wheel teachings overview"],
+        media: ["Talks on four-direction integration"]
+      },
+      environment: "Create a simple 4-direction layout in your room."
+    },
+    habits: [
+      { id: "h1", task: "Direction of the Day", duration: "10 mins", description: "Set daily directional intention." },
+      { id: "h2", task: "Embodied Balance Practice", duration: "20 mins", description: "Perform action for underdeveloped quadrant." },
+      { id: "h3", task: "Relational Balance Check", duration: "8 mins", description: "Note where your interactions are imbalanced." },
+      { id: "h4", task: "Evening Wheel Audit", duration: "10 mins", description: "Score all 4 domains and adjust tomorrow." }
+    ],
+    reflection: {
+      prompt: "What changed when you practiced development as balance, not optimization of one strength?",
+      journalPrompts: [
+        "Which direction do you neglect most?",
+        "What is your most stable balancing ritual now?",
+        "How will you maintain wheel checks weekly?"
+      ]
+    }
+  },
+
+  // ══════════════════════════════════════════════════════════
+  // UBUNTU / BANTU
+  // ══════════════════════════════════════════════════════════
+  {
+    id: "ubuntu",
+    title: "The Ubuntu Path",
+    philosophy: "Ubuntu (Bantu)",
+    tradition: "indigenous",
+    duration: "7 Days",
+    durationDays: 7,
+    icon: "🤝",
+    hue: 138,
+    quote: "I am because we are.",
+    author: "Ubuntu Proverb",
+    overview: "You train relational personhood: identity becomes clearer through contribution, dignity, and mutual recognition.",
+    immersion: {
+      ethos: "Personhood is co-created in relationship.",
+      persona: "Warm, responsible, and dignity-preserving.",
+      rituals: [
+        "Morning intention for one dignity-preserving action.",
+        "One daily act of repair or reconciliation.",
+        "End day by naming one person who shaped you."
+      ],
+      companions: ["Community memory", "Reciprocity", "Shared responsibility"],
+      taboos: [
+        "Do not isolate while claiming growth",
+        "Do not humiliate to win",
+        "Do not ignore repair opportunities"
+      ],
+      culture: {
+        music: ["Community choral harmonies"],
+        art: ["Ubuntu visual proverbs"],
+        reading: ["Short Ubuntu ethics texts"],
+        media: ["Restorative justice examples"]
+      },
+      environment: "Keep a visible list of people to appreciate and repair with."
+    },
+    habits: [
+      { id: "h1", task: "Dignity Action", duration: "Throughout day", description: "Choose behavior that protects shared dignity." },
+      { id: "h2", task: "Repair Practice", duration: "15 mins", description: "Initiate one small relational repair." },
+      { id: "h3", task: "Contribution Block", duration: "20 mins", description: "Offer effort that benefits collective wellbeing." },
+      { id: "h4", task: "Evening Ubuntu Journal", duration: "8 mins", description: "Document where 'we' improved 'I'." }
+    ],
+    reflection: {
+      prompt: "How did your identity and emotional stability change when you practiced Ubuntu concretely?",
+      journalPrompts: [
+        "Which relationship improved most through repair?",
+        "Where do you still default to isolated selfhood?",
+        "What weekly Ubuntu ritual will you keep?"
+      ]
+    }
+  },
+
+  // ══════════════════════════════════════════════════════════
+  // AZTEC / MEXICA
+  // ══════════════════════════════════════════════════════════
+  {
+    id: "aztec",
+    title: "The Mexica Path",
+    philosophy: "Aztec / Mexica",
+    tradition: "indigenous",
+    duration: "7 Days",
+    durationDays: 7,
+    icon: "☀",
+    hue: 16,
+    quote: "In ixtli in yollotl — face and heart.",
+    author: "Nahua Wisdom",
+    overview: "You cultivate disciplined vitality: align visible conduct (face) with inner truth and courage (heart).",
+    immersion: {
+      ethos: "Integrity of face and heart under pressure.",
+      persona: "Disciplined, courageous, and service-oriented.",
+      rituals: [
+        "Dawn sun-facing breath and commitment.",
+        "One difficult task completed before noon.",
+        "Evening face-heart alignment review."
+      ],
+      companions: ["Solar rhythm", "Courage practice", "Discipline"],
+      taboos: [
+        "Do not separate values from action",
+        "Do not postpone meaningful effort",
+        "Do not confuse image with honor"
+      ],
+      culture: {
+        music: ["Mesoamerican percussion"],
+        art: ["Nahua codex motifs"],
+        reading: ["Aztec ethical fragments"],
+        media: ["Mesoamerican worldview lectures"]
+      },
+      environment: "Morning light exposure and a visible commitment card."
+    },
+    habits: [
+      { id: "h1", task: "Dawn Commitment", duration: "6 mins", description: "Name one hard thing you will do today." },
+      { id: "h2", task: "Face-Heart Alignment", duration: "Throughout day", description: "Keep action and values synchronized." },
+      { id: "h3", task: "Discipline Block", duration: "25 mins", description: "Deep work on one meaningful task." },
+      { id: "h4", task: "Night Integrity Review", duration: "10 mins", description: "Where did face and heart diverge?" }
+    ],
+    reflection: {
+      prompt: "Where did disciplined courage increase your clarity, power, and self-respect this week?",
+      journalPrompts: [
+        "What did you stop postponing?",
+        "Where was your integrity tested most?",
+        "What discipline will you carry forward?"
+      ]
+    }
+  },
+
+  // ══════════════════════════════════════════════════════════
+  // GREEK VIRTUE
+  // ══════════════════════════════════════════════════════════
+  {
+    id: "greekvirtue",
+    title: "The Hellenic Path",
+    philosophy: "Greek Virtue Practice",
+    tradition: "esoteric",
+    duration: "8 Days",
+    durationDays: 8,
+    icon: "🏛",
+    hue: 34,
+    quote: "Know thyself.",
+    author: "Delphic Maxim",
+    overview: "You train virtue as repeated action: practical wisdom, courage, temperance, and justice in ordinary decisions.",
+    immersion: {
+      ethos: "Character over mood. Virtue is enacted, not admired.",
+      persona: "Measured, brave, and self-governing.",
+      rituals: [
+        "Morning virtue selection.",
+        "Noon correction after first failure.",
+        "Evening Stoic review of actions."
+      ],
+      companions: ["Socratic inquiry", "Aristotelian habit", "Stoic discipline"],
+      taboos: [
+        "Do not reduce virtue to theory",
+        "Do not perform virtue for social approval",
+        "Do not avoid corrective action"
+      ],
+      culture: {
+        music: ["Lyre and minimalist classical"],
+        art: ["Greek statuary and frieze study"],
+        reading: ["Epictetus Enchiridion excerpts", "Nicomachean Ethics selections"],
+        media: ["Lectures on practical virtue"]
+      },
+      environment: "Keep one virtue card visible on desk each day."
+    },
+    habits: [
+      { id: "h1", task: "Virtue of the Day", duration: "6 mins", description: "Choose and define one virtue behaviorally." },
+      { id: "h2", task: "Courage Action", duration: "15 mins", description: "Do one avoided but right action." },
+      { id: "h3", task: "Temperance Check", duration: "Throughout day", description: "Interrupt one excess pattern." },
+      { id: "h4", task: "Evening Examination", duration: "10 mins", description: "Review where wisdom governed impulse." }
+    ],
+    reflection: {
+      prompt: "Which virtue moved from concept to stable habit this week?",
+      journalPrompts: [
+        "Where did practical wisdom beat reactivity?",
+        "Which excess still controls behavior?",
+        "How will you train justice in relationships?"
+      ]
+    }
+  },
+
+  // ══════════════════════════════════════════════════════════
+  // INTEGRAL SYNTHESIS
+  // ══════════════════════════════════════════════════════════
+  {
+    id: "integral",
+    title: "The Integral Path",
+    philosophy: "Integral / AQAL Synthesis",
+    tradition: "modern",
+    duration: "10 Days",
+    durationDays: 10,
+    icon: "◈",
+    hue: 214,
+    quote: "Everyone is right — partially.",
+    author: "Integral Principle",
+    overview: "You train multi-perspective cognition by integrating interior/exterior, individual/collective, stage/state/type/line.",
+    immersion: {
+      ethos: "Meta-integrator. You stop false either-or thinking and map complexity without collapsing nuance.",
+      persona: "Clear, humble, and systems-aware.",
+      rituals: [
+        "Daily quadrant map of one life problem.",
+        "Track stage and state confusion explicitly.",
+        "One integration move that includes neglected quadrant."
+      ],
+      companions: ["AQAL mapping", "Perspective-taking", "Systems empathy"],
+      taboos: [
+        "Do not use integration to avoid decisions",
+        "Do not flatten differences",
+        "Do not confuse complexity with clarity"
+      ],
+      culture: {
+        music: ["Genre-jumping playlists for cognitive flexibility"],
+        art: ["Fractal and systems visualizations"],
+        reading: ["Integral overviews", "Systems thinking primers"],
+        media: ["Integral theory talks"]
+      },
+      environment: "Use a visible 2x2 quadrant note grid for daily cases."
+    },
+    habits: [
+      { id: "h1", task: "Quadrant Mapping", duration: "15 mins", description: "Map one issue across I/We/It/Its." },
+      { id: "h2", task: "State-Stage Distinction", duration: "8 mins", description: "Name one place you confused state with stage." },
+      { id: "h3", task: "Inclusion Move", duration: "20 mins", description: "Take one action integrating ignored perspective." },
+      { id: "h4", task: "Complexity Journal", duration: "10 mins", description: "Summarize today's cleaner model." }
+    ],
+    reflection: {
+      prompt: "How did your decisions improve when you used integral mapping instead of single-lens thinking?",
+      journalPrompts: [
+        "Which quadrant do you habitually neglect?",
+        "Where did inclusion reduce conflict?",
+        "What integral practice is now non-negotiable?"
+      ]
+    }
   }
 ];

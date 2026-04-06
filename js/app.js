@@ -35,6 +35,7 @@
   let currentTradition = 'all';
   let mapMode = '3d'; // '3d' or '2d'
   let viewPageIndex = 0;
+  const VIEW_PAGE_COUNT = 2;
 
   // ── VIEWS CONFIG ──
   const views = [
@@ -363,15 +364,11 @@
   function buildViewTabs() {
     const container = document.getElementById('view-tabs');
     if (!container) return;
-    const mode = document.documentElement.getAttribute('data-views-mode') || 'core';
     const allViews = views.filter(v => !v.sep);
-    const coreViews = allViews.filter(v => ['home','map','ego','therapy','darknight','development','scanner','archetypes','trainings','chronos'].includes(v.id));
     const half = Math.ceil(allViews.length / 2);
-    const pageSets = mode === 'all'
-      ? [allViews.slice(0, half), allViews.slice(half)]
-      : [coreViews];
+    const pageSets = [allViews.slice(0, half), allViews.slice(half)];
     viewPageIndex = Math.max(0, Math.min(viewPageIndex, pageSets.length - 1));
-    const inlineViews = pageSets[viewPageIndex] || coreViews;
+    const inlineViews = pageSets[viewPageIndex] || allViews;
     const compactViews = new Set(['figures', 'cases', 'disagree', 'relationships', 'chronos', 'alchemy', 'personal', 'quiz', 'resources']);
     container.innerHTML = inlineViews.map(v => {
       const compactClass = compactViews.has(v.id) ? ' compact' : '';
@@ -382,18 +379,11 @@
     });
     const prevBtn = document.getElementById('btn-view-page-prev');
     const nextBtn = document.getElementById('btn-view-page-next');
-    const paged = pageSets.length > 1;
     if (prevBtn && nextBtn) {
-      prevBtn.style.display = paged ? '' : 'none';
-      nextBtn.style.display = paged ? '' : 'none';
+      prevBtn.style.display = '';
+      nextBtn.style.display = '';
       prevBtn.disabled = viewPageIndex === 0;
       nextBtn.disabled = viewPageIndex === pageSets.length - 1;
-    }
-    const toggleBtn = document.getElementById('btn-toggle-view-set');
-    if (toggleBtn) {
-      toggleBtn.textContent = mode === 'all' ? 'Core' : 'More';
-      toggleBtn.title = mode === 'all' ? 'Show core views' : 'Show all views';
-      toggleBtn.classList.toggle('active', mode === 'all');
     }
   }
   
@@ -511,20 +501,12 @@
   function bindUtilityButtons() {
     document.getElementById('btn-search')?.addEventListener('click', () => App.Search?.open());
     document.getElementById('btn-theme')?.addEventListener('click', toggleTheme);
-    document.getElementById('btn-toggle-view-set')?.addEventListener('click', () => {
-      const current = document.documentElement.getAttribute('data-views-mode') || 'core';
-      const next = current === 'all' ? 'core' : 'all';
-      document.documentElement.setAttribute('data-views-mode', next);
-      viewPageIndex = 0;
-      buildViewTabs();
-    });
     document.getElementById('btn-view-page-prev')?.addEventListener('click', () => {
       viewPageIndex = Math.max(0, viewPageIndex - 1);
       buildViewTabs();
     });
     document.getElementById('btn-view-page-next')?.addEventListener('click', () => {
-      const mode = document.documentElement.getAttribute('data-views-mode') || 'core';
-      const maxPage = mode === 'all' ? 1 : 0;
+      const maxPage = VIEW_PAGE_COUNT - 1;
       viewPageIndex = Math.min(maxPage, viewPageIndex + 1);
       buildViewTabs();
     });

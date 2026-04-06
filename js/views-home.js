@@ -167,14 +167,16 @@ window.PsycheApp.ViewsHome = (function() {
 
           <section class="home-primary-section fade-in" style="animation-delay: 0.2s">
             <div class="home-section-title">Core Gateways</div>
+            <p class="home-section-subtitle">Psyche Maps, Trainings, Ego, Therapy, Shadow Scanner, and Library</p>
             <div class="home-primary-row">
               ${primaryCards.map((card, i) => renderPrimaryCard(card, i)).join('')}
             </div>
           </section>
 
           <section class="home-more-section fade-in" style="animation-delay: 0.35s">
-            <div class="home-more-kicker">Further Chambers</div>
-            <p class="home-more-sub">Expand beyond the core gateways into advanced lenses, synthesis tools, and developmental views.</p>
+            <div class="home-more-kicker">More Views</div>
+            <p class="home-more-sub">Expand into advanced lenses, synthesis tools, and developmental pathways.</p>
+            <div class="home-more-count">${secondaryCards.length} additional views</div>
           </section>
 
           <div class="home-grid home-grid-compact">

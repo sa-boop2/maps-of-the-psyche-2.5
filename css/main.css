@@ -470,7 +470,7 @@ a:hover { color: var(--gold-light); }
 
 /* Map controls - bottom right */
 #map-controls {
-  position: absolute; bottom: 20px; right: 20px;
+  position: absolute; bottom: 92px; right: 20px;
   display: flex; flex-direction: column; gap: 6px;
   z-index: 90;
 }
@@ -489,17 +489,22 @@ a:hover { color: var(--gold-light); }
 .map-ctrl-btn:hover { color: var(--gold); border-color: var(--border-hover); }
 .map-ctrl-btn.active { color: var(--gold); border-color: var(--gold); background: rgba(201,168,76,0.08); }
 
+.map-ctrl-btn--bio svg {
+  width: 18px;
+  height: 18px;
+}
+
 #biological-mirror-panel {
   position: absolute;
-  right: 74px;
-  bottom: 20px;
-  width: min(390px, calc(100vw - 96px));
-  max-height: 48vh;
+  right: 20px;
+  bottom: 92px;
+  width: min(460px, calc(100vw - 56px));
+  max-height: min(58vh, 560px);
   overflow-y: auto;
   background: var(--bg-glass);
   border: 1px solid var(--border);
   border-radius: var(--r);
-  padding: 13px 15px;
+  padding: 16px 18px;
   backdrop-filter: blur(12px);
   z-index: 120;
 }
@@ -508,21 +513,18 @@ a:hover { color: var(--gold-light); }
   display: none;
 }
 
-#map-view.bio-open #biological-mirror-panel {
-  right: calc(var(--sidebar-w) + 24px);
-  width: min(390px, calc(100vw - var(--sidebar-w) - 48px));
-}
+#map-view.bio-open #biological-mirror-panel { display: block; }
 
 .bio-header h4 {
   margin: 0;
-  font-size: 1.04rem;
+  font-size: 1.2rem;
   color: var(--gold-light);
 }
 
 .bio-header span {
   display: block;
   margin-top: 2px;
-  font-size: 0.74rem;
+  font-size: 0.82rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--text-dim);
@@ -530,44 +532,66 @@ a:hover { color: var(--gold-light); }
 
 .bio-empty {
   margin-top: 12px;
-  font-size: 0.9rem;
+  font-size: 1rem;
   color: var(--text-secondary);
-  line-height: 1.55;
+  line-height: 1.65;
 }
 
 .bio-node-title {
   margin-top: 10px;
-  margin-bottom: 10px;
+  margin-bottom: 4px;
   font-family: var(--font-display);
   color: var(--gold);
-  font-size: 0.98rem;
+  font-size: 1.22rem;
+}
+
+.bio-node-subtitle {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  margin-bottom: 10px;
+}
+
+.bio-analysis-lead {
+  font-size: 0.95rem;
+  color: var(--text);
+  line-height: 1.65;
+  margin-bottom: 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  background: rgba(255,255,255,0.02);
 }
 
 .bio-card {
-  padding: 10px;
-  margin-bottom: 8px;
+  padding: 12px;
+  margin-bottom: 10px;
   border: 1px solid var(--border);
   border-radius: var(--r-sm);
   background: rgba(255,255,255,0.03);
 }
 
 .bio-region {
-  font-size: 0.88rem;
+  font-size: 0.98rem;
   color: var(--gold-light);
-  margin-bottom: 4px;
+  margin-bottom: 6px;
 }
 
 .bio-circuit,
 .bio-affective {
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   color: var(--text-secondary);
-  margin-bottom: 4px;
+  margin-bottom: 6px;
 }
 
 .bio-card p {
-  font-size: 0.84rem;
+  font-size: 0.93rem;
   color: var(--text);
-  line-height: 1.5;
+  line-height: 1.65;
+}
+
+.bio-card--integration {
+  border-color: rgba(201, 168, 76, 0.35);
+  background: linear-gradient(180deg, rgba(201,168,76,0.09), rgba(201,168,76,0.03));
 }
 
 .bio-header {
@@ -578,14 +602,14 @@ a:hover { color: var(--gold-light); }
 }
 
 .bio-close-btn {
-  width: 26px;
-  height: 26px;
+  width: 30px;
+  height: 30px;
   border: 1px solid var(--border);
   background: rgba(255,255,255,0.03);
   color: var(--text-secondary);
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
-  font-size: 0.74rem;
+  font-size: 0.82rem;
 }
 
 .bio-close-btn:hover {
@@ -593,10 +617,30 @@ a:hover { color: var(--gold-light); }
   border-color: var(--gold);
 }
 
-.bio-actions {
-  margin-top: 10px;
-  border-top: 1px solid var(--border);
-  padding-top: 10px;
+.bio-actions { display: none; }
+
+@media (max-width: 1080px) {
+  #map-controls {
+    bottom: 82px;
+  }
+  #biological-mirror-panel {
+    bottom: 82px;
+    width: min(430px, calc(100vw - 36px));
+  }
+}
+
+@media (max-width: 740px) {
+  #map-controls {
+    bottom: 74px;
+    right: 14px;
+  }
+  #biological-mirror-panel {
+    right: 10px;
+    bottom: 74px;
+    width: calc(100vw - 20px);
+    max-height: min(56vh, 480px);
+    padding: 12px 12px;
+  }
 }
 
 /* Hovered label (floating near cursor on 3D map) */
@@ -5144,6 +5188,12 @@ button, a, input, select, textarea { transition: all var(--t) var(--ease); }
   font-family: var(--font-display);
   color: var(--gold-light);
   letter-spacing: 0.08em;
+  margin-bottom: 6px;
+}
+
+.home-section-subtitle {
+  font-size: 0.76rem;
+  color: var(--text-dim);
   margin-bottom: 12px;
 }
 
@@ -5201,8 +5251,12 @@ button, a, input, select, textarea { transition: all var(--t) var(--ease); }
 }
 
 .home-more-section {
-  margin: 18px 0 8px;
+  margin: 18px 0 10px;
   text-align: center;
+  padding: 10px 12px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  background: rgba(10, 10, 30, 0.5);
 }
 
 .home-more-kicker {
@@ -5217,6 +5271,14 @@ button, a, input, select, textarea { transition: all var(--t) var(--ease); }
 .home-more-sub {
   font-size: 0.77rem;
   color: var(--text-dim);
+}
+
+.home-more-count {
+  margin-top: 8px;
+  font-size: 0.68rem;
+  color: var(--gold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .home-grid-compact {
@@ -6461,6 +6523,42 @@ button, a, input, select, textarea { transition: all var(--t) var(--ease); }
   
   .dashboard-topbar-title span:not(.dashboard-topbar-icon) {
     display: none;
+  }
+}
+
+/* ── Map timeline/legend non-overlap hard guarantees ── */
+#map-view #timeline-container {
+  top: 14px !important;
+  bottom: auto !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  width: min(72vw, 640px) !important;
+  z-index: 80;
+}
+
+#map-view #map-legend {
+  bottom: 18px;
+  left: 18px;
+  max-height: min(56vh, 460px);
+  z-index: 85;
+}
+
+@media (max-width: 900px) {
+  #map-view #timeline-container {
+    top: 10px !important;
+    width: min(86vw, 600px) !important;
+  }
+}
+
+@media (max-width: 740px) {
+  #map-view #timeline-container {
+    width: calc(100vw - 24px) !important;
+    border-radius: 18px !important;
+    padding: 8px 10px !important;
+  }
+  #map-view #map-legend {
+    width: min(360px, calc(100vw - 24px));
+    max-height: min(50vh, 390px);
   }
 }
 

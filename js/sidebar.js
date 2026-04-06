@@ -61,10 +61,11 @@ window.PsycheApp.Sidebar = (function() {
     });
   }
 
-  function hide() {
+  function hide(options = {}) {
+    const suppressCallback = !!options.suppressCallback;
     sidebarEl.classList.add('hidden');
     isOpen = false;
-    if (window.PsycheApp.onSidebarClose) window.PsycheApp.onSidebarClose();
+    if (!suppressCallback && window.PsycheApp.onSidebarClose) window.PsycheApp.onSidebarClose();
   }
 
   function buildContent(data) {

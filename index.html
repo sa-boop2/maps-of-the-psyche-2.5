@@ -47,9 +47,6 @@
         <button id="btn-view-page-next" class="nav-icon-btn view-page-btn" title="Next view set">▶</button>
       </div>
       <div class="nav-right-group">
-        <button id="btn-toggle-view-set" class="nav-icon-btn nav-text-btn" title="Toggle view groups">
-          More
-        </button>
         <select id="atmosphere-select" title="Internal Weather" style="margin-right:12px; background:transparent; border:1px solid var(--border); color:var(--text); padding:4px 8px; border-radius:4px; font-family:var(--font-ui); font-size:0.75rem; cursor:pointer;">
           <option value="neutral">Neutral Sky (Default)</option>
           <option value="anxiety">Anxiety / Dissonance</option>
@@ -178,24 +175,26 @@
             <polyline points="21 3 21 9 15 9" />
           </svg>
         </button>
-        <button class="map-ctrl-btn" id="btn-toggle-biological-mirror" title="Toggle Biological Mirror">
-          🧠
+        <button class="map-ctrl-btn map-ctrl-btn--bio" id="btn-toggle-biological-mirror" title="Toggle Biological Mode">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M9 4.5a3.5 3.5 0 0 0-3.5 3.5v1.2A2.8 2.8 0 0 0 4 11.8v.4a2.8 2.8 0 0 0 1.5 2.6V16a3.5 3.5 0 0 0 7 0V8a3.5 3.5 0 0 0-3.5-3.5Z"/>
+            <path d="M15 4.5a3.5 3.5 0 0 1 3.5 3.5v1.2a2.8 2.8 0 0 1 1.5 2.6v.4a2.8 2.8 0 0 1-1.5 2.6V16a3.5 3.5 0 1 1-7 0V8A3.5 3.5 0 0 1 15 4.5Z"/>
+            <path d="M12 8.2v7.4"/>
+            <path d="M8.2 10.8h1.8M8.2 13.2h1.8M14 10.8h1.8M14 13.2h1.8"/>
+          </svg>
         </button>
       </div>
 
       <div id="biological-mirror-panel" class="hidden">
         <div class="bio-header">
           <div>
-            <h4>Biological Mirror</h4>
+            <h4>Biological Mode</h4>
             <span>Affective Neuroscience + Neuro-Psychoanalysis</span>
           </div>
           <button id="btn-close-biological-mirror" class="bio-close-btn" title="Close Biological Mirror">✕</button>
         </div>
         <div id="biological-mirror-content">
-          <p class="bio-empty">Select a node for sidebar details, then click Analyze to map it biologically.</p>
-        </div>
-        <div class="bio-actions">
-          <button id="btn-analyze-biological-mirror" class="legend-training-btn" type="button">Analyze Selected Node</button>
+          <p class="bio-empty">Enable Biological Mode, then click any node to run an in-depth neuropsychological analysis.</p>
         </div>
       </div>
 

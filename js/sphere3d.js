@@ -27,7 +27,6 @@ window.PsycheApp.Sphere3D = (function() {
   let hoverScheduled = false;
   let biologicalMirrorEnabled = false;
   let biologicalMirrorPanel = null;
-  let biologicalMirrorNeedsSelection = true;
   const DAMPING = 0.08;
   const neuroMap = [
     {
@@ -137,46 +136,15 @@ window.PsycheApp.Sphere3D = (function() {
       labelSprites.forEach(s => s.visible = showLabels);
     });
     document.getElementById('btn-toggle-biological-mirror')?.addEventListener('click', function() {
-      biologicalMirrorEnabled = !biologicalMirrorEnabled;
-      this.classList.toggle('active', biologicalMirrorEnabled);
-      if (biologicalMirrorEnabled) {
-        document.getElementById('map-view')?.classList.add('bio-open');
-        biologicalMirrorPanel?.classList.remove('hidden');
-        const hasSelection = !!selectedNode?.userData?.layer;
-        biologicalMirrorNeedsSelection = !hasSelection;
-        updateBiologicalMirror(hasSelection ? selectedNode.userData.layer : null, { waitingForAnalyze: true });
-      } else {
-        document.getElementById('map-view')?.classList.remove('bio-open');
-        biologicalMirrorPanel?.classList.add('hidden');
-      }
+      setBiologicalMode(!biologicalMirrorEnabled, { resetContent: false });
     });
     biologicalMirrorPanel = document.getElementById('biological-mirror-panel');
     document.getElementById('btn-close-biological-mirror')?.addEventListener('click', () => {
-      biologicalMirrorEnabled = false;
-      biologicalMirrorNeedsSelection = true;
-      document.getElementById('map-view')?.classList.remove('bio-open');
-      biologicalMirrorPanel?.classList.add('hidden');
-      const btn = document.getElementById('btn-toggle-biological-mirror');
-      btn?.classList.remove('active');
+      setBiologicalMode(false);
     });
     document.addEventListener('keydown', (e) => {
       if (e.key !== 'Escape') return;
-      if (!biologicalMirrorEnabled) return;
-      biologicalMirrorEnabled = false;
-      biologicalMirrorNeedsSelection = true;
-      document.getElementById('map-view')?.classList.remove('bio-open');
-      biologicalMirrorPanel?.classList.add('hidden');
-      const btn = document.getElementById('btn-toggle-biological-mirror');
-      btn?.classList.remove('active');
-    });
-    document.getElementById('btn-analyze-biological-mirror')?.addEventListener('click', () => {
-      if (!biologicalMirrorEnabled) return;
-      if (!selectedNode?.userData?.layer) {
-        updateBiologicalMirror(null, { waitingForAnalyze: true });
-        return;
-      }
-      biologicalMirrorNeedsSelection = false;
-      updateBiologicalMirror(selectedNode.userData.layer, { waitingForAnalyze: false });
+      if (biologicalMirrorEnabled) setBiologicalMode(false);
     });
 
     animate();
@@ -498,9 +466,7 @@ window.PsycheApp.Sphere3D = (function() {
         // It's a resonance node!
         window.PsycheApp.Sound?.playTransition();
         window.PsycheApp.setFrameworkById(obj.userData.frameworkId, obj.userData.layerIdx);
-      } else {
-        selectNode(obj);
-      }
+      } else selectNode(obj);
     }
   }
 
@@ -510,10 +476,11 @@ window.PsycheApp.Sphere3D = (function() {
     data.framework = node.userData.framework.name;
     data.frameworkId = node.userData.framework.id;
     data.crossRefs = findCrossRefs(node.userData.framework, node.userData.layerIndex);
-    window.PsycheApp.Sidebar.show(data);
     if (biologicalMirrorEnabled) {
-      biologicalMirrorNeedsSelection = true;
-      updateBiologicalMirror(null, { waitingForAnalyze: true });
+      window.PsycheApp.Sidebar?.hide?.({ suppressCallback: true });
+      updateBiologicalMirror(data, { modeActive: true });
+    } else {
+      window.PsycheApp.Sidebar.show(data);
     }
 
     // ── SPOTLIGHT EFFECT — dim everything except selected node ──
@@ -693,12 +660,54 @@ window.PsycheApp.Sphere3D = (function() {
     }
   }
 
+  function setBiologicalMode(enabled, options = {}) {
+    const resetContent = options.resetContent !== false;
+    biologicalMirrorEnabled = !!enabled;
+    const mapView = document.getElementById('map-view');
+    const btn = document.getElementById('btn-toggle-biological-mirror');
+    mapView?.classList.toggle('bio-open', biologicalMirrorEnabled);
+    mapView?.classList.toggle('bio-mode', biologicalMirrorEnabled);
+    biologicalMirrorPanel?.classList.toggle('hidden', !biologicalMirrorEnabled);
+    btn?.classList.toggle('active', biologicalMirrorEnabled);
+    if (biologicalMirrorEnabled && resetContent) {
+      updateBiologicalMirror(null, { modeActive: true });
+    }
+  }
+
+  function buildBiologicalInterpretiveLens(layerData, mapResult) {
+    const name = (layerData?.name || '').toLowerCase();
+    const desc = `${layerData?.description || ''} ${layerData?.pathology || ''} ${layerData?.shadow || ''}`.toLowerCase();
+    const text = `${name} ${desc}`;
+    if (text.includes('ego') || text.includes('persona') || text.includes('executive')) {
+      return 'Executive identity stabilization: this layer relies on prefrontal integration to inhibit impulsive subcortical drives while preserving coherent agency under social pressure.';
+    }
+    if (text.includes('shadow') || text.includes('fear') || text.includes('threat') || text.includes('trauma')) {
+      return 'Defensive affect processing: this layer likely reflects amygdalar salience tagging and limbic memory consolidation, where unresolved threat traces recruit projection and avoidance loops.';
+    }
+    if (text.includes('myth') || text.includes('archetype') || text.includes('collective unconscious')) {
+      return 'Symbolic-network integration: this layer maps to default-mode symbolic synthesis, where autobiographical memory and transpersonal motifs are integrated into identity narratives.';
+    }
+    if (text.includes('compulsion') || text.includes('obsession') || text.includes('addiction') || text.includes('eternal return')) {
+      return 'Reinforcement-cycle overbinding: this layer suggests dopaminergic prediction-error loops that over-prioritize familiar cues and repetitive behavioral scripts.';
+    }
+    if (text.includes('self') || text.includes('witness') || text.includes('unity') || text.includes('nondual')) {
+      return 'Embodied coherence mode: this layer indicates stronger interoceptive integration via insula-ACC-PAG pathways, often associated with grounded meta-awareness and reduced reactivity.';
+    }
+    return `Translational lens: ${mapResult.region} + ${mapResult.circuit} provides a plausible systems-level substrate for this symbolic layer, linking meaning-processes with embodied affect regulation.`;
+  }
+
   function updateBiologicalMirror(layerData, options = {}) {
-    const waitingForAnalyze = !!options.waitingForAnalyze;
+    const modeActive = !!options.modeActive;
     const container = document.getElementById('biological-mirror-content');
     if (!container) return;
-    if (!layerData && waitingForAnalyze) {
-      container.innerHTML = `<p class="bio-empty">Select a node to open its sidebar, then click <strong>Analyze Selected Node</strong> to run the biological mapping.</p>`;
+
+    if (!layerData && modeActive) {
+      container.innerHTML = `
+        <p class="bio-empty">
+          Biological Mode is active. Click any node to analyze it through affective neuroscience,
+          motivational circuitry, and psychodynamic regulation.
+        </p>
+      `;
       return;
     }
     if (!layerData) {
@@ -708,16 +717,35 @@ window.PsycheApp.Sphere3D = (function() {
     const hay = `${layerData.name || ''} ${layerData.subtitle || ''} ${layerData.description || ''} ${layerData.shadow || ''} ${layerData.pathology || ''}`.toLowerCase();
     const matches = neuroMap.filter(n => n.keys.some(k => hay.includes(k)));
     const results = matches.length ? matches : [neuroMap[0]];
+    const core = results[0];
+    const interpretiveLens = buildBiologicalInterpretiveLens(layerData, core);
+    const translation = layerData.description || layerData.pathology || layerData.shadow || 'No additional textual description available for translational analysis.';
+    const practices = [
+      `Interoceptive check-in: identify present-moment body tone linked to "${layerData.name || 'this construct'}".`,
+      'Regulation sequence: orienting breath + attentional narrowing + contextual reappraisal.',
+      'Behavioral experiment: run one low-stakes action that disconfirms the old defensive prediction.'
+    ];
+
     container.innerHTML = `
       <div class="bio-node-title">${layerData.name || 'Selected Layer'}</div>
+      <div class="bio-node-subtitle">${(layerData.subtitle || layerData.framework || 'Layer analysis').toString()}</div>
+      <div class="bio-analysis-lead">
+        <strong>Systems Interpretation:</strong> ${interpretiveLens}
+      </div>
       ${results.map(m => `
         <div class="bio-card">
           <div class="bio-region">${m.region}</div>
           <div class="bio-circuit"><strong>Circuit:</strong> ${m.circuit}</div>
           <div class="bio-affective"><strong>Affective system:</strong> ${m.affective}</div>
-          <p>${m.relevance}</p>
+          <p><strong>Clinical relevance:</strong> ${m.relevance}</p>
+          <p><strong>Layer translation:</strong> ${translation}</p>
+          <p><strong>Signal to watch:</strong> Repetitive triggers, autonomic shifts, and attentional narrowing around this symbolic domain often mark this circuit's activation profile.</p>
         </div>
       `).join('')}
+      <div class="bio-card bio-card--integration">
+        <div class="bio-region">Integration Protocol</div>
+        ${practices.map(step => `<p>${step}</p>`).join('')}
+      </div>
     `;
   }
 

@@ -196,6 +196,10 @@ window.PsycheApp.ViewsTrainings = (function() {
 
           <div class="trainings-grid">
             ${trainings.map(t => `
+              ${(() => {
+                const related = window.PsycheApp?.getFrameworksForTraining?.(t.id) || [];
+                const primary = related[0];
+                return `
               <article class="training-card" data-training="${t.id}" style="--hue: ${t.hue};">
                 <div class="training-card-glow"></div>
                 <div class="training-card-icon">${t.icon}</div>
@@ -203,9 +207,18 @@ window.PsycheApp.ViewsTrainings = (function() {
                 <p class="training-card-philosophy">${t.philosophy}</p>
                 <p class="training-card-duration">${t.duration}</p>
                 <blockquote class="training-card-quote">"${t.quote}"</blockquote>
-                <p class="training-card-overview">${t.overview.slice(0, 150)}...</p>
+                <p class="training-card-overview">${t.overview.slice(0, 108)}...</p>
+                <div class="training-card-frameworks">
+                  <div class="training-card-fw-label">Related Frameworks</div>
+                  <div class="training-card-fw-list">
+                    ${related.length ? related.map(f => `<span class="training-card-fw-chip">${f.name}</span>`).join('') : '<span class="training-card-fw-chip">None mapped yet</span>'}
+                  </div>
+                  ${primary ? `<button class="training-card-fw-btn" data-framework-id="${primary.id}" title="Open ${primary.name} on map">Open Framework ↔</button>` : ''}
+                </div>
                 <button class="training-card-btn">Begin Path</button>
               </article>
+                `;
+              })()}
             `).join('')}
           </div>
 
@@ -225,7 +238,6 @@ window.PsycheApp.ViewsTrainings = (function() {
     
     const day = getCurrentDay();
     const progress = getProgress();
-    const isLastDay = isReflectionDay();
     const habitsComplete = t.habits.filter(h => isHabitCompleted(h.id)).length;
     const circumference = 2 * Math.PI * 45;
     const dashOffset = circumference - (progress / 100) * circumference;
@@ -279,7 +291,7 @@ window.PsycheApp.ViewsTrainings = (function() {
             <button class="tab-btn active" data-tab="practice">Today's Practice</button>
             <button class="tab-btn" data-tab="ethos">Ethos & Persona</button>
             <button class="tab-btn" data-tab="immersion">Immersion</button>
-            <button class="tab-btn" data-tab="reflection">Reflection ${isLastDay ? '🔓' : '🔒'}</button>
+            <button class="tab-btn" data-tab="reflection">Reflection ✨</button>
           </div>
 
           <div class="dashboard-panels">
@@ -383,42 +395,29 @@ window.PsycheApp.ViewsTrainings = (function() {
 
             <!-- REFLECTION TAB -->
             <div class="tab-panel" data-panel="reflection">
-              ${isLastDay ? `
-                <div class="panel-hero">
-                  <h2>🔓 Terminal Reflection</h2>
-                  <p class="panel-subtitle">The training period has ended. Reflect on your journey.</p>
+              <div class="panel-hero">
+                <h2>🔓 Reflection</h2>
+                <p class="panel-subtitle">Available every day. Integrate insights continuously, not only at the end.</p>
+              </div>
+              
+              <div class="reflection-open">
+                <div class="reflection-prompt">
+                  ${t.reflection.prompt.split('\n\n').map(p => `<p>${p}</p>`).join('')}
                 </div>
                 
-                <div class="reflection-open">
-                  <div class="reflection-prompt">
-                    ${t.reflection.prompt.split('\n\n').map(p => `<p>${p}</p>`).join('')}
-                  </div>
-                  
-                  <h4>Journal Prompts</h4>
-                  <ul class="reflection-prompts">
-                    ${t.reflection.journalPrompts.map(p => `<li>${p}</li>`).join('')}
-                  </ul>
-                  
-                  ${!trainingState.reflectionCompleted ? `
-                    <button class="reflection-btn" onclick="PsycheApp.ViewsTrainings.completeReflection()">
-                      Mark Reflection Complete
-                    </button>
-                  ` : `
-                    <div class="reflection-done">✨ Reflection completed. The work continues...</div>
-                  `}
-                </div>
-              ` : `
-                <div class="panel-hero">
-                  <h2>🔒 Terminal Reflection</h2>
-                  <p class="panel-subtitle">This section unlocks on the final day of your training</p>
-                </div>
+                <h4>Journal Prompts</h4>
+                <ul class="reflection-prompts">
+                  ${t.reflection.journalPrompts.map(p => `<li>${p}</li>`).join('')}
+                </ul>
                 
-                <div class="reflection-locked">
-                  <span class="lock-big">🔒</span>
-                  <p>Opens on Day ${t.durationDays}</p>
-                  <p class="days-left">${t.durationDays - day} days remaining</p>
-                </div>
-              `}
+                ${!trainingState.reflectionCompleted ? `
+                  <button class="reflection-btn" onclick="PsycheApp.ViewsTrainings.completeReflection()">
+                    Mark Reflection Complete
+                  </button>
+                ` : `
+                  <div class="reflection-done">✨ Reflection completed. The work continues...</div>
+                `}
+              </div>
             </div>
 
           </div>
@@ -467,7 +466,16 @@ window.PsycheApp.ViewsTrainings = (function() {
       // Training card clicks
       const card = target.closest('.training-card');
       if (card) {
-        if (target.classList.contains('training-card-btn')) {
+        if (target.classList.contains('training-card-fw-btn')) {
+          const frameworkId = target.dataset.frameworkId;
+          if (frameworkId) {
+            window.PsycheApp?.goToView?.('map');
+            setTimeout(() => {
+              window.PsycheApp?.setFrameworkById?.(frameworkId, 0, false);
+            }, 120);
+            window.PsycheApp?.showToast?.('Opening related framework...');
+          }
+        } else if (target.classList.contains('training-card-btn')) {
           const id = card.dataset.training;
           beginTraining(id);
         } else {

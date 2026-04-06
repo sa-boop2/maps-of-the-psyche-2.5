@@ -5282,31 +5282,31 @@ button, a, input, select, textarea { transition: all var(--t) var(--ease); }
 .trainings-hall-content {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 80px 40px 60px;
+  padding: 56px 34px 44px;
 }
 
 .trainings-header {
   text-align: center;
-  margin-bottom: 60px;
+  margin-bottom: 34px;
 }
 
 .trainings-sigil {
-  font-size: 4rem;
-  margin-bottom: 20px;
+  font-size: 3rem;
+  margin-bottom: 12px;
   color: var(--gold);
   text-shadow: 0 0 60px rgba(201, 168, 76, 0.4);
 }
 
 .trainings-header h1 {
   font-family: var(--font-display);
-  font-size: 2.5rem;
+  font-size: 2.1rem;
   color: var(--gold-light);
   letter-spacing: 0.1em;
   margin-bottom: 12px;
 }
 
 .trainings-subtitle {
-  font-size: 1.2rem;
+  font-size: 1.02rem;
   color: var(--text-secondary);
   font-style: italic;
   margin-bottom: 16px;
@@ -5315,17 +5315,18 @@ button, a, input, select, textarea { transition: all var(--t) var(--ease); }
 .trainings-desc {
   max-width: 600px;
   margin: 0 auto;
-  font-size: 0.95rem;
+  font-size: 0.88rem;
   color: var(--text-dim);
-  line-height: 1.7;
+  line-height: 1.52;
 }
 
 /* ── TRAINING CARDS GRID ── */
 .trainings-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-  gap: 30px;
-  margin-bottom: 60px;
+  gap: 18px;
+  margin-bottom: 32px;
+  align-items: stretch;
 }
 
 .training-card {
@@ -5333,10 +5334,13 @@ button, a, input, select, textarea { transition: all var(--t) var(--ease); }
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--r);
-  padding: 40px 30px;
+  padding: 24px 20px;
   cursor: pointer;
   transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 470px;
   /* Performance */
   contain: content;
   will-change: transform;
@@ -5385,8 +5389,8 @@ button, a, input, select, textarea { transition: all var(--t) var(--ease); }
 }
 
 .training-card-icon {
-  font-size: 3.5rem;
-  margin-bottom: 20px;
+  font-size: 2.1rem;
+  margin-bottom: 10px;
   color: hsl(var(--hue), 45%, 55%);
   text-shadow: 0 0 30px hsla(var(--hue), 50%, 50%, 0.4);
   transition: transform 0.4s, text-shadow 0.4s;
@@ -5400,17 +5404,19 @@ button, a, input, select, textarea { transition: all var(--t) var(--ease); }
 
 .training-card-title {
   font-family: var(--font-display);
-  font-size: 1.5rem;
+  font-size: 1.18rem;
   color: var(--gold-light);
-  margin-bottom: 6px;
+  margin-bottom: 4px;
+  line-height: 1.25;
+  min-height: 2.5em;
 }
 
 .training-card-philosophy {
-  font-size: 0.8rem;
+  font-size: 0.72rem;
   color: var(--text-dim);
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
 }
 
 .training-card-duration {
@@ -5421,38 +5427,103 @@ button, a, input, select, textarea { transition: all var(--t) var(--ease); }
   background: hsla(var(--hue), 40%, 50%, 0.1);
   border: 1px solid hsla(var(--hue), 40%, 50%, 0.2);
   border-radius: 12px;
-  margin-bottom: 16px;
+  margin-bottom: 10px;
 }
 
 .training-card-quote {
   font-style: italic;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   color: var(--text-secondary);
-  margin-bottom: 16px;
-  padding-left: 16px;
+  margin-bottom: 10px;
+  padding-left: 12px;
   border-left: 2px solid hsla(var(--hue), 40%, 50%, 0.3);
+  line-height: 1.45;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 2.9em;
 }
 
 .training-card-overview {
-  font-size: 0.88rem;
+  font-size: 0.8rem;
   color: var(--text-dim);
-  line-height: 1.6;
-  margin-bottom: 24px;
+  line-height: 1.5;
+  margin-bottom: 12px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 3.6em;
+}
+
+.training-card-frameworks {
+  margin-bottom: 12px;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  background: rgba(255,255,255,0.02);
+  margin-top: auto;
+  min-height: 98px;
+}
+
+.training-card-fw-label {
+  font-size: 0.67rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 6px;
+}
+
+.training-card-fw-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-bottom: 8px;
+}
+
+.training-card-fw-chip {
+  display: inline-flex;
+  padding: 2px 8px;
+  border: 1px solid hsla(var(--hue), 38%, 45%, 0.35);
+  border-radius: 999px;
+  font-size: 0.68rem;
+  color: hsl(var(--hue), 40%, 66%);
+  background: hsla(var(--hue), 34%, 42%, 0.12);
+}
+
+.training-card-fw-btn {
+  width: 100%;
+  padding: 7px 10px;
+  border-radius: 14px;
+  border: 1px solid hsla(var(--hue), 45%, 50%, 0.32);
+  background: hsla(var(--hue), 45%, 45%, 0.12);
+  color: hsl(var(--hue), 44%, 66%);
+  font-size: 0.76rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.training-card-fw-btn:hover {
+  border-color: hsl(var(--hue), 45%, 55%);
+  color: #fff;
+  background: hsl(var(--hue), 45%, 46%);
 }
 
 .training-card-btn {
   width: 100%;
-  padding: 14px 24px;
+  padding: 10px 14px;
   font-family: var(--font);
-  font-size: 0.9rem;
+  font-size: 0.82rem;
   font-weight: 600;
   letter-spacing: 0.04em;
   background: hsla(var(--hue), 45%, 45%, 0.15);
   border: 1px solid hsla(var(--hue), 45%, 50%, 0.3);
-  border-radius: 24px;
+  border-radius: 16px;
   color: hsl(var(--hue), 40%, 65%);
   cursor: pointer;
   transition: all 0.3s;
+  margin-top: 2px;
 }
 
 .training-card-btn:hover {
@@ -6232,7 +6303,7 @@ button, a, input, select, textarea { transition: all var(--t) var(--ease); }
 
 @media (max-width: 600px) {
   .trainings-hall-content {
-    padding: 70px 20px 40px;
+    padding: 56px 16px 30px;
   }
   
   .trainings-header h1 {
@@ -6240,7 +6311,8 @@ button, a, input, select, textarea { transition: all var(--t) var(--ease); }
   }
   
   .training-card {
-    padding: 30px 24px;
+    padding: 20px 16px;
+    min-height: auto;
   }
   
   .immersion-tabs {

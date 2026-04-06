@@ -111,18 +111,38 @@ window.PsycheApp.ViewsTrainings = (function() {
   }
 
   function goToHall() {
-    activeTraining = null;
-    trainingState = null;
+    // Don't clear state - just show hall view
+    // This allows users to resume their training
     reRender();
   }
 
   function goHome() {
-    window.PsycheApp?.goToView?.('home');
+    if (window.PsycheApp?.goToView) {
+      window.PsycheApp.goToView('home');
+    }
+  }
+  
+  function pauseTraining() {
+    // Temporarily hide training view without losing progress
+    activeTraining = null;
+    reRender();
   }
 
   // ── RENDER: HALL ──
   function renderHall() {
     const trainings = D.trainings || [];
+    
+    // Check if there's a saved training in progress
+    let savedTraining = null;
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        const data = JSON.parse(raw);
+        if (data.activeTrainingId && data.state) {
+          savedTraining = D.trainings?.find(t => t.id === data.activeTrainingId);
+        }
+      }
+    } catch (e) {}
     
     return `
       <div class="trainings-page">
@@ -141,6 +161,19 @@ window.PsycheApp.ViewsTrainings = (function() {
             <p class="trainings-subtitle">Stop intellectualizing. Start living.</p>
             <p class="trainings-desc">Choose a path below. For the next 7-14 days, you will adopt the persona of an initiate in that tradition — following their rhythms, their practices, their culture.</p>
           </header>
+          
+          ${savedTraining ? `
+            <div class="resume-banner">
+              <div class="resume-icon">${savedTraining.icon}</div>
+              <div class="resume-info">
+                <h3>Resume Your Journey</h3>
+                <p>You have an active training: <strong>${savedTraining.title}</strong></p>
+              </div>
+              <button class="resume-btn" onclick="PsycheApp.ViewsTrainings.beginTraining('${savedTraining.id}')">
+                Continue →
+              </button>
+            </div>
+          ` : ''}
 
           <div class="trainings-grid">
             ${trainings.map(t => `
@@ -178,18 +211,21 @@ window.PsycheApp.ViewsTrainings = (function() {
     const circumference = 2 * Math.PI * 45;
     const dashOffset = circumference - (progress / 100) * circumference;
 
+    // Unique theme classes per training
+    const themeClass = `training-theme-${t.id}`;
+
     return `
-      <div class="trainings-page training-active" style="--hue: ${t.hue};">
+      <div class="trainings-page training-active ${themeClass}" style="--hue: ${t.hue};">
         <div class="dashboard-topbar">
-          <button class="dashboard-back-btn" onclick="PsycheApp.ViewsTrainings.goToHall()">
-            ← Back to Hall
+          <button class="dashboard-back-btn" onclick="PsycheApp.ViewsTrainings.pauseTraining()">
+            ← Hall
           </button>
           <div class="dashboard-topbar-title">
             <span class="dashboard-topbar-icon">${t.icon}</span>
             <span>${t.title}</span>
           </div>
-          <button class="dashboard-abandon-btn" onclick="PsycheApp.ViewsTrainings.abandonTraining()">
-            Abandon
+          <button class="dashboard-home-btn" onclick="PsycheApp.ViewsTrainings.goHome()">
+            Home
           </button>
         </div>
 
@@ -214,94 +250,131 @@ window.PsycheApp.ViewsTrainings = (function() {
             </div>
           </section>
 
-          <!-- MAIN GRID -->
-          <div class="dashboard-grid">
-            
-            <!-- ETHOS -->
-            <section class="dash-card dash-ethos">
-              <h3>⚔ Your Ethos</h3>
-              <p class="ethos-main">${t.immersion.ethos}</p>
-              <div class="ethos-persona">
-                <h4>The Persona</h4>
-                <p>${t.immersion.persona}</p>
-              </div>
-            </section>
+          <!-- TABBED SECTIONS -->
+          <div class="dashboard-tabs">
+            <button class="tab-btn active" data-tab="practice">Today's Practice</button>
+            <button class="tab-btn" data-tab="ethos">Ethos & Persona</button>
+            <button class="tab-btn" data-tab="immersion">Immersion</button>
+            <button class="tab-btn" data-tab="reflection">Reflection ${isLastDay ? '🔓' : '🔒'}</button>
+          </div>
 
-            <!-- TODAY'S PRACTICE -->
-            <section class="dash-card dash-habits">
-              <h3>◉ Today's Practice <span class="habits-count">${habitsComplete}/${t.habits.length}</span></h3>
+          <div class="dashboard-panels">
+            
+            <!-- PRACTICE TAB -->
+            <div class="tab-panel active" data-panel="practice">
+              <div class="panel-hero">
+                <h2>◉ Today's Practice</h2>
+                <p class="panel-subtitle">Complete these daily practices to deepen your immersion</p>
+              </div>
+              
               <div class="habits-list">
                 ${t.habits.map(h => `
                   <div class="habit-row ${isHabitCompleted(h.id) ? 'done' : ''}" data-habit="${h.id}">
                     <div class="habit-check">${isHabitCompleted(h.id) ? '✓' : ''}</div>
                     <div class="habit-info">
-                      <strong>${h.task}</strong>
-                      <span class="habit-time">${h.duration}</span>
-                      <p>${h.description}</p>
+                      <div class="habit-header">
+                        <strong>${h.task}</strong>
+                        <span class="habit-time">${h.duration}</span>
+                      </div>
+                      <p class="habit-desc">${h.description}</p>
                     </div>
                   </div>
                 `).join('')}
               </div>
-            </section>
+              
+              <div class="habits-progress">
+                <div class="habits-bar">
+                  <div class="habits-bar-fill" style="width: ${(habitsComplete / t.habits.length) * 100}%"></div>
+                </div>
+                <p>${habitsComplete} of ${t.habits.length} complete</p>
+              </div>
 
-            <!-- DAILY RITUALS -->
-            <section class="dash-card dash-rituals">
-              <h3>☽ Daily Rituals</h3>
-              <ul>
-                ${t.immersion.rituals.map(r => `<li>${r}</li>`).join('')}
-              </ul>
-            </section>
+              <div class="daily-rituals">
+                <h3>☽ Daily Rituals</h3>
+                <ul>
+                  ${t.immersion.rituals.map(r => `<li>${r}</li>`).join('')}
+                </ul>
+              </div>
+            </div>
 
-            <!-- IMMERSION HUB -->
-            <section class="dash-card dash-immersion">
-              <h3>🎭 Immersion Hub</h3>
-              <div class="immersion-tabs">
-                <div class="immersion-tab">
+            <!-- ETHOS TAB -->
+            <div class="tab-panel" data-panel="ethos">
+              <div class="panel-hero">
+                <h2>⚔ Your Ethos</h2>
+                <p class="panel-subtitle">Embody this way of being for the duration of your training</p>
+              </div>
+              
+              <div class="ethos-main">
+                <p>${t.immersion.ethos}</p>
+              </div>
+              
+              <div class="ethos-persona">
+                <h4>🎭 The Persona</h4>
+                <p>${t.immersion.persona}</p>
+              </div>
+
+              <div class="boundaries-section">
+                <div class="boundaries-col">
+                  <h4>◈ Companions</h4>
+                  <ul>${t.immersion.companions.map(c => `<li>${c}</li>`).join('')}</ul>
+                </div>
+                <div class="boundaries-col">
+                  <h4>⊘ Taboos</h4>
+                  <ul class="taboos-list">${t.immersion.taboos.map(tb => `<li>${tb}</li>`).join('')}</ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- IMMERSION TAB -->
+            <div class="tab-panel" data-panel="immersion">
+              <div class="panel-hero">
+                <h2>🎭 Immersion Hub</h2>
+                <p class="panel-subtitle">Surround yourself with the culture and atmosphere of this tradition</p>
+              </div>
+              
+              <div class="immersion-grid">
+                <div class="immersion-card">
                   <h4>♫ Music</h4>
                   <ul>${t.immersion.culture.music.map(m => `<li>${m}</li>`).join('')}</ul>
                 </div>
-                <div class="immersion-tab">
+                <div class="immersion-card">
                   <h4>📖 Reading</h4>
                   <ul>${t.immersion.culture.reading.map(r => `<li>${r}</li>`).join('')}</ul>
                 </div>
-                <div class="immersion-tab">
+                <div class="immersion-card">
                   <h4>🎨 Art</h4>
                   <ul>${t.immersion.culture.art.map(a => `<li>${a}</li>`).join('')}</ul>
                 </div>
-                <div class="immersion-tab">
+                <div class="immersion-card">
                   <h4>🎬 Media</h4>
                   <ul>${t.immersion.culture.media.map(m => `<li>${m}</li>`).join('')}</ul>
                 </div>
               </div>
+
               <div class="immersion-env">
                 <h4>🕯 Environment</h4>
                 <p>${t.immersion.environment}</p>
               </div>
-            </section>
+            </div>
 
-            <!-- COMPANIONS & TABOOS -->
-            <section class="dash-card dash-boundaries">
-              <h3>⚖ Boundaries</h3>
-              <div class="boundaries-grid">
-                <div>
-                  <h4>Companions</h4>
-                  <ul>${t.immersion.companions.map(c => `<li>◈ ${c}</li>`).join('')}</ul>
-                </div>
-                <div>
-                  <h4>Taboos</h4>
-                  <ul class="taboos-list">${t.immersion.taboos.map(tb => `<li>⊘ ${tb}</li>`).join('')}</ul>
-                </div>
-              </div>
-            </section>
-
-            <!-- REFLECTION -->
-            <section class="dash-card dash-reflection ${isLastDay ? 'unlocked' : 'locked'}">
-              <h3>${isLastDay ? '🔓' : '🔒'} Terminal Reflection</h3>
+            <!-- REFLECTION TAB -->
+            <div class="tab-panel" data-panel="reflection">
               ${isLastDay ? `
+                <div class="panel-hero">
+                  <h2>🔓 Terminal Reflection</h2>
+                  <p class="panel-subtitle">The training period has ended. Reflect on your journey.</p>
+                </div>
+                
                 <div class="reflection-open">
-                  <p>${t.reflection.prompt.replace(/\n/g, '<br><br>')}</p>
+                  <div class="reflection-prompt">
+                    ${t.reflection.prompt.split('\n\n').map(p => `<p>${p}</p>`).join('')}
+                  </div>
+                  
                   <h4>Journal Prompts</h4>
-                  <ul>${t.reflection.journalPrompts.map(p => `<li>${p}</li>`).join('')}</ul>
+                  <ul class="reflection-prompts">
+                    ${t.reflection.journalPrompts.map(p => `<li>${p}</li>`).join('')}
+                  </ul>
+                  
                   ${!trainingState.reflectionCompleted ? `
                     <button class="reflection-btn" onclick="PsycheApp.ViewsTrainings.completeReflection()">
                       Mark Reflection Complete
@@ -311,22 +384,46 @@ window.PsycheApp.ViewsTrainings = (function() {
                   `}
                 </div>
               ` : `
+                <div class="panel-hero">
+                  <h2>🔒 Terminal Reflection</h2>
+                  <p class="panel-subtitle">This section unlocks on the final day of your training</p>
+                </div>
+                
                 <div class="reflection-locked">
                   <span class="lock-big">🔒</span>
                   <p>Opens on Day ${t.durationDays}</p>
                   <p class="days-left">${t.durationDays - day} days remaining</p>
                 </div>
               `}
-            </section>
+            </div>
 
           </div>
         </div>
+        
+        <button class="abandon-footer-btn" onclick="PsycheApp.ViewsTrainings.abandonTraining()">
+          Abandon Training
+        </button>
       </div>
     `;
   }
 
   // ── BIND EVENTS ──
   function bindEvents() {
+    // Tab switching
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetTab = btn.dataset.tab;
+        
+        // Update buttons
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        
+        // Update panels
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        document.querySelector(`[data-panel="${targetTab}"]`)?.classList.add('active');
+      });
+    });
+  
     // Training card clicks
     document.querySelectorAll('.training-card').forEach(card => {
       card.addEventListener('click', (e) => {
@@ -406,6 +503,19 @@ window.PsycheApp.ViewsTrainings = (function() {
     
     loadState();
     
+    // If we have saved state but no active training loaded, set it
+    if (!activeTraining && trainingState) {
+      const savedId = localStorage.getItem(STORAGE_KEY);
+      if (savedId) {
+        try {
+          const data = JSON.parse(savedId);
+          if (data.activeTrainingId) {
+            activeTraining = D.trainings?.find(t => t.id === data.activeTrainingId);
+          }
+        } catch (e) {}
+      }
+    }
+    
     if (activeTraining && trainingState) {
       currentContainer.innerHTML = renderDashboard();
     } else {
@@ -426,6 +536,7 @@ window.PsycheApp.ViewsTrainings = (function() {
     render,
     beginTraining,
     abandonTraining,
+    pauseTraining,
     toggleHabit,
     completeReflection,
     goToHall,

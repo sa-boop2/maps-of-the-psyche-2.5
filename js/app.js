@@ -38,8 +38,6 @@
     { id: 'relationships', label: 'Relations', icon: '∞', group: 'more' },
     { id: 'meditation', label: 'Practice', icon: '◯', group: 'more' },
     { id: 'trainings', label: 'Trainings', icon: '⚗', group: 'more' },
-    { id: 'compare', label: 'Compare', icon: '⟷', group: 'more' },
-    { id: 'lineage', label: 'Lineage', icon: '⇢', group: 'more' },
     { id: 'personal', label: 'My Map', icon: '◎', group: 'you' },
     { id: 'quiz', label: 'Find Path', icon: '⟐', group: 'you' },
     { id: 'resources', label: 'Library', icon: '⊡', group: 'you' },
@@ -67,6 +65,7 @@
 
     buildFrameworkTabs();
     buildViewTabs();
+    bindMapQuickTools();
     bindTraditionFilter();
     bindMapModeToggle();
     bindUtilityButtons();
@@ -298,6 +297,17 @@
       });
     });
   }
+
+  function bindMapQuickTools() {
+    document.querySelectorAll('#map-quick-tools .map-quick-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetView = btn.dataset.mapView;
+        if (!targetView) return;
+        setView(targetView);
+        App.Sound?.playUIClick();
+      });
+    });
+  }
   function setMapMode(mode) {
     mapMode = mode;
     document.querySelectorAll('#map-mode-toggle .mode-btn').forEach(b => b.classList.toggle('active', b.dataset.mode === mode));
@@ -347,7 +357,14 @@
     const secView = document.getElementById('secondary-view');
     const mainNav = document.getElementById('main-nav');
     const subNav = document.getElementById('sub-nav');
+    const mapQuickTools = document.getElementById('map-quick-tools');
+    const traditionFilter = document.getElementById('tradition-filter');
+    const frameworkTabs = document.getElementById('framework-tabs');
+    const mapModeToggle = document.getElementById('map-mode-toggle');
+    const subNavDividers = subNav ? Array.from(subNav.querySelectorAll('.sub-nav-divider')) : [];
     const appMain = document.getElementById('app-main');
+    const mapContextViews = new Set(['map', 'lineage', 'compare']);
+    const compactMapViews = new Set(['lineage', 'compare']);
 
     if (viewId === 'home') {
       // Full immersive home
@@ -374,6 +391,7 @@
       secView.classList.remove('active');
       if (mainNav) mainNav.classList.remove('nav-hidden');
       if (subNav) subNav.style.display = '';
+      if (mapQuickTools) mapQuickTools.style.display = '';
       if (appMain) appMain.classList.remove('home-active');
       if (mapMode === '3d') App.Sphere3D.setFramework(App.currentFramework);
       else { App.View2D?.show(); App.View2D?.setFramework(App.currentFramework); }
@@ -382,11 +400,25 @@
       secView.classList.add('active');
       if (mainNav) mainNav.classList.remove('nav-hidden');
       if (subNav) subNav.style.display = 'none';
+      if (mapQuickTools) mapQuickTools.style.display = mapContextViews.has(viewId) ? '' : 'none';
       if (appMain) appMain.classList.remove('home-active');
       App.View2D?.hide();
       secView.scrollTop = 0;
       renderSecondaryView(secView, viewId);
     }
+    if (mapQuickTools) {
+      mapQuickTools.querySelectorAll('.map-quick-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.mapView === viewId);
+      });
+    }
+    const showFullMapControls = viewId === 'map';
+    const showCompactMapControls = compactMapViews.has(viewId);
+    if (traditionFilter) traditionFilter.style.display = showFullMapControls ? '' : 'none';
+    if (frameworkTabs) frameworkTabs.style.display = showFullMapControls ? '' : 'none';
+    if (mapModeToggle) mapModeToggle.style.display = showFullMapControls ? '' : 'none';
+    subNavDividers.forEach(d => {
+      d.style.display = (showFullMapControls || showCompactMapControls) ? '' : 'none';
+    });
     App.Sidebar.hide();
   }
   function renderSecondaryView(container, viewId) {

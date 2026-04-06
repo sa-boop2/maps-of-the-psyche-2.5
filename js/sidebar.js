@@ -21,6 +21,8 @@ window.PsycheApp.Sidebar = (function() {
     if (!data) return;
     titleEl.textContent = data.name || '';
     subtitleEl.textContent = data.subtitle || data.framework || '';
+    const accent = typeof data.color === 'string' ? data.color : 'var(--gold)';
+    sidebarEl.style.setProperty('--node-accent', accent);
     contentEl.innerHTML = buildContent(data);
     sidebarEl.classList.remove('hidden');
     isOpen = true;
@@ -46,6 +48,15 @@ window.PsycheApp.Sidebar = (function() {
         }
       });
     });
+    // Bind cross-framework jumps
+    contentEl.querySelectorAll('.sb-crossref').forEach(el => {
+      el.addEventListener('click', () => {
+        const fw = el.dataset.fw;
+        const layerIdx = Number(el.dataset.layer);
+        if (!fw || Number.isNaN(layerIdx)) return;
+        window.PsycheApp?.setFrameworkById?.(fw, layerIdx, false);
+      });
+    });
     // Auto-open first two sections
     const headers = contentEl.querySelectorAll('.sb-section-header');
     headers.forEach((h, i) => {
@@ -61,14 +72,22 @@ window.PsycheApp.Sidebar = (function() {
 
   function buildContent(data) {
     let html = '';
+    const lead = data.description || data.pathology || data.shadow || data.history || '';
+    if (lead) {
+      html += `
+        <div class="sb-intro-card">
+          <div class="sb-intro-kicker">Essence</div>
+          <p>${esc(lead)}</p>
+        </div>
+      `;
+    }
     
     // Core Data
-    if (data.description) html += section('Description', `<p>${esc(data.description)}</p>`);
-    if (data.pathology) html += section('What Goes Wrong', `<p>${esc(data.pathology)}</p>`);
-    if (data.shadow) html += section('Shadow Aspect', `<p>${esc(data.shadow)}</p>`);
-    if (data.history) html += section('Historical Context', `<p>${esc(data.history)}</p>`);
-    if (data.philosophy) html += section('Philosophical Connections', `<p>${esc(data.philosophy)}</p>`);
-    if (data.psychology) html += section('Modern Psychology', `<p>${esc(data.psychology)}</p>`);
+    if (data.pathology) html += section('What Goes Wrong', `<p>${esc(data.pathology)}</p>`, '⚠');
+    if (data.shadow) html += section('Shadow Aspect', `<p>${esc(data.shadow)}</p>`, '◒');
+    if (data.history) html += section('Historical Context', `<p>${esc(data.history)}</p>`, '⌛');
+    if (data.philosophy) html += section('Philosophical Connections', `<p>${esc(data.philosophy)}</p>`, '◈');
+    if (data.psychology) html += section('Modern Psychology', `<p>${esc(data.psychology)}</p>`, '🧠');
 
     // == PHASE 8 DEEP DIVE EXPANDED CARDS ==
     const hasDeepDive = data.neurology || data.archetype || data.trauma || data.development || data.culturalLens;
@@ -80,33 +99,33 @@ window.PsycheApp.Sidebar = (function() {
       if (data.development) dd += `<div class="dd-card"><div class="dd-icon">🌱</div><div class="dd-title">Developmental</div><div class="dd-text">${esc(data.development)}</div></div>`;
       if (data.culturalLens) dd += `<div class="dd-card"><div class="dd-icon">👁️</div><div class="dd-title">Cultural Lens</div><div class="dd-text">${esc(data.culturalLens)}</div></div>`;
       dd += '</div>';
-      html += section('Deep Dive Analysis', dd);
+      html += section('Deep Dive Analysis', dd, '✦');
     }
 
     // Lists & Tags
     if (data.practices && data.practices.length) {
-      html += section('Practices', data.practices.map(p => `<div class="sb-tag">${esc(p)}</div>`).join(''));
+      html += section('Practices', data.practices.map(p => `<div class="sb-tag">${esc(p)}</div>`).join(''), '☽');
     }
     if (data.reflections && data.reflections.length) {
-      html += section('Reflect', data.reflections.map(q => `<div class="sb-question">${esc(q)}</div>`).join(''));
+      html += section('Reflect', data.reflections.map(q => `<div class="sb-question">${esc(q)}</div>`).join(''), '✍');
     }
     if (data.resources && data.resources.length) {
       html += section('Resources', data.resources.map(r =>
-        `<div class="sb-resource"><span class="sb-resource-title">${esc(r.title)}</span></div>`
-      ).join(''));
+        `<div class="sb-resource"><span class="sb-resource-title">${esc(typeof r === 'string' ? r : r.title)}</span></div>`
+      ).join(''), '⊡');
     }
     
     // Cross-framework connections
     if (data.crossRefs && data.crossRefs.length) {
       html += section('Universal Resonance', data.crossRefs.map(cr =>
         `<div class="sb-crossref" data-fw="${cr.frameworkId}" data-layer="${cr.layerIdx}"><strong>${esc(cr.frameworkName)}:</strong> ${esc(cr.layerName)}</div>`
-      ).join(''));
+      ).join(''), '↔');
     }
     return html;
   }
 
-  function section(title, body) {
-    return `<div class="sb-section"><div class="sb-section-header">${esc(title)}</div><div class="sb-section-body">${body}</div></div>`;
+  function section(title, body, icon = '') {
+    return `<div class="sb-section"><div class="sb-section-header"><span class="sb-section-icon">${icon}</span>${esc(title)}</div><div class="sb-section-body">${body}</div></div>`;
   }
 
   function esc(str) {

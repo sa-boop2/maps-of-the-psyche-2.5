@@ -625,6 +625,26 @@ a:hover { color: var(--gold-light); }
   background: rgba(255,255,255,0.04);
   border-color: var(--border);
 }
+
+.sb-training-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 10px;
+  margin: 4px 6px 4px 0;
+  font-size: 0.78rem;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.04);
+  color: var(--text);
+  cursor: pointer;
+  transition: all var(--t) var(--ease);
+}
+
+.sb-training-link:hover {
+  border-color: var(--border-hover);
+  color: var(--gold-light);
+}
 .sb-crossref::before { content: '↔'; font-size: 0.7rem; }
 
 /* === SECONDARY VIEWS === */
@@ -5585,6 +5605,31 @@ button, a, input, select, textarea { transition: all var(--t) var(--ease); }
 .dashboard-hero-info cite {
   font-size: 0.85rem;
   color: var(--gold-dark);
+}
+
+.training-framework-links {
+  margin-top: 14px;
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.training-framework-btn {
+  padding: 6px 12px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.03);
+  color: var(--text-secondary);
+  font-size: 0.76rem;
+  cursor: pointer;
+  transition: all var(--t) var(--ease);
+}
+
+.training-framework-btn:hover {
+  color: hsl(var(--hue), 55%, 72%);
+  border-color: hsla(var(--hue), 45%, 65%, 0.5);
+  background: hsla(var(--hue), 35%, 40%, 0.12);
 }
 
 /* ── Dashboard Grid ── */

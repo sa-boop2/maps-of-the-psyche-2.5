@@ -22,6 +22,9 @@ window.PsycheApp.Sphere3D = (function() {
   let resonanceObjects = []; // for animation
   let resonanceNodeObjects = []; // for clicking
   let currentAtmosphere = 'neutral';
+  let canvasRect = null;
+  let hoverEvent = null;
+  let hoverScheduled = false;
   const DAMPING = 0.08;
 
   function init() {
@@ -42,6 +45,7 @@ window.PsycheApp.Sphere3D = (function() {
     renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false, preserveDrawingBuffer: true });
     renderer.setSize(container.clientWidth, container.clientHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    canvasRect = canvas.getBoundingClientRect();
 
     // Raycaster
     raycaster = new THREE.Raycaster();
@@ -358,9 +362,9 @@ window.PsycheApp.Sphere3D = (function() {
   function onMouseDown(e) { isDragging = true; prevMouse.x = e.clientX; prevMouse.y = e.clientY; }
   function onMouseUp() { isDragging = false; }
   function onMouseMove(e) {
-    const rect = canvas.getBoundingClientRect();
-    mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-    mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+    if (!canvasRect) canvasRect = canvas.getBoundingClientRect();
+    mouse.x = ((e.clientX - canvasRect.left) / canvasRect.width) * 2 - 1;
+    mouse.y = -((e.clientY - canvasRect.top) / canvasRect.height) * 2 + 1;
     if (isDragging) {
       const dx = e.clientX - prevMouse.x;
       const dy = e.clientY - prevMouse.y;
@@ -369,7 +373,14 @@ window.PsycheApp.Sphere3D = (function() {
       prevMouse.x = e.clientX;
       prevMouse.y = e.clientY;
     }
-    checkHover(e);
+    hoverEvent = e;
+    if (!hoverScheduled) {
+      hoverScheduled = true;
+      requestAnimationFrame(() => {
+        hoverScheduled = false;
+        if (hoverEvent) checkHover(hoverEvent);
+      });
+    }
   }
   function onWheel(e) {
     e.preventDefault();
@@ -378,9 +389,9 @@ window.PsycheApp.Sphere3D = (function() {
 
   function onClick(e) {
     if (!nodeObjects.length) return;
-    const rect = canvas.getBoundingClientRect();
-    mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-    mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+    if (!canvasRect) canvasRect = canvas.getBoundingClientRect();
+    mouse.x = ((e.clientX - canvasRect.left) / canvasRect.width) * 2 - 1;
+    mouse.y = -((e.clientY - canvasRect.top) / canvasRect.height) * 2 + 1;
     raycaster.setFromCamera(mouse, camera);
     const intersects = raycaster.intersectObjects([...nodeObjects, ...resonanceNodeObjects]);
     if (intersects.length > 0) {
@@ -399,6 +410,7 @@ window.PsycheApp.Sphere3D = (function() {
     selectedNode = node;
     const data = node.userData.layer;
     data.framework = node.userData.framework.name;
+    data.frameworkId = node.userData.framework.id;
     data.crossRefs = findCrossRefs(node.userData.framework, node.userData.layerIndex);
     window.PsycheApp.Sidebar.show(data);
 
@@ -581,6 +593,7 @@ window.PsycheApp.Sphere3D = (function() {
 
   function onResize() {
     if (!container || !camera || !renderer) return;
+    canvasRect = canvas.getBoundingClientRect();
     camera.aspect = container.clientWidth / container.clientHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(container.clientWidth, container.clientHeight);

@@ -4,6 +4,21 @@
 (function() {
   const App = window.PsycheApp = window.PsycheApp || {};
   const D = window.PsycheData || {};
+  const trainingFrameworkMap = {
+    hermeticism: ['esoteric', 'alchemy', 'egyptian'],
+    daoism: ['daoist'],
+    individuation: ['jungian', 'ifs'],
+    buddhist: ['buddhist'],
+    chakra: ['chakra', 'vedantic'],
+    egyptian: ['egyptian'],
+    gnostic: ['gnostic'],
+    kabbalah: ['kabbalah'],
+    alchemy: ['alchemy', 'esoteric'],
+    ifs: ['ifs', 'jungian'],
+    sufi: ['sufi'],
+    frankl: ['frankl', 'erikson'],
+    spiral: ['spiral', 'integral']
+  };
 
   // Combine all frameworks
   App.allFrameworks = [
@@ -126,6 +141,14 @@
     }
   };
   App.goToView = function(id) { setView(id); };
+  App.getFrameworksForTraining = function(trainingId) {
+    const ids = trainingFrameworkMap[trainingId] || [];
+    return ids.map(id => App.allFrameworks.find(f => f.id === id)).filter(Boolean);
+  };
+  App.getTrainingsForFramework = function(frameworkId) {
+    const trainings = D.trainings || [];
+    return trainings.filter(t => (trainingFrameworkMap[t.id] || []).includes(frameworkId));
+  };
 
   // ── FRAMEWORK TABS ──
   function buildFrameworkTabs() {

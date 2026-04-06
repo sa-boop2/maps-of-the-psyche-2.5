@@ -6,6 +6,7 @@ window.PsycheApp = window.PsycheApp || {};
 window.PsycheApp.Sidebar = (function() {
   let sidebarEl, titleEl, subtitleEl, contentEl, closeBtn;
   let isOpen = false;
+  let contentClickHandler = null;
 
   function init() {
     sidebarEl = document.getElementById('sidebar');
@@ -26,37 +27,32 @@ window.PsycheApp.Sidebar = (function() {
     contentEl.innerHTML = buildContent(data);
     sidebarEl.classList.remove('hidden');
     isOpen = true;
-    // Bind section toggles
-    contentEl.querySelectorAll('.sb-section-header').forEach(h => {
-      h.addEventListener('click', () => {
-        h.classList.toggle('open');
-        const body = h.nextElementSibling;
-        if (body) body.classList.toggle('open');
-      });
-    });
-    // Bind accordion toggles
-    contentEl.querySelectorAll('.js-accordion-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        btn.classList.toggle('active');
-        const body = btn.nextElementSibling;
-        if (body) {
-          if (btn.classList.contains('active')) {
-            body.style.maxHeight = body.scrollHeight + "px";
-          } else {
-            body.style.maxHeight = null;
-          }
+    if (!contentClickHandler) {
+      contentClickHandler = (e) => {
+        const sectionHeader = e.target.closest('.sb-section-header');
+        if (sectionHeader) {
+          sectionHeader.classList.toggle('open');
+          sectionHeader.nextElementSibling?.classList.toggle('open');
+          return;
         }
-      });
-    });
-    // Bind cross-framework jumps
-    contentEl.querySelectorAll('.sb-crossref').forEach(el => {
-      el.addEventListener('click', () => {
-        const fw = el.dataset.fw;
-        const layerIdx = Number(el.dataset.layer);
-        if (!fw || Number.isNaN(layerIdx)) return;
-        window.PsycheApp?.setFrameworkById?.(fw, layerIdx, false);
-      });
-    });
+        const crossRef = e.target.closest('.sb-crossref');
+        if (crossRef) {
+          const fw = crossRef.dataset.fw;
+          const layerIdx = Number(crossRef.dataset.layer);
+          if (!fw || Number.isNaN(layerIdx)) return;
+          window.PsycheApp?.setFrameworkById?.(fw, layerIdx, false);
+          return;
+        }
+        const trainingLink = e.target.closest('.sb-training-link');
+        if (trainingLink) {
+          const trainingId = trainingLink.dataset.trainingId;
+          if (!trainingId) return;
+          window.PsycheApp?.goToView?.('trainings');
+          setTimeout(() => window.PsycheApp?.ViewsTrainings?.beginTraining(trainingId), 100);
+        }
+      };
+      contentEl.addEventListener('click', contentClickHandler);
+    }
     // Auto-open first two sections
     const headers = contentEl.querySelectorAll('.sb-section-header');
     headers.forEach((h, i) => {
@@ -120,6 +116,15 @@ window.PsycheApp.Sidebar = (function() {
       html += section('Universal Resonance', data.crossRefs.map(cr =>
         `<div class="sb-crossref" data-fw="${cr.frameworkId}" data-layer="${cr.layerIdx}"><strong>${esc(cr.frameworkName)}:</strong> ${esc(cr.layerName)}</div>`
       ).join(''), '↔');
+    }
+
+    const relatedTrainings = window.PsycheApp?.getTrainingsForFramework?.(data.frameworkId) || [];
+    if (relatedTrainings.length) {
+      html += section(
+        'Related Trainings',
+        relatedTrainings.map(t => `<button class="sb-training-link" data-training-id="${t.id}">${esc(t.icon)} ${esc(t.title)}</button>`).join(''),
+        '⚗'
+      );
     }
     return html;
   }

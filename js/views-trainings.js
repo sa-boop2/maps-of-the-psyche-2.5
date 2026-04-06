@@ -266,6 +266,11 @@ window.PsycheApp.ViewsTrainings = (function() {
               <h1>${t.title}</h1>
               <p class="dashboard-philosophy">${t.philosophy}</p>
               <blockquote>"${t.quote}" <cite>— ${t.author}</cite></blockquote>
+              <div class="training-framework-links">
+                ${(window.PsycheApp?.getFrameworksForTraining?.(t.id) || [])
+                  .map(f => `<button class="training-framework-btn" data-framework-id="${f.id}">↔ ${f.name}</button>`)
+                  .join('')}
+              </div>
             </div>
           </section>
 
@@ -479,7 +484,17 @@ window.PsycheApp.ViewsTrainings = (function() {
         toggleHabit(id);
         return;
       }
-      
+
+      const frameworkBtn = target.closest('.training-framework-btn');
+      if (frameworkBtn) {
+        const frameworkId = frameworkBtn.dataset.frameworkId;
+        if (frameworkId) {
+          window.PsycheApp?.setFrameworkById?.(frameworkId, null, false);
+          window.PsycheApp?.showToast?.('Jumping to related framework...');
+        }
+        return;
+      }
+       
     };
 
     currentContainer.addEventListener('click', delegatedClickHandler);

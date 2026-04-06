@@ -5040,9 +5040,9 @@ button, a, input, select, textarea { transition: all var(--t) var(--ease); }
 .home-content {
   position: relative;
   z-index: 1;
-  max-width: 1000px;
+  max-width: 1120px;
   margin: 0 auto;
-  padding: 0 22px 64px;
+  padding: 0 18px 52px;
 }
 
 /* ── Featured Card (Psyche Maps) ── */
@@ -5218,7 +5218,7 @@ button, a, input, select, textarea { transition: all var(--t) var(--ease); }
 .home-card:hover .home-card-arrow { opacity: 0.4; transform: translateX(3px); }
 
 .home-primary-section {
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
 .home-section-title {
@@ -5231,13 +5231,13 @@ button, a, input, select, textarea { transition: all var(--t) var(--ease); }
 .home-section-subtitle {
   font-size: 0.76rem;
   color: var(--text-dim);
-  margin-bottom: 12px;
+  margin-bottom: 8px;
 }
 
 .home-primary-row {
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
-  gap: 9px;
+  gap: 8px;
 }
 
 .home-primary-card {
@@ -5248,7 +5248,7 @@ button, a, input, select, textarea { transition: all var(--t) var(--ease); }
     inset 0 1px 0 rgba(255,255,255,0.04),
     0 8px 24px rgba(0,0,0,0.28);
   padding: 11px 11px 10px;
-  min-height: 152px;
+  min-height: 144px;
   cursor: pointer;
   transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
 }
@@ -5263,9 +5263,9 @@ button, a, input, select, textarea { transition: all var(--t) var(--ease); }
 }
 
 .home-primary-icon {
-  width: 24px;
-  height: 24px;
-  margin-bottom: 7px;
+  width: 22px;
+  height: 22px;
+  margin-bottom: 6px;
 }
 
 .home-primary-icon svg {
@@ -5275,28 +5275,28 @@ button, a, input, select, textarea { transition: all var(--t) var(--ease); }
 
 .home-primary-title {
   font-family: var(--font-display);
-  font-size: 0.88rem;
+  font-size: 0.84rem;
   color: var(--gold-light);
   margin-bottom: 3px;
 }
 
 .home-primary-subtitle {
-  font-size: 0.64rem;
+  font-size: 0.61rem;
   color: var(--text-dim);
   margin-bottom: 5px;
   font-style: italic;
 }
 
 .home-primary-desc {
-  font-size: 0.69rem;
+  font-size: 0.66rem;
   color: var(--text-secondary);
-  line-height: 1.34;
+  line-height: 1.3;
 }
 
 .home-more-section {
-  margin: 10px 0 8px;
+  margin: 8px 0 7px;
   text-align: center;
-  padding: 8px 10px 9px;
+  padding: 7px 9px 8px;
   border: 1px solid var(--border);
   border-radius: var(--r-sm);
   background: rgba(10, 10, 30, 0.5);
@@ -5307,18 +5307,18 @@ button, a, input, select, textarea { transition: all var(--t) var(--ease); }
   color: var(--gold);
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  font-size: 0.84rem;
-  margin-bottom: 6px;
+  font-size: 0.78rem;
+  margin-bottom: 4px;
 }
 
 .home-more-sub {
-  font-size: 0.77rem;
+  font-size: 0.72rem;
   color: var(--text-dim);
 }
 
 .home-more-count {
-  margin-top: 8px;
-  font-size: 0.68rem;
+  margin-top: 6px;
+  font-size: 0.62rem;
   color: var(--gold);
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -5350,8 +5350,8 @@ button, a, input, select, textarea { transition: all var(--t) var(--ease); }
 
 /* ── Footer ── */
 .home-footer {
-  text-align: center; margin-top: 56px;
-  padding: 36px 20px; border-top: 1px solid var(--border);
+  text-align: center; margin-top: 36px;
+  padding: 24px 16px; border-top: 1px solid var(--border);
 }
 .home-footer p {
   font-size: 0.8rem; color: var(--text-dim);
@@ -5375,6 +5375,52 @@ button, a, input, select, textarea { transition: all var(--t) var(--ease); }
   }
   .home-featured-icon { width: 56px; height: 56px; }
   .home-featured-arrow { position: absolute; top: 28px; right: 24px; }
+}
+
+@media (max-height: 930px) and (min-width: 1024px) {
+  .home-hero {
+    padding: 1.8vh 20px 0.8vh;
+  }
+  .home-hero-sigil {
+    font-size: 2.8rem;
+    margin-bottom: 4px;
+  }
+  .home-hero-title {
+    font-size: 2.2rem;
+    margin-bottom: 6px;
+  }
+  .home-hero-rule {
+    margin-bottom: 6px;
+  }
+  .home-hero-sub {
+    font-size: 0.88rem;
+    margin-bottom: 4px;
+  }
+  .home-hero-desc {
+    font-size: 0.7rem;
+  }
+  .home-section-subtitle {
+    margin-bottom: 6px;
+  }
+  .home-primary-card {
+    min-height: 132px;
+    padding: 9px 9px 8px;
+    border-radius: 16px;
+  }
+  .home-primary-title {
+    font-size: 0.8rem;
+  }
+  .home-primary-subtitle {
+    font-size: 0.58rem;
+  }
+  .home-primary-desc {
+    font-size: 0.62rem;
+    line-height: 1.24;
+  }
+  .home-more-section {
+    margin-top: 6px;
+    padding: 6px 8px 7px;
+  }
 }
 @media (max-width: 520px) {
   .home-hero-title { font-size: 1.6rem; letter-spacing: 0.1em; }

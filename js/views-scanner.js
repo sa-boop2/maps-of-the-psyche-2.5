@@ -180,6 +180,7 @@ window.PsycheApp.ViewsScanner = (function() {
   let currentStep = -1;
   let answers = [];
   let scanPhase = 'intro'; // 'intro', 'scanning', 'processing', 'result'
+  const SHADOW_RESULT_KEY = 'psyche_shadow_scan_result';
 
   function render(container) {
     currentStep = -1;
@@ -294,7 +295,11 @@ window.PsycheApp.ViewsScanner = (function() {
         if (window.PsycheApp.Sound) window.PsycheApp.Sound.playUIClick();
         
         const idx = parseInt(btn.dataset.idx);
-        answers.push(q.options[idx].result);
+        const result = q.options[idx].result;
+        answers.push({
+          ...result,
+          fw: normalizeFrameworkId(result.fw)
+        });
         
         setTimeout(() => {
           currentStep++;
@@ -443,6 +448,8 @@ window.PsycheApp.ViewsScanner = (function() {
       </div>
     `;
 
+    persistShadowResult(finalResult, sortedFw, answers.length);
+
     if (window.PsycheApp.Sound) window.PsycheApp.Sound.playTransition();
 
     const btnMap = document.getElementById('btn-view-on-map');
@@ -491,6 +498,35 @@ window.PsycheApp.ViewsScanner = (function() {
       bantu: 'Bantu/Ubuntu'
     };
     return names[fwId] || fwId;
+  }
+
+  function normalizeFrameworkId(fwId) {
+    if (!fwId) return fwId;
+    if (fwId === 'freudian') return 'freud';
+    return fwId;
+  }
+
+  function persistShadowResult(finalResult, rankedFrameworks, answerCount) {
+    try {
+      const payload = {
+        timestamp: new Date().toISOString(),
+        dominant: {
+          frameworkId: finalResult.fw,
+          frameworkName: getFrameworkName(finalResult.fw),
+          layerIndex: finalResult.layer
+        },
+        rankedFrameworks: rankedFrameworks.map(([fwId, count]) => ({
+          frameworkId: fwId,
+          frameworkName: getFrameworkName(fwId),
+          count,
+          ratio: answerCount ? Number((count / answerCount).toFixed(3)) : 0
+        })),
+        answerCount
+      };
+      localStorage.setItem(SHADOW_RESULT_KEY, JSON.stringify(payload));
+    } catch (error) {
+      console.warn('Could not persist shadow scan result', error);
+    }
   }
 
   return { render };

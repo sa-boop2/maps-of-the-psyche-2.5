@@ -53,6 +53,8 @@
     { id: 'relationships', label: 'Relations', icon: '∞', group: 'more' },
     { id: 'meditation', label: 'Practice', icon: '◯', group: 'more' },
     { id: 'trainings', label: 'Trainings', icon: '⚗', group: 'more' },
+    { id: 'chronos', label: 'Chronos', icon: '🌀', group: 'more' },
+    { id: 'alchemy', label: 'Alchemy Lab', icon: '⚗', group: 'more' },
     { id: 'personal', label: 'My Map', icon: '◎', group: 'you' },
     { id: 'quiz', label: 'Find Path', icon: '⟐', group: 'you' },
     { id: 'resources', label: 'Library', icon: '⊡', group: 'you' },
@@ -360,7 +362,7 @@
   function buildViewTabs() {
     const container = document.getElementById('view-tabs');
     if (!container) return;
-    const compactViews = new Set(['figures', 'cases', 'disagree', 'relationships', 'personal', 'quiz', 'resources']);
+    const compactViews = new Set(['figures', 'cases', 'disagree', 'relationships', 'chronos', 'alchemy', 'personal', 'quiz', 'resources']);
     container.innerHTML = views.map(v => {
       if (v.sep) return '';
       const compactClass = compactViews.has(v.id) ? ' compact' : '';
@@ -470,6 +472,8 @@
       case 'therapy': App.ViewsTherapy?.render(container); break;
       case 'meditation': App.ViewsMeditation?.render(container); break;
       case 'trainings': App.ViewsTrainings?.render(container); break;
+      case 'chronos': App.ViewsMap.renderHerosPath(container); break;
+      case 'alchemy': App.ViewsMap.renderAlchemicalLab(container); break;
       case 'quiz': App.ViewsQuiz?.render(container); break;
       case 'personal': App.ViewsDevelop.renderPersonalMapping(container); break;
       case 'compare': App.ViewsMap.renderCulturalComparison(container); break;

@@ -5,6 +5,8 @@ window.PsycheApp = window.PsycheApp || {};
 
 window.PsycheApp.ViewsMap = (function() {
   const D = () => window.PsycheData;
+  const HERO_PATH_KEY = 'psyche_hero_path_state';
+  const ALCHEMY_KEY = 'psyche_alchemy_lab_state';
 
   // ── TRAUMA CARTOGRAPHY ──
   function renderTraumaCartography(container) {
@@ -340,5 +342,367 @@ window.PsycheApp.ViewsMap = (function() {
     render();
   }
 
-  return { renderTraumaCartography, renderDarkNight, renderRelationships, renderCulturalComparison, renderResources };
+  function renderHerosPath(container) {
+    const allFw = window.PsycheApp.allFrameworks || [];
+    const fwById = new Map(allFw.map(fw => [fw.id, fw]));
+    const defaultMilestones = [
+      { id: 'call', phase: 'The Call to Adventure', age: 'Adolescence', ageBand: '12-18', tradition: 'Rite of passage' },
+      { id: 'crossing', phase: 'Crossing the Threshold', age: 'Young Adult', ageBand: '18-28', tradition: 'Initiation into duty' },
+      { id: 'ordeal', phase: 'The Ordeal', age: 'Maturity Crisis', ageBand: '29-45', tradition: 'Dark night / trial by fire' },
+      { id: 'boon', phase: 'The Boon', age: 'Elder Formation', ageBand: '46-60', tradition: 'Wisdom extraction' },
+      { id: 'return', phase: 'The Return', age: 'Elderhood', ageBand: '60+', tradition: 'Giving back to the village' }
+    ];
+    const agesOfMan = [
+      { tradition: 'Greek', stages: 'Childhood, Ephebic Formation, Civic Prime, Gerousia' },
+      { tradition: 'Hindu Ashrama', stages: 'Brahmacharya, Grihastha, Vanaprastha, Sannyasa' },
+      { tradition: 'Confucian', stages: 'Learning, Standing Firm, Understanding Mandate, Following Heart-Mind' },
+      { tradition: 'Yoruba', stages: 'Akomolede, Agba, Elder-Council, Ancestor Orientation' },
+      { tradition: 'Jungian-Depth', stages: 'Persona Formation, Ego Achievement, Midlife Descent, Individuation' }
+    ];
+
+    function loadState() {
+      try {
+        const parsed = JSON.parse(localStorage.getItem(HERO_PATH_KEY) || '{}');
+        if (!Array.isArray(parsed.milestones)) parsed.milestones = defaultMilestones;
+        if (!parsed.bioTitle) parsed.bioTitle = '';
+        if (!parsed.bioThesis) parsed.bioThesis = '';
+        return parsed;
+      } catch {
+        return {
+          bioTitle: '',
+          bioThesis: '',
+          milestones: defaultMilestones
+        };
+      }
+    }
+
+    function saveState(state) {
+      try {
+        localStorage.setItem(HERO_PATH_KEY, JSON.stringify(state));
+      } catch (error) {
+        console.warn('Hero Path save failed', error);
+      }
+    }
+
+    function frameworkOptions(selectedId) {
+      return `<option value="">Map to framework...</option>${allFw.map(fw => `<option value="${fw.id}" ${fw.id === selectedId ? 'selected' : ''}>${fw.name}</option>`).join('')}`;
+    }
+
+    function milestoneCardHtml(m, idx) {
+      const mapped = m.frameworkId ? fwById.get(m.frameworkId) : null;
+      const mappedText = mapped ? `<span class="hp-chip mapped">${mapped.name}</span>` : `<span class="hp-chip">Unmapped</span>`;
+      return `
+        <div class="hp-milestone-card">
+          <div class="hp-milestone-head">
+            <div>
+              <div class="hp-step-index">Milestone ${idx + 1}</div>
+              <div class="hp-phase">${m.phase || 'Untitled Phase'}</div>
+            </div>
+            <div class="hp-badges">
+              <span class="hp-chip">${m.age || 'Life Stage'}</span>
+              <span class="hp-chip">${m.ageBand || 'Age Band'}</span>
+              ${mappedText}
+            </div>
+          </div>
+          <div class="hp-grid">
+            <label>Life Event
+              <input type="text" class="hp-input hp-event" data-id="${m.id}" value="${escapeHtml(m.event || '')}" placeholder="What happened here?" />
+            </label>
+            <label>Meaning / Narrative
+              <textarea class="hp-textarea hp-meaning" data-id="${m.id}" placeholder="How did this chapter shape your identity?">${escapeHtml(m.meaning || '')}</textarea>
+            </label>
+            <label>Mythic Theme
+              <input type="text" class="hp-input hp-theme" data-id="${m.id}" value="${escapeHtml(m.theme || '')}" placeholder="e.g., exile, sacrifice, initiation" />
+            </label>
+            <label>Framework Correlation
+              <select class="hp-select hp-framework" data-id="${m.id}">
+                ${frameworkOptions(m.frameworkId || '')}
+              </select>
+            </label>
+          </div>
+          <div class="hp-actions">
+            <button class="view-tab hp-jump-map" data-framework="${m.frameworkId || ''}" ${m.frameworkId ? '' : 'disabled'}>Open on 3D Map</button>
+            <span class="hp-tradition">Ages of Man lens: ${m.tradition}</span>
+          </div>
+        </div>
+      `;
+    }
+
+    function render() {
+      const state = loadState();
+      const completeness = state.milestones.reduce((acc, m) => acc + (m.event && m.meaning ? 1 : 0), 0);
+      const progressPercent = Math.round((completeness / state.milestones.length) * 100);
+
+      container.innerHTML = `
+        <div class="view-header">
+          <h1>The Hero's Path — Chronos View</h1>
+          <p>A narrative-therapy timeline mapped onto the psyche sphere. Plot your biography as mythic progression and correlate each chapter with philosophical frameworks.</p>
+        </div>
+
+        <div class="hp-hero card">
+          <div class="hp-hero-left">
+            <h3>Temporal Spiral</h3>
+            <p>The spiral represents recursive growth: themes return, but at higher fidelity. Anchor your life chapters below and map them to the psyche framework where they resonate most.</p>
+          </div>
+          <div class="hp-progress">
+            <div class="hp-progress-value">${progressPercent}%</div>
+            <div class="hp-progress-label">Narrative mapped</div>
+            <div class="hp-progress-bar"><span style="width:${progressPercent}%"></span></div>
+          </div>
+        </div>
+
+        <div class="hp-biography card">
+          <div class="card-subtitle">Biography Anchor</div>
+          <label>Current Chapter Title
+            <input id="hp-bio-title" class="hp-input" type="text" value="${escapeHtml(state.bioTitle)}" placeholder="e.g., Rebuilding After Collapse" />
+          </label>
+          <label>Narrative Thesis
+            <textarea id="hp-bio-thesis" class="hp-textarea" placeholder="What story are you currently living, and what does it demand from you next?">${escapeHtml(state.bioThesis)}</textarea>
+          </label>
+        </div>
+
+        <div class="hp-spiral card">
+          <div class="card-subtitle">Chronos Spiral Milestones</div>
+          <div class="hp-spiral-track">
+            ${state.milestones.map((m, idx) => milestoneCardHtml(m, idx)).join('')}
+          </div>
+        </div>
+
+        <div class="hp-ages card">
+          <div class="card-subtitle">Ages of Man — Cross-Tradition Correlation</div>
+          <div class="hp-ages-grid">
+            ${agesOfMan.map(row => `
+              <div class="hp-age-row">
+                <div class="hp-age-tradition">${row.tradition}</div>
+                <div class="hp-age-stages">${row.stages}</div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+
+      const update = () => {
+        const next = loadState();
+        const titleEl = document.getElementById('hp-bio-title');
+        const thesisEl = document.getElementById('hp-bio-thesis');
+        next.bioTitle = titleEl?.value || '';
+        next.bioThesis = thesisEl?.value || '';
+        container.querySelectorAll('.hp-event').forEach(el => {
+          const id = el.dataset.id;
+          const target = next.milestones.find(m => m.id === id);
+          if (target) target.event = el.value || '';
+        });
+        container.querySelectorAll('.hp-meaning').forEach(el => {
+          const id = el.dataset.id;
+          const target = next.milestones.find(m => m.id === id);
+          if (target) target.meaning = el.value || '';
+        });
+        container.querySelectorAll('.hp-theme').forEach(el => {
+          const id = el.dataset.id;
+          const target = next.milestones.find(m => m.id === id);
+          if (target) target.theme = el.value || '';
+        });
+        container.querySelectorAll('.hp-framework').forEach(el => {
+          const id = el.dataset.id;
+          const target = next.milestones.find(m => m.id === id);
+          if (target) target.frameworkId = el.value || '';
+        });
+        saveState(next);
+      };
+
+      container.querySelectorAll('#hp-bio-title, #hp-bio-thesis, .hp-event, .hp-meaning, .hp-theme, .hp-framework').forEach(el => {
+        el.addEventListener('input', update);
+        el.addEventListener('change', update);
+      });
+
+      container.querySelectorAll('.hp-jump-map').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const frameworkId = btn.dataset.framework;
+          if (!frameworkId) return;
+          window.PsycheApp.goToView('map');
+          setTimeout(() => window.PsycheApp.setFrameworkById(frameworkId, 0, false), 140);
+        });
+      });
+    }
+
+    render();
+  }
+
+  function renderAlchemicalLab(container) {
+    const allFw = window.PsycheApp.allFrameworks || [];
+    const shadowResult = loadShadowResult();
+    const dominantFramework = shadowResult?.dominant?.frameworkId || '';
+    const stages = [
+      { id: 'nigredo', title: 'Nigredo — Blackening', icon: '⚫', prompt: 'Confront the pattern honestly. What repetitive shadow behavior is active now?', help: 'Name the loop, trigger, and cost without spiritual bypassing.' },
+      { id: 'albedo', title: 'Albedo — Whitening', icon: '⚪', prompt: 'Extract the gift. What protected intelligence is hidden inside this shadow?', help: 'Translate defense into virtue-in-potential (boundary, drive, precision, courage).' },
+      { id: 'rubedo', title: 'Rubedo — Reddening', icon: '🔴', prompt: 'Embody integration. What daily action proves this trait is now conscious?', help: 'Commit to measurable behavior in relationship, work, or discipline.' }
+    ];
+
+    function loadState() {
+      try {
+        const parsed = JSON.parse(localStorage.getItem(ALCHEMY_KEY) || '{}');
+        parsed.entries = parsed.entries || {};
+        parsed.progress = parsed.progress || { nigredo: false, albedo: false, rubedo: false };
+        parsed.frameworkId = parsed.frameworkId || dominantFramework;
+        parsed.leadScore = typeof parsed.leadScore === 'number' ? parsed.leadScore : 72;
+        parsed.goldScore = typeof parsed.goldScore === 'number' ? parsed.goldScore : 28;
+        return parsed;
+      } catch {
+        return {
+          frameworkId: dominantFramework,
+          leadScore: 72,
+          goldScore: 28,
+          entries: {},
+          progress: { nigredo: false, albedo: false, rubedo: false }
+        };
+      }
+    }
+
+    function saveState(state) {
+      try {
+        localStorage.setItem(ALCHEMY_KEY, JSON.stringify(state));
+      } catch (error) {
+        console.warn('Alchemy save failed', error);
+      }
+    }
+
+    function frameworkSelect(selectedId) {
+      return `<option value="">Link a framework...</option>${allFw.map(fw => `<option value="${fw.id}" ${fw.id === selectedId ? 'selected' : ''}>${fw.name}</option>`).join('')}`;
+    }
+
+    function render() {
+      const state = loadState();
+      const completionCount = stages.reduce((acc, s) => acc + (state.progress[s.id] ? 1 : 0), 0);
+      const transmutation = Math.round((completionCount / stages.length) * 100);
+
+      container.innerHTML = `
+        <div class="view-header">
+          <h1>The Alchemical Lab</h1>
+          <p>A hermetic integration workflow for turning Shadow Scanner insight into embodied transformation from lead to gold.</p>
+        </div>
+
+        <div class="alchemy-hero card">
+          <div class="alchemy-title-wrap">
+            <div class="alchemy-glyph">⚗</div>
+            <div>
+              <h3>Lead → Gold Integration Engine</h3>
+              <p class="card-text">Track your transmutation cycle through Nigredo, Albedo, and Rubedo. Each stage stores your entries locally and builds measurable integration momentum.</p>
+            </div>
+          </div>
+          <div class="alchemy-meter">
+            <div class="alchemy-meter-label">Transmutation</div>
+            <div class="alchemy-meter-value">${transmutation}%</div>
+            <div class="alchemy-meter-bar"><span style="width:${transmutation}%"></span></div>
+          </div>
+        </div>
+
+        <div class="alchemy-metrics card">
+          <div class="alchemy-score lead">
+            <div class="alchemy-score-num">${state.leadScore}</div>
+            <div class="alchemy-score-label">Lead (Unconscious Habit)</div>
+          </div>
+          <div class="alchemy-score gold">
+            <div class="alchemy-score-num">${state.goldScore}</div>
+            <div class="alchemy-score-label">Gold (Integrated Awareness)</div>
+          </div>
+          <div class="alchemy-controls">
+            <button class="view-tab alchemy-shift" data-shift="minus">Mark Regression</button>
+            <button class="view-tab alchemy-shift" data-shift="plus">Mark Embodied Win</button>
+          </div>
+        </div>
+
+        <div class="alchemy-link card">
+          <div class="card-subtitle">Framework Correlation</div>
+          <label>Primary active framework
+            <select id="alchemy-framework" class="hp-select">${frameworkSelect(state.frameworkId)}</select>
+          </label>
+          <div class="alchemy-link-actions">
+            <button id="alchemy-open-map" class="view-tab" ${state.frameworkId ? '' : 'disabled'}>Open Correlated Framework on Map</button>
+            ${shadowResult ? `<span class="alchemy-shadow-hint">Scanner resonance: ${shadowResult.dominant.frameworkName} (Layer ${shadowResult.dominant.layerIndex + 1})</span>` : '<span class="alchemy-shadow-hint">Run Shadow Scanner to auto-seed this section.</span>'}
+          </div>
+        </div>
+
+        <div class="alchemy-stages">
+          ${stages.map(stage => `
+            <div class="alchemy-stage card ${state.progress[stage.id] ? 'done' : ''}">
+              <div class="alchemy-stage-head">
+                <div class="alchemy-stage-title">${stage.icon} ${stage.title}</div>
+                <label class="alchemy-check">
+                  <input type="checkbox" class="alchemy-complete" data-stage="${stage.id}" ${state.progress[stage.id] ? 'checked' : ''} />
+                  Complete
+                </label>
+              </div>
+              <p class="alchemy-stage-prompt">${stage.prompt}</p>
+              <p class="alchemy-stage-help">${stage.help}</p>
+              <textarea class="alchemy-notes" data-stage="${stage.id}" placeholder="Write your stage work...">${escapeHtml(state.entries[stage.id] || '')}</textarea>
+            </div>
+          `).join('')}
+        </div>
+      `;
+
+      const persist = () => {
+        const next = loadState();
+        const fwEl = document.getElementById('alchemy-framework');
+        next.frameworkId = fwEl?.value || '';
+        container.querySelectorAll('.alchemy-notes').forEach(el => {
+          next.entries[el.dataset.stage] = el.value || '';
+        });
+        container.querySelectorAll('.alchemy-complete').forEach(el => {
+          next.progress[el.dataset.stage] = !!el.checked;
+        });
+        saveState(next);
+      };
+
+      container.querySelectorAll('.alchemy-notes, .alchemy-complete, #alchemy-framework').forEach(el => {
+        el.addEventListener('input', persist);
+        el.addEventListener('change', persist);
+      });
+
+      container.querySelectorAll('.alchemy-shift').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const next = loadState();
+          const plus = btn.dataset.shift === 'plus';
+          if (plus) {
+            next.goldScore = Math.min(100, next.goldScore + 6);
+            next.leadScore = Math.max(0, next.leadScore - 6);
+          } else {
+            next.goldScore = Math.max(0, next.goldScore - 5);
+            next.leadScore = Math.min(100, next.leadScore + 5);
+          }
+          saveState(next);
+          render();
+        });
+      });
+
+      document.getElementById('alchemy-open-map')?.addEventListener('click', () => {
+        const state = loadState();
+        if (!state.frameworkId) return;
+        window.PsycheApp.goToView('map');
+        setTimeout(() => window.PsycheApp.setFrameworkById(state.frameworkId, 0, false), 140);
+      });
+    }
+
+    render();
+  }
+
+  function loadShadowResult() {
+    try {
+      const parsed = JSON.parse(localStorage.getItem('psyche_shadow_scan_result') || 'null');
+      if (!parsed || !parsed.dominant) return null;
+      return parsed;
+    } catch {
+      return null;
+    }
+  }
+
+  function escapeHtml(value) {
+    return String(value || '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  return { renderTraumaCartography, renderDarkNight, renderRelationships, renderCulturalComparison, renderResources, renderHerosPath, renderAlchemicalLab };
 })();

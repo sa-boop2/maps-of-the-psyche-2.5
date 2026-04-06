@@ -47,6 +47,7 @@ window.PsycheApp.ViewsTherapy = (function() {
         <button class="view-tab ${activeTab === 'techniques' ? 'active' : ''}" data-tab="techniques">Techniques</button>
         <button class="view-tab ${activeTab === 'exercises' ? 'active' : ''}" data-tab="exercises">Practice</button>
         <button class="view-tab ${activeTab === 'evidence' ? 'active' : ''}" data-tab="evidence">Evidence & Use</button>
+        <button class="view-tab ${activeTab === 'trauma' ? 'active' : ''}" data-tab="trauma">Trauma</button>
         <button class="view-tab ${activeTab === 'compare' ? 'active' : ''}" data-tab="compare">Compare All</button>
         <button class="view-tab ${activeTab === 'matcher' ? 'active' : ''}" data-tab="matcher">Find Your Fit</button>
       </div>
@@ -79,8 +80,19 @@ window.PsycheApp.ViewsTherapy = (function() {
       case 'techniques': renderTechniques(content, therapy); break;
       case 'exercises': renderExercises(content, therapy); break;
       case 'evidence': renderEvidence(content, therapy); break;
+      case 'trauma': renderTraumaTab(content); break;
       case 'compare': renderCompare(content); break;
       case 'matcher': renderMatcher(content); break;
+    }
+  }
+
+  // ── TRAUMA (inline from ViewsMap) ──
+  function renderTraumaTab(el) {
+    // Delegate to the existing trauma cartography renderer
+    if (window.PsycheApp.ViewsMap && window.PsycheApp.ViewsMap.renderTraumaCartography) {
+      window.PsycheApp.ViewsMap.renderTraumaCartography(el);
+    } else {
+      el.innerHTML = '<p style="text-align:center;color:var(--text-dim);padding:60px">Trauma data not loaded.</p>';
     }
   }
 

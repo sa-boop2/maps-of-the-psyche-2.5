@@ -198,7 +198,7 @@ window.PsycheApp.ViewsScanner = (function() {
         </div>
 
         <div class="scanner-hero fade-in">
-          <div class="scanner-glyph">◖</div>
+          <div class="scanner-glyph">🔮</div>
           <h1 class="scanner-title">Shadow Scanner</h1>
           <div class="scanner-divider"></div>
           <p class="scanner-tagline">An interactive self-inquiry engine</p>
@@ -225,7 +225,7 @@ window.PsycheApp.ViewsScanner = (function() {
         </div>
 
         <button id="btn-initiate-scan" class="scanner-start-btn fade-in" style="animation-delay:0.7s">
-          <span class="btn-icon">◉</span>
+          <span class="btn-icon">●</span>
           <span class="btn-text">Initiate Diagnostic</span>
           <span class="btn-glow"></span>
         </button>
@@ -316,7 +316,7 @@ window.PsycheApp.ViewsScanner = (function() {
         <div class="processing-visual">
           <div class="process-ring"></div>
           <div class="process-core">
-            <span class="core-symbol">◉</span>
+            <span class="core-symbol">⬤</span>
           </div>
         </div>
 
@@ -324,19 +324,19 @@ window.PsycheApp.ViewsScanner = (function() {
         
         <div class="processing-stages">
           <div class="stage-item active" data-stage="1">
-            <span class="stage-icon">◯</span>
+            <span class="stage-icon">○</span>
             <span class="stage-text">Analyzing response patterns...</span>
           </div>
           <div class="stage-item" data-stage="2">
-            <span class="stage-icon">◯</span>
+            <span class="stage-icon">○</span>
             <span class="stage-text">Cross-referencing frameworks...</span>
           </div>
           <div class="stage-item" data-stage="3">
-            <span class="stage-icon">◯</span>
+            <span class="stage-icon">○</span>
             <span class="stage-text">Locating psychic friction point...</span>
           </div>
           <div class="stage-item" data-stage="4">
-            <span class="stage-icon">◯</span>
+            <span class="stage-icon">○</span>
             <span class="stage-text">Mapping to consciousness sphere...</span>
           </div>
         </div>
@@ -406,7 +406,7 @@ window.PsycheApp.ViewsScanner = (function() {
         <div class="result-visual">
           <div class="result-ring pulse"></div>
           <div class="result-core">
-            <span class="core-symbol">◉</span>
+            <span class="core-symbol">⬤</span>
           </div>
         </div>
 
@@ -427,7 +427,7 @@ window.PsycheApp.ViewsScanner = (function() {
 
         <div class="result-actions fade-in" style="margin-top: 32px; animation-delay:0.3s">
           <button id="btn-view-on-map" class="result-btn primary">
-            <span class="btn-icon">◉</span>
+            <span class="btn-icon">●</span>
             <span class="btn-text">Locate on 3D Map</span>
           </button>
           <button id="btn-rescan" class="result-btn secondary">

@@ -22,26 +22,23 @@
 
   // ── VIEWS CONFIG ──
   const views = [
+    { id: 'home', label: 'Home', icon: 'Ψ', group: 'core' },
     { id: 'map', label: 'Map', icon: '◉', group: 'core' },
-    { id: 'compare', label: 'Compare', icon: '⊞', group: 'core' },
-    { id: 'lineage', label: 'Lineage', icon: '⟡', group: 'core' },
     { id: '_sep1', sep: true },
-    { id: 'archetypes', label: 'Archetypes', icon: '☿', group: 'explore' },
-    { id: 'scanner', label: 'Shadow Scanner', icon: '◖', group: 'explore' },
     { id: 'ego', label: 'Ego', icon: 'ψ', group: 'explore' },
     { id: 'therapy', label: 'Therapy', icon: '⚕', group: 'explore' },
-    { id: 'figures', label: 'Figures', icon: '♰', group: 'explore' },
-    { id: 'cases', label: 'Cases', icon: '◈', group: 'explore' },
-    { id: 'disagree', label: 'Tensions', icon: '⚡', group: 'explore' },
+    { id: 'darknight', label: 'Dark Night', icon: '☾', group: 'explore' },
+    { id: 'development', label: 'Growth', icon: '↑', group: 'explore' },
+    { id: 'scanner', label: 'Scanner', icon: '◖', group: 'explore' },
+    { id: 'archetypes', label: 'Archetypes', icon: '☿', group: 'explore' },
     { id: '_sep2', sep: true },
-    { id: 'development', label: 'Growth', icon: '↑', group: 'journey' },
-    { id: 'trauma', label: 'Trauma', icon: '◇', group: 'journey' },
-    { id: 'darknight', label: 'Dark Night', icon: '☾', group: 'journey' },
-    { id: 'relationships', label: 'Relations', icon: '∞', group: 'journey' },
-    { id: 'meditation', label: 'Practice', icon: '◯', group: 'journey' },
-    { id: '_sep3', sep: true },
+    { id: 'figures', label: 'Figures', icon: '♰', group: 'more' },
+    { id: 'cases', label: 'Cases', icon: '◈', group: 'more' },
+    { id: 'disagree', label: 'Tensions', icon: '⚡', group: 'more' },
+    { id: 'relationships', label: 'Relations', icon: '∞', group: 'more' },
+    { id: 'meditation', label: 'Practice', icon: '◯', group: 'more' },
     { id: 'personal', label: 'My Map', icon: '◎', group: 'you' },
-    { id: 'quiz', label: 'Find Your Path', icon: '⟐', group: 'you' },
+    { id: 'quiz', label: 'Find Path', icon: '⟐', group: 'you' },
     { id: 'resources', label: 'Library', icon: '⊡', group: 'you' },
   ];
   const navigableViews = views.filter(v => !v.sep);
@@ -76,7 +73,7 @@
     loadTheme();
 
     setFramework(App.allFrameworks[0]);
-    setView('map');
+    setView('home');
 
     setTimeout(() => {
       const ls = document.getElementById('loading-screen');
@@ -335,24 +332,27 @@
       brand.style.cursor = 'pointer';
       brand.addEventListener('click', () => {
         if (window.PsycheApp.Sound) window.PsycheApp.Sound.playUIClick();
-        setView('map');
+        setView('home');
       });
     }
   }
   function setView(viewId) {
-    if (currentView === viewId) return; // Prevent redundant view switching and sidebar hiding
+    if (currentView === viewId && viewId !== 'home') return; // Prevent redundant view switching
     currentView = viewId;
     document.querySelectorAll('#view-tabs .view-btn').forEach(b => b.classList.toggle('active', b.dataset.view === viewId));
     const mapView = document.getElementById('map-view');
     const secView = document.getElementById('secondary-view');
+    const subNav = document.getElementById('sub-nav');
     if (viewId === 'map') {
       mapView.classList.add('active');
       secView.classList.remove('active');
+      if (subNav) subNav.style.display = '';
       if (mapMode === '3d') App.Sphere3D.setFramework(App.currentFramework);
       else { App.View2D?.show(); App.View2D?.setFramework(App.currentFramework); }
     } else {
       mapView.classList.remove('active');
       secView.classList.add('active');
+      if (subNav) subNav.style.display = 'none';
       App.View2D?.hide();
       secView.scrollTop = 0;
       renderSecondaryView(secView, viewId);
@@ -362,6 +362,7 @@
   function renderSecondaryView(container, viewId) {
     container.innerHTML = '';
     switch(viewId) {
+      case 'home': App.ViewsHome?.render(container); break;
       case 'archetypes': App.ViewsExplore.renderArchetypes(container); break;
       case 'development': App.ViewsDevelop.renderDevelopmentalArc(container); break;
       case 'trauma': App.ViewsMap.renderTraumaCartography(container); break;
@@ -379,6 +380,7 @@
       case 'compare': App.ViewsMap.renderCulturalComparison(container); break;
       case 'resources': App.ViewsMap.renderResources(container); break;
       case 'lineage': App.Lineage?.render(container); break;
+      case 'trainings': container.innerHTML = '<div class="view-header"><h1>Trainings</h1><p>Structured learning paths for deep psychological work. This section is under development.</p></div><div style="text-align:center;padding:80px 20px;color:var(--text-dim)"><div style="font-size:3rem;margin-bottom:16px">🎯</div><p style="font-size:1rem">Coming Soon</p><p style="font-size:0.85rem;margin-top:8px;max-width:400px;margin-left:auto;margin-right:auto">We are crafting guided programs for shadow work, ego integration, and contemplative practice. Check back soon.</p></div>'; break;
       default: container.innerHTML = '<p style="text-align:center;color:var(--text-dim);padding:60px">View not found.</p>';
     }
   }

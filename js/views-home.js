@@ -89,13 +89,45 @@ window.PsycheApp.ViewsHome = (function() {
       description: 'Curated books, papers, and references across all traditions and modalities.',
       icon: `<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="10" y="8" width="8" height="32" rx="1"/><rect x="20" y="12" width="8" height="28" rx="1" opacity="0.6"/><rect x="30" y="10" width="8" height="30" rx="1" opacity="0.3"/></svg>`,
       accent: 'var(--text-secondary)'
+    },
+    {
+      id: 'chronos',
+      title: 'Chronos',
+      subtitle: 'Heroic timeline mapping',
+      description: 'Plot your life chapters as mythic milestones and link each phase to fitting frameworks.',
+      icon: `<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="24" cy="24" r="16"/><path d="M24 14v11l7 4"/><path d="M9 24h4M35 24h4M24 9v4M24 35v4"/></svg>`,
+      accent: 'var(--accent-orange)'
+    },
+    {
+      id: 'alchemy',
+      title: 'Alchemy Lab',
+      subtitle: 'Nigredo → Rubedo integration',
+      description: 'Convert shadow insights into embodied change using a ritualized transformation workflow.',
+      icon: `<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 8h12"/><path d="M20 8v8l-8 16a8 8 0 0 0 7 12h10a8 8 0 0 0 7-12l-8-16V8"/><path d="M16 28h16"/></svg>`,
+      accent: 'var(--gold)'
+    },
+    {
+      id: 'compare',
+      title: 'Comparison',
+      subtitle: 'Cross-tradition layer study',
+      description: 'Compare equivalent layers across traditions in one synchronized table.',
+      icon: `<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="7" y="10" width="14" height="28"/><rect x="27" y="10" width="14" height="28"/><path d="M21 24h6"/></svg>`,
+      accent: 'var(--accent-blue)'
+    },
+    {
+      id: 'lineage',
+      title: 'Lineage',
+      subtitle: 'Transmission pathways',
+      description: 'Trace how ideas passed from ancient schools into modern psychological systems.',
+      icon: `<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="10" cy="10" r="3"/><circle cx="24" cy="24" r="3"/><circle cx="38" cy="38" r="3"/><path d="M13 13l8 8M27 27l8 8"/></svg>`,
+      accent: 'var(--accent-teal)'
     }
   ];
 
   function render(container) {
-    const featured = cards.find(c => c.featured);
-    const rest = cards.filter(c => !c.featured);
-    const deck = cards.slice(0, 7);
+    const primaryOrder = ['map', 'trainings', 'ego', 'therapy', 'scanner', 'resources'];
+    const primaryCards = primaryOrder.map(id => cards.find(c => c.id === id)).filter(Boolean);
+    const secondaryCards = cards.filter(c => !primaryOrder.includes(c.id));
 
     container.innerHTML = `
       <div class="home-page">
@@ -133,22 +165,20 @@ window.PsycheApp.ViewsHome = (function() {
             <p class="home-hero-desc">28 frameworks · 6 traditions · 65,000 years of human wisdom</p>
           </div>
 
-          <section class="home-3d-showcase fade-in" style="animation-delay: 0.2s">
-            <div class="home-3d-title">Consciousness Atlas</div>
-            <div class="home-3d-deck">
-              ${deck.map((card, i) => `
-                <button class="home-stele" data-navigate="${card.id}" style="--z:${(deck.length - i) * 36}px; --rx:${6 - i}deg; --ry:${(i % 2 === 0 ? -1 : 1) * (5 + i)}deg;">
-                  <span class="home-stele-icon">${card.icon}</span>
-                  <span class="home-stele-label">${card.title}</span>
-                </button>
-              `).join('')}
+          <section class="home-primary-section fade-in" style="animation-delay: 0.2s">
+            <div class="home-section-title">Core Gateways</div>
+            <div class="home-primary-row">
+              ${primaryCards.map((card, i) => renderPrimaryCard(card, i)).join('')}
             </div>
           </section>
 
-          ${renderFeaturedCard(featured)}
+          <section class="home-more-section fade-in" style="animation-delay: 0.35s">
+            <div class="home-more-kicker">Further Chambers</div>
+            <p class="home-more-sub">Expand beyond the core gateways into advanced lenses, synthesis tools, and developmental views.</p>
+          </section>
 
-          <div class="home-grid home-grid-3d">
-            ${rest.map((card, i) => renderCard(card, i)).join('')}
+          <div class="home-grid home-grid-compact">
+            ${secondaryCards.map((card, i) => renderCard(card, i)).join('')}
           </div>
 
           <div class="home-footer fade-in" style="animation-delay: 1.2s">
@@ -188,6 +218,46 @@ window.PsycheApp.ViewsHome = (function() {
     }
   }
 
+  function renderPrimaryCard(card, index) {
+    return `
+      <div class="home-primary-card fade-in" style="animation-delay: ${0.26 + index * 0.06}s" data-navigate="${card.id}">
+        <div class="home-primary-icon" style="color: ${card.accent}">
+          ${card.icon}
+        </div>
+        <div class="home-primary-body">
+          <h2 class="home-primary-title">${card.title}</h2>
+          <p class="home-primary-subtitle">${card.subtitle}</p>
+          <p class="home-primary-desc">${card.description}</p>
+          ${card.tags ? `<div class="home-card-tags">${card.tags.map(t => `<span class="home-tag home-tag--sm">${t}</span>`).join('')}</div>` : ''}
+        </div>
+      </div>
+    `;
+  }
+
+  function renderCard(card, index) {
+    const classes = ['home-card', 'home-card--compact', 'fade-in'];
+    if (card.comingSoon) classes.push('home-card--soon');
+    if (card.highlight) classes.push('home-card--highlight');
+    
+    return `
+      <div class="${classes.join(' ')}" style="animation-delay: ${0.42 + index * 0.05}s" data-navigate="${card.id}">
+        ${card.comingSoon ? '<span class="home-badge">Coming Soon</span>' : ''}
+        <div class="home-card-icon" style="color: ${card.accent}">
+          ${card.icon}
+        </div>
+        <div class="home-card-body">
+          <h3 class="home-card-title">${card.title}</h3>
+          <p class="home-card-subtitle">${card.subtitle}</p>
+          <p class="home-card-desc">${card.description}</p>
+          ${card.tags ? `<div class="home-card-tags">${card.tags.map(t => `<span class="home-tag home-tag--sm">${t}</span>`).join('')}</div>` : ''}
+        </div>
+        <div class="home-card-arrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 18l6-6-6-6"/></svg>
+        </div>
+      </div>
+    `;
+  }
+
   function renderFeaturedCard(card) {
     return `
       <div class="home-featured fade-in" style="animation-delay: 0.3s" data-navigate="${card.id}">
@@ -205,30 +275,6 @@ window.PsycheApp.ViewsHome = (function() {
         </div>
         <div class="home-featured-arrow">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </div>
-      </div>
-    `;
-  }
-
-  function renderCard(card, index) {
-    const classes = ['home-card', 'fade-in'];
-    if (card.comingSoon) classes.push('home-card--soon');
-    if (card.highlight) classes.push('home-card--highlight');
-    
-    return `
-      <div class="${classes.join(' ')}" style="animation-delay: ${0.4 + index * 0.07}s" data-navigate="${card.id}">
-        ${card.comingSoon ? '<span class="home-badge">Coming Soon</span>' : ''}
-        <div class="home-card-icon" style="color: ${card.accent}">
-          ${card.icon}
-        </div>
-        <div class="home-card-body">
-          <h3 class="home-card-title">${card.title}</h3>
-          <p class="home-card-subtitle">${card.subtitle}</p>
-          <p class="home-card-desc">${card.description}</p>
-          ${card.tags ? `<div class="home-card-tags">${card.tags.map(t => `<span class="home-tag home-tag--sm">${t}</span>`).join('')}</div>` : ''}
-        </div>
-        <div class="home-card-arrow">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 18l6-6-6-6"/></svg>
         </div>
       </div>
     `;

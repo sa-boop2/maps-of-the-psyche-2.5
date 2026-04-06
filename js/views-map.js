@@ -359,6 +359,11 @@ window.PsycheApp.ViewsMap = (function() {
       { tradition: 'Yoruba', stages: 'Akomolede, Agba, Elder-Council, Ancestor Orientation' },
       { tradition: 'Jungian-Depth', stages: 'Persona Formation, Ego Achievement, Midlife Descent, Individuation' }
     ];
+    const chronosLenses = [
+      { name: 'Narrative Reframe', description: 'Translate the event from fate-language to agency-language without denying pain.' },
+      { name: 'Symbolic Pattern', description: 'Identify recurring mythic motif: exile, trial, descent, apprenticeship, return.' },
+      { name: 'Relational Task', description: 'Clarify the relational maturation required at this stage of the story.' }
+    ];
 
     function loadState() {
       try {
@@ -436,13 +441,16 @@ window.PsycheApp.ViewsMap = (function() {
       container.innerHTML = `
         <div class="view-header">
           <h1>The Hero's Path — Chronos View</h1>
-          <p>A narrative-therapy timeline mapped onto the psyche sphere. Plot your biography as mythic progression and correlate each chapter with philosophical frameworks.</p>
+          <p>A temporal spiral for mythic biography work: map decisive life passages, derive their developmental task, and connect each chapter to fitting frameworks.</p>
         </div>
 
         <div class="hp-hero card">
           <div class="hp-hero-left">
-            <h3>Temporal Spiral</h3>
-            <p>The spiral represents recursive growth: themes return, but at higher fidelity. Anchor your life chapters below and map them to the psyche framework where they resonate most.</p>
+            <h3>Temporal Spiral Cartography</h3>
+            <p>In the spiral, recurrence is not repetition but refinement. Each return tests whether your identity is reenacting a wound or embodying a wiser form.</p>
+            <div class="hp-lens-strip">
+              ${chronosLenses.map(l => `<div class="hp-lens-chip"><strong>${l.name}</strong><span>${l.description}</span></div>`).join('')}
+            </div>
           </div>
           <div class="hp-progress">
             <div class="hp-progress-value">${progressPercent}%</div>
@@ -452,12 +460,12 @@ window.PsycheApp.ViewsMap = (function() {
         </div>
 
         <div class="hp-biography card">
-          <div class="card-subtitle">Biography Anchor</div>
+          <div class="card-subtitle">Narrative Anchor</div>
           <label>Current Chapter Title
             <input id="hp-bio-title" class="hp-input" type="text" value="${escapeHtml(state.bioTitle)}" placeholder="e.g., Rebuilding After Collapse" />
           </label>
           <label>Narrative Thesis
-            <textarea id="hp-bio-thesis" class="hp-textarea" placeholder="What story are you currently living, and what does it demand from you next?">${escapeHtml(state.bioThesis)}</textarea>
+            <textarea id="hp-bio-thesis" class="hp-textarea" placeholder="What story are you living now, and what initiation does it demand next?">${escapeHtml(state.bioThesis)}</textarea>
           </label>
         </div>
 
@@ -477,6 +485,15 @@ window.PsycheApp.ViewsMap = (function() {
                 <div class="hp-age-stages">${row.stages}</div>
               </div>
             `).join('')}
+          </div>
+        </div>
+
+        <div class="hp-integration card">
+          <div class="card-subtitle">Integration Compass</div>
+          <div class="hp-integration-grid">
+            <div><strong>Call</strong><p>What summons are you still postponing?</p></div>
+            <div><strong>Ordeal</strong><p>Which trial keeps repeating until its lesson is embodied?</p></div>
+            <div><strong>Return</strong><p>How does your gained insight become service beyond the self?</p></div>
           </div>
         </div>
       `;
@@ -533,9 +550,14 @@ window.PsycheApp.ViewsMap = (function() {
     const shadowResult = loadShadowResult();
     const dominantFramework = shadowResult?.dominant?.frameworkId || '';
     const stages = [
-      { id: 'nigredo', title: 'Nigredo — Blackening', icon: '⚫', prompt: 'Confront the pattern honestly. What repetitive shadow behavior is active now?', help: 'Name the loop, trigger, and cost without spiritual bypassing.' },
-      { id: 'albedo', title: 'Albedo — Whitening', icon: '⚪', prompt: 'Extract the gift. What protected intelligence is hidden inside this shadow?', help: 'Translate defense into virtue-in-potential (boundary, drive, precision, courage).' },
-      { id: 'rubedo', title: 'Rubedo — Reddening', icon: '🔴', prompt: 'Embody integration. What daily action proves this trait is now conscious?', help: 'Commit to measurable behavior in relationship, work, or discipline.' }
+      { id: 'nigredo', title: 'Nigredo — Blackening', icon: '⚫', prompt: 'Name the pattern with precision. What repeats, what triggers it, and what does it cost?', help: 'No euphemisms. Describe behavior, not identity labels.' },
+      { id: 'albedo', title: 'Albedo — Whitening', icon: '⚪', prompt: 'Distill the hidden intelligence. What capacity is trapped inside this defense?', help: 'Convert the shadow from enemy-language into function-language.' },
+      { id: 'rubedo', title: 'Rubedo — Reddening', icon: '🔴', prompt: 'Ritualize embodiment. What observable act proves integration this week?', help: 'Anchor the change in calendar, relationship, and measurable repetition.' }
+    ];
+    const labCodex = [
+      { name: 'Retort', meaning: 'Containment vessel: where emotional heat can be held without discharge.' },
+      { name: 'Athanor', meaning: 'Steady fire: disciplined repetition over dramatic intensity.' },
+      { name: 'Elixir', meaning: 'The integrated trait that nourishes future action.' }
     ];
 
     function loadState() {
@@ -578,15 +600,15 @@ window.PsycheApp.ViewsMap = (function() {
       container.innerHTML = `
         <div class="view-header">
           <h1>The Alchemical Lab</h1>
-          <p>A hermetic integration workflow for turning Shadow Scanner insight into embodied transformation from lead to gold.</p>
+          <p>A ritualized transformation chamber that translates shadow diagnostics into durable, embodied change.</p>
         </div>
 
         <div class="alchemy-hero card">
           <div class="alchemy-title-wrap">
             <div class="alchemy-glyph">⚗</div>
             <div>
-              <h3>Lead → Gold Integration Engine</h3>
-              <p class="card-text">Track your transmutation cycle through Nigredo, Albedo, and Rubedo. Each stage stores your entries locally and builds measurable integration momentum.</p>
+              <h3>Lead → Gold Transmutation Cycle</h3>
+              <p class="card-text">Move from compulsion to conscious craft through the three operations. The work is cumulative: clarify, distill, then embody.</p>
             </div>
           </div>
           <div class="alchemy-meter">
@@ -619,6 +641,13 @@ window.PsycheApp.ViewsMap = (function() {
           <div class="alchemy-link-actions">
             <button id="alchemy-open-map" class="view-tab" ${state.frameworkId ? '' : 'disabled'}>Open Correlated Framework on Map</button>
             ${shadowResult ? `<span class="alchemy-shadow-hint">Scanner resonance: ${shadowResult.dominant.frameworkName} (Layer ${shadowResult.dominant.layerIndex + 1})</span>` : '<span class="alchemy-shadow-hint">Run Shadow Scanner to auto-seed this section.</span>'}
+          </div>
+        </div>
+
+        <div class="alchemy-codex card">
+          <div class="card-subtitle">Laboratory Codex</div>
+          <div class="alchemy-codex-grid">
+            ${labCodex.map(c => `<div class="alchemy-codex-item"><h4>${c.name}</h4><p>${c.meaning}</p></div>`).join('')}
           </div>
         </div>
 

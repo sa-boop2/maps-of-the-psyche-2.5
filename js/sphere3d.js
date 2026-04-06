@@ -675,7 +675,12 @@ window.PsycheApp.Sphere3D = (function() {
       return;
     }
     if (!biologicalMirrorEnabled && clearSelectionOnClose) {
-      window.PsycheApp?.Sidebar?.hide?.();
+      const sb = window.PsycheApp?.Sidebar;
+      if (sb?.isOpen) {
+        sb.hide();
+      } else {
+        window.PsycheApp?.onSidebarClose?.();
+      }
     }
   }
 

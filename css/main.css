@@ -6882,6 +6882,33 @@ button, a, input, select, textarea { transition: all var(--t) var(--ease); }
   background-image: none !important;
 }
 
+/* Sidebar related trainings: remove odd backgrounds in both themes */
+#sidebar .sb-training-link,
+#sidebar .sb-section .sb-training-link {
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+#sidebar .sb-training-link:hover,
+#sidebar .sb-section .sb-training-link:hover {
+  background: rgba(255, 255, 255, 0.05) !important;
+}
+
+[data-theme="light"] #sidebar .sb-training-link,
+[data-theme="light"] #sidebar .sb-section .sb-training-link {
+  background: transparent !important;
+  background-image: none !important;
+  border-color: rgba(0, 0, 0, 0.12) !important;
+  color: #3a3428 !important;
+}
+
+[data-theme="light"] #sidebar .sb-training-link:hover,
+[data-theme="light"] #sidebar .sb-section .sb-training-link:hover {
+  background: rgba(122, 104, 48, 0.08) !important;
+  border-color: rgba(0, 0, 0, 0.2) !important;
+}
+
 @media (max-width: 900px) {
   #map-view #timeline-container {
     bottom: 6px !important;
